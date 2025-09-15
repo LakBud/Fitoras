@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import HomePage from "../pages/home/HomePage";
 import SplitDetail from "../pages/splits/SplitDetail";
-import ExerciseDetail from "../pages/exercise/ExerciseDetail";
+import ExerciseDetail from "../pages/exercise/Exercise";
 import WorkoutDay from "../pages/day/WorkoutDay";
 
 const AppRoutes = () => {
