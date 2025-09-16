@@ -11,7 +11,7 @@ const AppRoutes = () => {
         <Routes>
           <Route path="/" element={<HomePage />}></Route>
           <Route path="/splits" element={<SplitDetail />}></Route>
-          <Route path="/day" element={<WorkoutDay />}></Route>
+          <Route path="/current" element={<WorkoutDay />}></Route>
           <Route path="/exercise" element={<ExerciseDetail />}></Route>
         </Routes>
       </div>

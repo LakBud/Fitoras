@@ -13,7 +13,7 @@ const NavBar = () => {
   const links = [
     { to: "/", label: "Home", icon: <FiHome size={22} /> },
     { to: "/splits", label: "Splits", icon: <BsSignpostSplit size={22} /> },
-    { to: "/day", label: "Current", icon: <RiWeightLine size={22} /> },
+    { to: "/current", label: "Current", icon: <RiWeightLine size={22} /> },
     { to: "/exercise", label: "Exercises", icon: <GiWeightLiftingUp size={22} /> },
   ];
 
