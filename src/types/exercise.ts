@@ -1,4 +1,4 @@
-export type Exercise = {
+export type Exercises = {
   name: string;
   force?: string;
   level?: string;

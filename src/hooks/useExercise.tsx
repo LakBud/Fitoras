@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Exercise } from "../types/exercise";
+import axios from "axios";
 
 const STORAGE_KEY = "exercises";
 
@@ -7,6 +8,7 @@ export function useExercise(jsonPath: string = "/data/allExercises.json") {
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Check if data is already on local storage
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
@@ -19,13 +21,13 @@ export function useExercise(jsonPath: string = "/data/allExercises.json") {
     }
 
     // Fetch the local JSON file (from public/)
-    fetch(jsonPath)
-      .then((res) => res.json())
-      .then((data: Exercise[]) => {
-        setExercises(data);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    axios
+      .get<Exercise[]>(jsonPath)
+      .then((res) => {
+        setExercises(res.data);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(res.data));
       })
-      .catch((err) => console.error("Error loading exercises:", err))
+      .catch((error) => console.error("Error loading exercises: ", error))
       .finally(() => setLoading(false));
   }, [jsonPath]);
 
