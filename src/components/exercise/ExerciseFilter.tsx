@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import type { Exercises } from "../../types/exercise";
-import { FiSearch, FiZap, FiSettings, FiBox, FiLayers, FiTarget, FiShuffle } from "react-icons/fi";
+import { FiSearch, FiZap, FiSettings, FiBox, FiLayers, FiTarget, FiShuffle, FiRefreshCw } from "react-icons/fi";
 
 interface FilterProps {
   exercises: Exercises[];
@@ -11,7 +11,7 @@ const STORAGE_KEY = "exerciseFilters";
 
 const ExerciseFilter = ({ exercises, setFilteredExercises }: FilterProps) => {
   // ----------------------
-  // Load filters from localStorage (only once)
+  // Load filters from localStorage
   // ----------------------
   const getStoredFilters = () => {
     try {
@@ -38,15 +38,7 @@ const ExerciseFilter = ({ exercises, setFilteredExercises }: FilterProps) => {
   // Persist filters in localStorage
   // ----------------------
   useEffect(() => {
-    const filters = {
-      name,
-      force,
-      mechanic,
-      equipment,
-      category,
-      primaryMuscle,
-      secondaryMuscle,
-    };
+    const filters = { name, force, mechanic, equipment, category, primaryMuscle, secondaryMuscle };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(filters));
   }, [name, force, mechanic, equipment, category, primaryMuscle, secondaryMuscle]);
 
@@ -55,7 +47,6 @@ const ExerciseFilter = ({ exercises, setFilteredExercises }: FilterProps) => {
   // ----------------------
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
-
     debounceRef.current = setTimeout(() => {
       const normalize = (str: string) => str.toLowerCase().replace(/-/g, "").trim();
       const search = normalize(name);
@@ -110,7 +101,7 @@ const ExerciseFilter = ({ exercises, setFilteredExercises }: FilterProps) => {
     setCategory("");
     setPrimaryMuscle("");
     setSecondaryMuscle("");
-    localStorage.removeItem(STORAGE_KEY); // clear persistence
+    localStorage.removeItem(STORAGE_KEY);
   };
 
   const isString = (val: unknown): val is string => typeof val === "string";
@@ -131,29 +122,30 @@ const ExerciseFilter = ({ exercises, setFilteredExercises }: FilterProps) => {
   ];
 
   return (
-    <div className="z-50 mb-6 bg-white/90 backdrop-blur-xl px-4 py-3 shadow-md border-b border-red-300 rounded-b-2xl">
-      <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-3">
+    <div className="z-50 fixed w-full top-0 md:top-auto bg-white/90 backdrop-blur-sm px-4 py-3 shadow-md border-t border-red-300 md:border-b md:border-t-0 rounded-b-2xl">
+      {/* Desktop layout (md and above) */}
+      <div className="hidden md:flex flex-row items-center gap-4">
         {/* Search */}
-        <div className="relative flex-1 md:flex-none w-full md:w-48">
+        <div className="relative w-full md:w-64 flex-1">
           <input
             type="text"
-            placeholder="Search..."
+            placeholder="Search exercises..."
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="pl-9 pr-3 py-2 w-full border border-red-300 rounded-full bg-red-50/70 focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-red-400 shadow-sm placeholder-gray-500 transition-all duration-200 text-sm"
+            className="pl-10 pr-4 py-2 w-full border border-red-300 rounded-full bg-red-50/70 focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-red-400 shadow-sm placeholder-gray-500 text-sm transition-all duration-200"
           />
-          <FiSearch className="absolute left-2 top-1/2 -translate-y-1/2 text-red-500" />
+          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-red-500 text-lg" />
         </div>
 
-        {/* Select filters */}
-        <div className="flex overflow-x-auto gap-2 md:gap-3 py-1">
+        {/* Filters */}
+        <div className="flex overflow-x-auto gap-3 py-1 flex-1">
           {filters.map(([label, value, setter, options, icon]) => (
-            <div key={label} className="relative flex-shrink-0 w-[130px] md:w-[150px]">
-              <div className="absolute left-2 top-1/2 -translate-y-1/2 text-red-500">{icon}</div>
+            <div key={label} className="relative flex-shrink-0 w-36 md:w-40">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-red-500 text-lg">{icon}</div>
               <select
                 value={value}
                 onChange={(e) => setter(e.target.value)}
-                className="pl-7 pr-2 py-1 w-full border border-red-300 rounded-full bg-red-50/70 shadow-sm focus:outline-none focus:ring-1 focus:ring-red-400 text-sm transition-all duration-200"
+                className="pl-10 pr-3 py-2 w-full border border-red-300 rounded-full bg-red-50/70 shadow-sm focus:outline-none focus:ring-1 focus:ring-red-400 text-sm transition-all duration-200"
               >
                 <option value="">{label}</option>
                 {[...new Set(options)].map((opt) => (
@@ -169,10 +161,43 @@ const ExerciseFilter = ({ exercises, setFilteredExercises }: FilterProps) => {
         {/* Reset */}
         <button
           onClick={handleReset}
-          className="ml-auto bg-red-600 text-white font-semibold px-4 py-1 rounded-full shadow hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 text-sm transition-all duration-200"
+          className="ml-auto bg-red-600 text-white font-semibold px-5 py-2 rounded-full shadow hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 text-sm transition-all duration-200"
         >
           Reset
         </button>
+      </div>
+
+      {/* Mobile layout (below md) */}
+      <div className="flex md:hidden overflow-x-auto gap-3 py-1 items-center">
+        {/* Reset */}
+        <button
+          onClick={handleReset}
+          title="Reset filters"
+          className="p-3 rounded-full bg-red-600 shadow-sm flex items-center justify-center text-white transition-all duration-200 hover:bg-red-700"
+        >
+          <FiRefreshCw />
+        </button>
+        {filters.map(([label, value, setter, options, icon]) => (
+          <div key={label} className="relative flex-shrink-0">
+            {/* Icon */}
+            <div className="absolute text-red-500 text-lg pointer-events-none">{icon}</div>
+
+            {/* Select */}
+            <select
+              title={label}
+              value={value}
+              onChange={(e) => setter(e.target.value)}
+              className="pl-8 pr-3 py-3 rounded-full bg-red-50 shadow-sm flex items-center justify-center text-red-600 transition-all duration-200 hover:bg-red-100 focus:bg-red-200:"
+            >
+              <option value="">{label}</option>
+              {[...new Set(options)].map((opt) => (
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
+            </select>
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { FiHome } from "react-icons/fi";
 import { GiPowerLightning, GiWeightLiftingUp } from "react-icons/gi";
 import { RiWeightLine } from "react-icons/ri";
@@ -7,9 +6,6 @@ import { Link, NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const NavBar = () => {
-  const [hidden, setHidden] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
-
   const links = [
     { to: "/", label: "Home", icon: <FiHome size={22} /> },
     { to: "/splits", label: "Splits", icon: <BsSignpostSplit size={22} /> },
@@ -17,24 +13,11 @@ const NavBar = () => {
     { to: "/exercise", label: "Exercises", icon: <GiWeightLiftingUp size={22} /> },
   ];
 
-  // Hide nav on scroll down
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > lastScrollY) setHidden(true);
-      else setHidden(false);
-      setLastScrollY(window.scrollY);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
-
   return (
     <>
       {/* Top Navbar (desktop only) */}
       <motion.nav
         initial={false}
-        animate={{ y: hidden ? -80 : 0 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
         className="hidden md:block bg-white/90 backdrop-blur-xl shadow-lg sticky top-0 z-50"
       >
@@ -68,7 +51,6 @@ const NavBar = () => {
       {/* Bottom Nav (mobile only) */}
       <motion.div
         initial={false}
-        animate={{ y: hidden ? 80 : 0 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
         className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl shadow-t-lg z-50"
       >
