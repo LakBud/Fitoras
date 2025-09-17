@@ -7,28 +7,52 @@ interface FilterProps {
   setFilteredExercises: React.Dispatch<React.SetStateAction<Exercises[]>>;
 }
 
+const STORAGE_KEY = "exerciseFilters";
+
 const ExerciseFilter = ({ exercises, setFilteredExercises }: FilterProps) => {
-  const [name, setName] = useState("");
-  const [force, setForce] = useState<string>("");
-  const [mechanic, setMechanic] = useState<string>("");
-  const [equipment, setEquipment] = useState<string>("");
-  const [category, setCategory] = useState<string>("");
-  const [primaryMuscle, setPrimaryMuscle] = useState<string>("");
-  const [secondaryMuscle, setSecondaryMuscle] = useState<string>("");
-
-  const debounceRef = useRef<NodeJS.Timeout | null>(null);
-
-  const handleReset = () => {
-    setName("");
-    setForce("");
-    setMechanic("");
-    setEquipment("");
-    setCategory("");
-    setPrimaryMuscle("");
-    setSecondaryMuscle("");
+  // ----------------------
+  // Load filters from localStorage (only once)
+  // ----------------------
+  const getStoredFilters = () => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      return stored ? JSON.parse(stored) : {};
+    } catch {
+      return {};
+    }
   };
 
-  // Filtering logic with debounce
+  const stored = getStoredFilters();
+
+  const [name, setName] = useState(stored.name || "");
+  const [force, setForce] = useState(stored.force || "");
+  const [mechanic, setMechanic] = useState(stored.mechanic || "");
+  const [equipment, setEquipment] = useState(stored.equipment || "");
+  const [category, setCategory] = useState(stored.category || "");
+  const [primaryMuscle, setPrimaryMuscle] = useState(stored.primaryMuscle || "");
+  const [secondaryMuscle, setSecondaryMuscle] = useState(stored.secondaryMuscle || "");
+
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // ----------------------
+  // Persist filters in localStorage
+  // ----------------------
+  useEffect(() => {
+    const filters = {
+      name,
+      force,
+      mechanic,
+      equipment,
+      category,
+      primaryMuscle,
+      secondaryMuscle,
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(filters));
+  }, [name, force, mechanic, equipment, category, primaryMuscle, secondaryMuscle]);
+
+  // ----------------------
+  // Filtering logic (debounced)
+  // ----------------------
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
 
@@ -49,7 +73,6 @@ const ExerciseFilter = ({ exercises, setFilteredExercises }: FilterProps) => {
             ex.category,
             ex.id,
             ...(ex.primaryMuscles || []),
-            ...(ex.secondaryMuscles || []),
           ]
             .filter(Boolean)
             .some((field) => typeof field === "string" && normalize(field).includes(search));
@@ -58,8 +81,8 @@ const ExerciseFilter = ({ exercises, setFilteredExercises }: FilterProps) => {
         const matchesMechanic = !mechanic || ex.mechanic === mechanic;
         const matchesEquipment = !equipment || ex.equipment === equipment;
         const matchesCategory = !category || ex.category === category;
-        const matchesPrimaryMuscle = !primaryMuscle || ex.primaryMuscles?.includes(primaryMuscle);
-        const matchesSecondaryMuscle = !secondaryMuscle || ex.secondaryMuscles?.includes(secondaryMuscle);
+        const matchesPrimary = !primaryMuscle || ex.primaryMuscles?.includes(primaryMuscle);
+        const matchesSecondary = !secondaryMuscle || ex.secondaryMuscles?.includes(secondaryMuscle);
 
         return (
           matchesSearch &&
@@ -67,14 +90,28 @@ const ExerciseFilter = ({ exercises, setFilteredExercises }: FilterProps) => {
           matchesMechanic &&
           matchesEquipment &&
           matchesCategory &&
-          matchesPrimaryMuscle &&
-          matchesSecondaryMuscle
+          matchesPrimary &&
+          matchesSecondary
         );
       });
 
       setFilteredExercises(filtered);
     }, 250);
   }, [name, force, mechanic, equipment, category, primaryMuscle, secondaryMuscle, exercises, setFilteredExercises]);
+
+  // ----------------------
+  // Reset all filters
+  // ----------------------
+  const handleReset = () => {
+    setName("");
+    setForce("");
+    setMechanic("");
+    setEquipment("");
+    setCategory("");
+    setPrimaryMuscle("");
+    setSecondaryMuscle("");
+    localStorage.removeItem(STORAGE_KEY); // clear persistence
+  };
 
   const isString = (val: unknown): val is string => typeof val === "string";
 
@@ -93,15 +130,10 @@ const ExerciseFilter = ({ exercises, setFilteredExercises }: FilterProps) => {
     ],
   ];
 
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-
   return (
-    <div
-      className={`z-50 mb-6 bg-white/90 backdrop-blur-xl px-4 py-3 shadow-md border-b border-red-300 rounded-b-2xl`}
-      style={{ top: !isMobile ? "62px" : undefined }}
-    >
+    <div className="z-50 mb-6 bg-white/90 backdrop-blur-xl px-4 py-3 shadow-md border-b border-red-300 rounded-b-2xl">
       <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-3">
-        {/* Search Input */}
+        {/* Search */}
         <div className="relative flex-1 md:flex-none w-full md:w-48">
           <input
             type="text"
@@ -113,7 +145,7 @@ const ExerciseFilter = ({ exercises, setFilteredExercises }: FilterProps) => {
           <FiSearch className="absolute left-2 top-1/2 -translate-y-1/2 text-red-500" />
         </div>
 
-        {/* Filter Selects */}
+        {/* Select filters */}
         <div className="flex overflow-x-auto gap-2 md:gap-3 py-1">
           {filters.map(([label, value, setter, options, icon]) => (
             <div key={label} className="relative flex-shrink-0 w-[130px] md:w-[150px]">
@@ -134,7 +166,7 @@ const ExerciseFilter = ({ exercises, setFilteredExercises }: FilterProps) => {
           ))}
         </div>
 
-        {/* Reset Button */}
+        {/* Reset */}
         <button
           onClick={handleReset}
           className="ml-auto bg-red-600 text-white font-semibold px-4 py-1 rounded-full shadow hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 text-sm transition-all duration-200"
