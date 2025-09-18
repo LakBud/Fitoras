@@ -187,7 +187,7 @@ const ExerciseFilter = ({ exercises, setFilteredExercises }: FilterProps) => {
               title={label}
               value={value}
               onChange={(e) => setter(e.target.value)}
-              className="pl-8 pr-3 py-3 rounded-full bg-red-50 shadow-sm flex items-center justify-center text-red-600 transition-all duration-200 hover:bg-red-100 focus:bg-red-200:"
+              className="pl-8 pr-8 py-3.5 rounded-full bg-red-50 shadow-sm flex items-center justify-center text-red-600 transition-all duration-200 hover:bg-red-100 focus:bg-red-200:"
             >
               <option value="">{label}</option>
               {[...new Set(options)].map((opt) => (
