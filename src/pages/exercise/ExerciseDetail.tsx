@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useExercise } from "../../hooks/useExerciseStore";
-import { GiCogsplosion, GiMuscleUp, GiProgression, GiWeight, GiWeightCrush } from "react-icons/gi";
+import { useExercise } from "../../hooks/useExercise";
+import { GiAbdominalArmor, GiCogsplosion, GiMuscleFat, GiMuscleUp, GiProgression, GiWeight, GiWeightCrush } from "react-icons/gi";
 import { RiBarChart2Fill } from "react-icons/ri";
 import { motion } from "framer-motion";
 import ScrollTopButton from "../../components/common/ScrollTopButton";
+import { FiInfo } from "react-icons/fi";
 
 const ExerciseDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -65,7 +66,7 @@ const ExerciseDetail = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className="relative w-screen h-80 sm:h-96 md:h-[500px] mb-6 overflow-hidden shadow-2xl"
+        className="relative w-full h-80 sm:h-96 md:h-[500px] mb-6 overflow-hidden shadow-2xl"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -89,14 +90,14 @@ const ExerciseDetail = () => {
             <motion.button
               onClick={prevImage}
               whileHover={{ scale: 1.15 }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-rose-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:shadow-2xl transition-transform"
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-rose-600 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-md hover:shadow-lg transition-transform"
             >
               &#8592;
             </motion.button>
             <motion.button
               onClick={nextImage}
               whileHover={{ scale: 1.15 }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-rose-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:shadow-2xl transition-transform"
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-rose-600 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-md hover:shadow-lg transition-transform"
             >
               &#8594;
             </motion.button>
@@ -104,7 +105,7 @@ const ExerciseDetail = () => {
         )}
       </motion.div>
 
-      <div className="px-4 sm:px-8 md:px-12 pb-5">
+      <div className="px-4 sm:px-8 md:px-12 pb-10 max-w-5xl mx-auto">
         {/* Header */}
         <motion.header
           initial={{ opacity: 0, y: -40 }}
@@ -114,15 +115,16 @@ const ExerciseDetail = () => {
         >
           <button
             onClick={() => navigate(-1)}
-            className="mb-6 px-5 py-3 bg-rose-200 text-rose-700 font-semibold rounded-full hover:bg-rose-300 transition-shadow shadow-md hover:shadow-xl"
+            className="mb-6 px-5 py-3 bg-rose-200 text-rose-700 font-semibold rounded-full hover:bg-rose-300 shadow-md transition-shadow"
           >
             ← Back
           </button>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-rose-700 mb-3 drop-shadow-lg tracking-tight">
-            {exercise.name}
+            {exercise.name || "Unknown"}
           </h1>
           <p className="text-gray-700 sm:text-lg md:text-xl tracking-wide">
-            {exercise.category} • {exercise.level}
+            {exercise.category ? exercise.category.charAt(0).toUpperCase() + exercise.category.slice(1) : "Unknown"} •{" "}
+            {exercise.level ? exercise.level.charAt(0).toUpperCase() + exercise.level.slice(1) : "Unknown"}
           </p>
         </motion.header>
 
@@ -131,72 +133,92 @@ const ExerciseDetail = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="bg-white/90 backdrop-blur-sm p-4 sm:p-8 rounded-3xl shadow-xl text-gray-800 font-semibold mb-12 w-full max-w-3xl mx-auto hover:shadow-2xl transition-shadow"
+          className="bg-white/90 backdrop-blur-sm p-6 sm:p-8 rounded-3xl shadow-md mb-12"
         >
-          <p className="flex items-center gap-2 sm:gap-3 text-xl sm:text-3xl text-rose-700 font-bold mb-3 sm:mb-5 justify-center">
+          <p className="flex items-center gap-2 sm:gap-3 text-xl sm:text-3xl text-rose-700 font-bold mb-4 justify-center">
             <GiWeightCrush /> Instructions
           </p>
           <p className="text-gray-700 leading-relaxed whitespace-pre-line text-center sm:text-left text-sm sm:text-base">
-            {exercise.instructions}
+            {exercise.instructions || "No instructions available."}
           </p>
         </motion.section>
 
-        {/* Info + Muscles Container */}
-        <motion.div
+        {/* Info Section */}
+        <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 w-full max-w-5xl mx-auto"
+          className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12"
         >
-          {[
-            {
-              label: "Category",
-              value: exercise.category,
-              icon: <RiBarChart2Fill className="text-rose-600 text-3xl sm:text-4xl mx-auto" />,
-              bg: "bg-rose-50",
-            },
-            {
-              label: "Equipment",
-              value: exercise.equipment,
-              icon: <GiWeight className="text-rose-600 text-3xl sm:text-4xl mx-auto" />,
-              bg: "bg-rose-200",
-            },
-            {
-              label: "Level",
-              value: exercise.level,
-              icon: <GiProgression className="text-rose-600 text-3xl sm:text-4xl mx-auto" />,
-              bg: "bg-rose-50",
-            },
-            {
-              label: "Mechanic",
-              value: exercise.mechanic,
-              icon: <GiCogsplosion className="text-rose-600 text-3xl sm:text-4xl mx-auto" />,
-              bg: "bg-rose-200",
-            },
-            {
-              label: "Primary Muscles",
-              value: exercise.primaryMuscles,
-              icon: <GiMuscleUp className="text-rose-600 text-3xl sm:text-4xl mx-auto" />,
-              bg: "bg-rose-50",
-            },
-            {
-              label: "Secondary Muscles",
-              value: exercise.secondaryMuscles || "None",
-              icon: <GiMuscleUp className="text-rose-600 text-3xl sm:text-4xl mx-auto" />,
-              bg: "bg-rose-200",
-            },
-          ].map((item) => (
-            <motion.div
-              key={item.label}
-              whileHover={{ scale: 1.03 }}
-              className={`${item.bg} p-3 sm:p-5 rounded-2xl sm:rounded-3xl shadow-lg hover:shadow-2xl flex flex-col items-center gap-2 sm:gap-3 text-center transition-transform`}
-            >
-              {item.icon}
-              <span className="text-xs sm:text-sm font-semibold text-gray-500">{item.label}</span>
-              <span className="text-sm sm:text-base font-bold text-gray-800">{item.value}</span>
-            </motion.div>
-          ))}
-        </motion.div>
+          {/* General Info - White Cards */}
+          <div className="space-y-6">
+            <h2 className="text-2xl font-bold text-rose-700 mb-2">
+              <div className="flex items-center gap-2">
+                <FiInfo className="text-rose-600 text-lg" />
+                <span>Information</span>
+              </div>
+            </h2>
+            {[
+              { label: "Category", value: exercise.category, icon: <RiBarChart2Fill className="text-rose-600 text-3xl" /> },
+              { label: "Equipment", value: exercise.equipment, icon: <GiWeight className="text-rose-600 text-3xl" /> },
+              { label: "Level", value: exercise.level, icon: <GiProgression className="text-rose-600 text-3xl" /> },
+              { label: "Mechanic", value: exercise.mechanic, icon: <GiCogsplosion className="text-rose-600 text-3xl" /> },
+            ].map((item) => (
+              <motion.div
+                key={item.label}
+                whileHover={{ scale: 1.02 }}
+                className="bg-white p-4 sm:p-6 rounded-2xl shadow-md flex items-center gap-4 transition-transform"
+              >
+                {item.icon}
+                <div>
+                  <p className="text-gray-500 text-sm font-semibold">{item.label}</p>
+                  <p className="text-gray-800 font-bold">
+                    {item.value ? item.value.charAt(0).toUpperCase() + item.value.slice(1) : "Unknown"}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Muscles - Rose Cards */}
+          <div className="space-y-6">
+            <h2 className="text-2xl font-bold text-rose-700 mb-2">
+              <div className="flex items-center gap-2">
+                <GiAbdominalArmor className="text-rose-600 text-lg" />
+                <span>Muscles</span>
+              </div>
+            </h2>
+            {[
+              { label: "Primary Muscles", value: exercise.primaryMuscles, icon: <GiMuscleUp className="text-white text-3xl" /> },
+              {
+                label: "Secondary Muscles",
+                value: exercise.secondaryMuscles || ["None"],
+                icon: <GiMuscleFat className="text-white text-3xl" />,
+              },
+            ].map((item) => (
+              <motion.div
+                key={item.label}
+                whileHover={{ scale: 1.02 }}
+                className="bg-rose-500 p-4 sm:p-6 rounded-2xl shadow-md flex items-center gap-4 transition-transform"
+              >
+                {item.icon}
+                <div>
+                  <p className="text-white text-sm font-semibold">{item.label}</p>
+                  <p className="text-white font-bold">
+                    {item.value.length === 0
+                      ? "None"
+                      : item.value.map((muscle: string, i: number) => (
+                          <span key={i}>
+                            {muscle.charAt(0).toUpperCase() + muscle.slice(1)}
+                            {i < item.value.length - 1 ? ", " : ""}
+                          </span>
+                        ))}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
       </div>
 
       <ScrollTopButton />
