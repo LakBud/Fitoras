@@ -41,23 +41,26 @@ const ExerciseFilter = () => {
   ];
 
   return (
-    <div className="z-20 sticky w-full top-0 md:top-auto bg-white/90  px-4 py-4 shadow-md border-t border-red-300 md:border-b md:border-t-0 rounded-b-2xl">
+    <div className="z-20 sticky w-full top-0 md:top-auto bg-white/90 px-4 py-4 shadow-md border-t border-red-300 md:border-b md:border-t-0 rounded-b-2xl">
       {/* Desktop layout */}
-      <div className="hidden md:flex flex-row items-center gap-4">
+      <div className="hidden md:flex flex-row items-center gap-6">
+        {" "}
+        {/* Added more gap for spacing */}
         {/* Search */}
         <div className="relative w-full md:w-64 flex-1">
           <input
             type="text"
-            placeholder="Search exercises..."
+            placeholder="Search Exercises..."
             value={filters.name}
             onChange={(e) => handleChange("name", e.target.value)}
             className="pl-10 pr-4 py-2 w-full border border-red-300 rounded-full bg-red-50/70 focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-red-400 shadow-sm placeholder-gray-500 text-sm transition-all duration-200"
           />
           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-red-500 text-lg" />
         </div>
-
         {/* Filters */}
-        <div className="flex overflow-x-auto gap-3 py-1 flex-1">
+        <div className="flex overflow-x-auto gap-4 py-1 flex-1">
+          {" "}
+          {/* Increased gap */}
           {filterOptions.map(([key, options, icon]) => (
             <div key={key} className="relative flex-shrink-0 w-36 md:w-40">
               <div className="absolute left-3 top-1/2 -translate-y-1/2 text-red-500 text-lg">{icon}</div>
@@ -69,14 +72,13 @@ const ExerciseFilter = () => {
                 <option value="">{key.charAt(0).toUpperCase() + key.slice(1)}</option>
                 {[...new Set(options)].map((opt) => (
                   <option key={opt} value={opt}>
-                    {opt}
+                    {opt.charAt(0).toUpperCase() + opt.slice(1)}
                   </option>
                 ))}
               </select>
             </div>
           ))}
         </div>
-
         {/* Reset */}
         <button
           onClick={resetFilters}
@@ -87,7 +89,9 @@ const ExerciseFilter = () => {
       </div>
 
       {/* Mobile layout (sticky top) */}
-      <div className="md:hidden sticky top-[60px] z-50 bg-white/95 backdrop-blur-lg flex overflow-x-auto gap-3 items-center px-4 py-2 border-b border-red-200 shadow-sm">
+      <div className="md:hidden sticky top-[60px] z-50 bg-white/95 backdrop-blur-lg flex overflow-x-auto gap-4 items-center px-4 py-2 border-b border-red-200 shadow-sm">
+        {" "}
+        {/* Added gap */}
         {/* Reset */}
         <button
           onClick={resetFilters}
@@ -96,7 +100,6 @@ const ExerciseFilter = () => {
         >
           <FiRefreshCw />
         </button>
-
         {filterOptions.map(([key, options, icon]) => (
           <div key={key} className="relative flex-shrink-0 w-32">
             <div className="absolute left-3 top-1/2 -translate-y-1/2 text-red-500 text-lg pointer-events-none">{icon}</div>
@@ -109,7 +112,7 @@ const ExerciseFilter = () => {
               <option value="">{key.charAt(0).toUpperCase() + key.slice(1)}</option>
               {[...new Set(options)].map((opt) => (
                 <option key={opt} value={opt}>
-                  {opt}
+                  {opt.charAt(0).toUpperCase() + opt.slice(1)}
                 </option>
               ))}
             </select>
