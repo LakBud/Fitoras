@@ -1,7 +1,7 @@
 import { ExerciseList } from "../../components/exercise/ExerciseList";
 import ExerciseFilter from "../../components/exercise/ExerciseFilter";
 import { useState, useEffect } from "react";
-import { useExercise } from "../../hooks/useExercise";
+import { useExercise } from "../../hooks/useExerciseStore";
 import type { Exercises } from "../../types/exercise";
 import ScrollTopButton from "../../components/common/ScrollTopButton";
 

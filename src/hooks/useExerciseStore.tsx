@@ -1,18 +1,31 @@
-import { useEffect, useState } from "react";
+import { create } from "zustand";
+import { useEffect } from "react";
 import type { Exercises } from "../types/exercise";
 import axios from "axios";
 
 const STORAGE_KEY = "exercises";
 
+interface ExerciseState {
+  exercises: Exercises[];
+  loading: boolean;
+  setExercises: (ex: Exercises[]) => void;
+  setLoading: (loading: boolean) => void;
+}
+
+export const useExerciseStore = create<ExerciseState>((set) => ({
+  exercises: [],
+  loading: true,
+  setExercises: (ex) => set({ exercises: ex }),
+  setLoading: (loading) => set({ loading }),
+}));
+
 export function useExercise(jsonPath: string = "/data/allExercises.json") {
-  const [exercises, setExercises] = useState<Exercises[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { exercises, loading, setExercises, setLoading } = useExerciseStore();
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
 
     if (stored) {
-      // Use cached data
       try {
         setExercises(JSON.parse(stored));
       } catch (e) {
@@ -20,10 +33,9 @@ export function useExercise(jsonPath: string = "/data/allExercises.json") {
         localStorage.removeItem(STORAGE_KEY);
       }
       setLoading(false);
-      return; // do not fetch JSON again
+      return;
     }
 
-    // Only fetch JSON if nothing is in localStorage
     axios
       .get<Exercises[]>(jsonPath)
       .then((res) => {
@@ -32,7 +44,7 @@ export function useExercise(jsonPath: string = "/data/allExercises.json") {
       })
       .catch((error) => console.error("Error loading exercises:", error))
       .finally(() => setLoading(false));
-  }, [jsonPath]);
+  }, [jsonPath, setExercises, setLoading]);
 
   return { exercises, loading };
 }

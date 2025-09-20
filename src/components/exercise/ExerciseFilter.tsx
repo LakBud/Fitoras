@@ -122,7 +122,7 @@ const ExerciseFilter = ({ exercises, setFilteredExercises }: FilterProps) => {
   ];
 
   return (
-    <div className="z-50 fixed w-full top-0 md:top-auto bg-white/90 backdrop-blur-sm px-4 py-3 shadow-md border-t border-red-300 md:border-b md:border-t-0 rounded-b-2xl">
+    <div className="z-50 fixed w-full top-0 md:top-auto bg-white/90 backdrop-blur-sm px-4 py-4 shadow-md border-t border-red-300 md:border-b md:border-t-0 rounded-b-2xl">
       {/* Desktop layout (md and above) */}
       <div className="hidden md:flex flex-row items-center gap-4">
         {/* Search */}

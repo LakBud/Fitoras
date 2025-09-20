@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useExercise } from "../../hooks/useExercise";
+import { useExercise } from "../../hooks/useExerciseStore";
 import { GiCogsplosion, GiMuscleUp, GiProgression, GiWeight, GiWeightCrush } from "react-icons/gi";
 import { RiBarChart2Fill } from "react-icons/ri";
 import { motion } from "framer-motion";
