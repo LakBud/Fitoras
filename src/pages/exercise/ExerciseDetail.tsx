@@ -139,7 +139,30 @@ const ExerciseDetail = () => {
             <GiWeightCrush /> Instructions
           </p>
           <p className="text-gray-700 leading-relaxed whitespace-pre-line text-center sm:text-left text-sm sm:text-base">
-            {exercise.instructions || "No instructions available."}
+            {(() => {
+              if (!exercise.instructions) return "No instructions available.";
+
+              if (typeof exercise.instructions === "string") {
+                const text = exercise.instructions.trim();
+                return text
+                  ? text.charAt(0).toUpperCase() + text.slice(1).replace(/\s*$/, "") + (/[.!?]$/.test(text) ? "" : ".")
+                  : "No instructions available.";
+              }
+
+              // If it's an object, join values
+              if (typeof exercise.instructions === "object") {
+                return Object.values(exercise.instructions)
+                  .map((instr) => String(instr).trim())
+                  .filter(Boolean)
+                  .map(
+                    (instr) =>
+                      instr.charAt(0).toUpperCase() + instr.slice(1).replace(/\s*$/, "") + (/[.!?]$/.test(instr) ? "" : ".")
+                  )
+                  .join("\n");
+              }
+
+              return "No instructions available.";
+            })()}
           </p>
         </motion.section>
 
