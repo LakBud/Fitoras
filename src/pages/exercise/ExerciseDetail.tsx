@@ -190,7 +190,7 @@ const ExerciseDetail = () => {
                 <div>
                   <p className="text-gray-500 text-sm font-semibold">{item.label}</p>
                   <p className="text-gray-800 font-bold">
-                    {item.value ? item.value.charAt(0).toUpperCase() + item.value.slice(1) : "Unknown"}
+                    {item.value ? item.value.charAt(0).toUpperCase() + item.value.slice(1) : "None"}
                   </p>
                 </div>
               </motion.div>
