@@ -1,7 +1,6 @@
 import { FiHome } from "react-icons/fi";
 import { GiPowerLightning, GiWeightLiftingUp } from "react-icons/gi";
-import { RiWeightLine } from "react-icons/ri";
-import { BsSignpostSplit } from "react-icons/bs";
+import { BsCalendar2Check, BsSignpostSplit } from "react-icons/bs";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import ExerciseFilter from "../exercise/ExerciseFilter";
@@ -13,7 +12,7 @@ const NavBar = () => {
   const links = [
     { to: "/", label: "Home", icon: <FiHome size={22} /> },
     { to: "/splits", label: "Splits", icon: <BsSignpostSplit size={22} /> },
-    { to: "/current", label: "Current", icon: <RiWeightLine size={22} /> },
+    { to: "/calendar", label: "Calendar", icon: <BsCalendar2Check size={22} /> },
     { to: "/exercise", label: "Exercises", icon: <GiWeightLiftingUp size={22} /> },
   ];
 

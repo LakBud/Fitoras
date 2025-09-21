@@ -111,7 +111,7 @@ const ExerciseDetail = () => {
           initial={{ opacity: 0, y: -40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="text-center mb-12 mt-10"
         >
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-rose-700 mb-3 drop-shadow-lg tracking-tight">
             {exercise.name || "Unknown"}

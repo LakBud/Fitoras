@@ -1,9 +1,10 @@
 import { Route, Routes } from "react-router-dom";
 import HomePage from "../pages/home/HomePage";
-import SplitDetail from "../pages/splits/SplitDetail";
 import Exercise from "../pages/exercise/Exercise";
-import WorkoutDay from "../pages/day/WorkoutDay";
 import ExerciseDetail from "../pages/exercise/ExerciseDetail";
+import Calendar from "../pages/calendar/Calendar";
+import Splits from "../pages/splits/Splits";
+import SplitDetailPage from "../pages/splits/SplitDetailPage";
 
 const AppRoutes = () => {
   return (
@@ -11,8 +12,9 @@ const AppRoutes = () => {
       <div>
         <Routes>
           <Route path="/" element={<HomePage />}></Route>
-          <Route path="/splits" element={<SplitDetail />}></Route>
-          <Route path="/current" element={<WorkoutDay />}></Route>
+          <Route path="/splits" element={<Splits />}></Route>
+          <Route path="/splits/:id" element={<SplitDetailPage />}></Route>
+          <Route path="/calendar" element={<Calendar />}></Route>
           <Route path="/exercise" element={<Exercise />}></Route>
           <Route path="/exercise/:id" element={<ExerciseDetail />}></Route>
         </Routes>

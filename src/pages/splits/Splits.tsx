@@ -1,6 +1,6 @@
 import SplitList from "../../components/split/SplitList";
 
-const SplitDetail = () => {
+const Splits = () => {
   return (
     <div>
       <div>
@@ -14,4 +14,4 @@ const SplitDetail = () => {
   );
 };
 
-export default SplitDetail;
+export default Splits;
