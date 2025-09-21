@@ -113,12 +113,6 @@ const ExerciseDetail = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <button
-            onClick={() => navigate(-1)}
-            className="mb-6 px-5 py-3 bg-rose-200 text-rose-700 font-semibold rounded-full hover:bg-rose-300 shadow-md transition-shadow"
-          >
-            ← Back
-          </button>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-rose-700 mb-3 drop-shadow-lg tracking-tight">
             {exercise.name || "Unknown"}
           </h1>
@@ -244,7 +238,15 @@ const ExerciseDetail = () => {
         </motion.section>
       </div>
 
-      <ScrollTopButton />
+      <nav>
+        <button
+          onClick={() => navigate(-1)}
+          className="mb-6 fixed px-5 py-3 bg-rose-200 text-rose-700 font-semibold rounded-full hover:bg-rose-300 shadow-md transition-shadow md:top-20 top-5 left-3 z-10"
+        >
+          ← Back
+        </button>
+        <ScrollTopButton />
+      </nav>
     </div>
   );
 };
