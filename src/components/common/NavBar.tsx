@@ -8,7 +8,7 @@ import ExerciseFilter from "../exercise/ExerciseFilter";
 
 const NavBar = () => {
   const location = useLocation();
-  const isExercisePage = location.pathname.startsWith("/exercise");
+  const isExercisePage = location.pathname === "/exercise";
 
   const links = [
     { to: "/", label: "Home", icon: <FiHome size={22} /> },
