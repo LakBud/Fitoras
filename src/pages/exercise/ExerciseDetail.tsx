@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useExercise } from "../../hooks/useExercise";
-import { GiAbdominalArmor, GiCogsplosion, GiMuscleFat, GiMuscleUp, GiProgression, GiWeight, GiWeightCrush } from "react-icons/gi";
+import { GiCogsplosion, GiMuscleFat, GiMuscleUp, GiProgression, GiWeight, GiWeightCrush } from "react-icons/gi";
 import { RiBarChart2Fill } from "react-icons/ri";
 import { motion } from "framer-motion";
 import ScrollTopButton from "../../components/common/ScrollTopButton";
-import { FiInfo } from "react-icons/fi";
 
 const ExerciseDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { exercises, loading } = useExercise();
   const navigate = useNavigate();
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
@@ -21,6 +21,7 @@ const ExerciseDetail = () => {
   const [currentImage, setCurrentImage] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState<"info" | "muscles">("info");
 
   if (loading) {
     return (
@@ -90,14 +91,14 @@ const ExerciseDetail = () => {
             <motion.button
               onClick={prevImage}
               whileHover={{ scale: 1.15 }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-rose-600 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-md hover:shadow-lg transition-transform"
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-rose-600 text-white rounded-full w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center shadow-md hover:shadow-lg transition-transform"
             >
               &#8592;
             </motion.button>
             <motion.button
               onClick={nextImage}
               whileHover={{ scale: 1.15 }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-rose-600 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-md hover:shadow-lg transition-transform"
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-rose-600 text-white rounded-full w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center shadow-md hover:shadow-lg transition-transform"
             >
               &#8594;
             </motion.button>
@@ -132,109 +133,125 @@ const ExerciseDetail = () => {
           <p className="flex items-center gap-2 sm:gap-3 text-xl sm:text-3xl text-rose-700 font-bold mb-4 justify-center">
             <GiWeightCrush /> Instructions
           </p>
-          <p className="text-gray-700 leading-relaxed whitespace-pre-line text-center sm:text-left text-sm sm:text-base">
-            {(() => {
-              if (!exercise.instructions) return "No instructions available.";
 
-              if (typeof exercise.instructions === "string") {
-                const text = exercise.instructions.trim();
-                return text
-                  ? text.charAt(0).toUpperCase() + text.slice(1).replace(/\s*$/, "") + (/[.!?]$/.test(text) ? "" : ".")
-                  : "No instructions available.";
-              }
-
-              // If it's an object, join values
-              if (typeof exercise.instructions === "object") {
-                return Object.values(exercise.instructions)
-                  .map((instr) => String(instr).trim())
-                  .filter(Boolean)
-                  .map(
-                    (instr) =>
-                      instr.charAt(0).toUpperCase() + instr.slice(1).replace(/\s*$/, "") + (/[.!?]$/.test(instr) ? "" : ".")
-                  )
-                  .join("\n");
-              }
-
-              return "No instructions available.";
-            })()}
-          </p>
+          {exercise.instructions ? (
+            <ol className="list-decimal list-inside text-gray-700 leading-relaxed whitespace-pre-line text-sm sm:text-base">
+              {typeof exercise.instructions === "string"
+                ? exercise.instructions.split("\n").map((step, i) => <li key={i}>{step.trim()}</li>)
+                : Object.values(exercise.instructions)
+                    .map((step) => String(step).trim())
+                    .filter(Boolean)
+                    .map((step, i) => <li key={i}>{step}</li>)}
+            </ol>
+          ) : (
+            <p className="text-gray-700 text-center sm:text-left text-sm sm:text-base">No instructions available.</p>
+          )}
         </motion.section>
 
-        {/* Info Section */}
+        {/* Tab Slider */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12"
+          className="mb-12"
         >
-          {/* General Info - White Cards */}
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-rose-700 mb-2">
-              <div className="flex items-center gap-2">
-                <FiInfo className="text-rose-600 text-lg" />
-                <span>Information</span>
-              </div>
-            </h2>
-            {[
-              { label: "Category", value: exercise.category, icon: <RiBarChart2Fill className="text-rose-600 text-3xl" /> },
-              { label: "Equipment", value: exercise.equipment, icon: <GiWeight className="text-rose-600 text-3xl" /> },
-              { label: "Level", value: exercise.level, icon: <GiProgression className="text-rose-600 text-3xl" /> },
-              { label: "Mechanic", value: exercise.mechanic, icon: <GiCogsplosion className="text-rose-600 text-3xl" /> },
-            ].map((item) => (
-              <motion.div
-                key={item.label}
-                whileHover={{ scale: 1.02 }}
-                className="bg-white p-4 sm:p-6 rounded-2xl shadow-md flex items-center gap-4 transition-transform"
+          <div className="relative flex w-full max-w-xs mx-auto bg-gray-100 rounded-full p-1 mb-6">
+            {["info", "muscles"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab as "info" | "muscles")}
+                className={`relative z-10 flex-1 px-4 py-2 text-sm sm:text-base font-semibold rounded-full transition-colors ${
+                  activeTab === tab ? "text-white" : "text-gray-600"
+                }`}
               >
-                {item.icon}
-                <div>
-                  <p className="text-gray-500 text-sm font-semibold">{item.label}</p>
-                  <p className="text-gray-800 font-bold">
-                    {item.value ? item.value.charAt(0).toUpperCase() + item.value.slice(1) : "None"}
-                  </p>
-                </div>
-              </motion.div>
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                {activeTab === tab && (
+                  <motion.div
+                    layoutId="tabSlider"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    className="absolute inset-0 bg-rose-600 rounded-full z-[-1]"
+                  />
+                )}
+              </button>
             ))}
           </div>
 
-          {/* Muscles - Rose Cards */}
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-rose-700 mb-2">
-              <div className="flex items-center gap-2">
-                <GiAbdominalArmor className="text-rose-600 text-lg" />
-                <span>Muscles</span>
-              </div>
-            </h2>
-            {[
-              { label: "Primary Muscles", value: exercise.primaryMuscles, icon: <GiMuscleUp className="text-white text-3xl" /> },
-              {
-                label: "Secondary Muscles",
-                value: exercise.secondaryMuscles || ["None"],
-                icon: <GiMuscleFat className="text-white text-3xl" />,
-              },
-            ].map((item) => (
-              <motion.div
-                key={item.label}
-                whileHover={{ scale: 1.02 }}
-                className="bg-rose-500 p-4 sm:p-6 rounded-2xl shadow-md flex items-center gap-4 transition-transform"
-              >
-                {item.icon}
-                <div>
-                  <p className="text-white text-sm font-semibold">{item.label}</p>
-                  <p className="text-white font-bold">
-                    {item.value.length === 0
-                      ? "None"
-                      : item.value.map((muscle: string, i: number) => (
-                          <span key={i}>
-                            {muscle.charAt(0).toUpperCase() + muscle.slice(1)}
-                            {i < item.value.length - 1 ? ", " : ""}
-                          </span>
-                        ))}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          {/* Info Section */}
+          {activeTab === "info" && (
+            <div className="grid grid-cols-2 lg:grid-cols-4 sm:grid-cols-2 gap-4 justify-items-center justify-center">
+              {[
+                {
+                  label: "Category",
+                  value: exercise.category,
+                  icon: <RiBarChart2Fill className="text-rose-600 text-2xl sm:text-3xl" />,
+                },
+                {
+                  label: "Equipment",
+                  value: exercise.equipment,
+                  icon: <GiWeight className="text-rose-600 text-2xl sm:text-3xl" />,
+                },
+                { label: "Level", value: exercise.level, icon: <GiProgression className="text-rose-600 text-2xl sm:text-3xl" /> },
+                {
+                  label: "Mechanic",
+                  value: exercise.mechanic,
+                  icon: <GiCogsplosion className="text-rose-600 text-2xl sm:text-3xl" />,
+                },
+              ].map((item) => (
+                <motion.div
+                  key={item.label}
+                  whileHover={{ scale: 1.03 }}
+                  className="bg-white p-3 sm:p-4 rounded-xl shadow-sm flex flex-col items-center gap-2 transition-transform w-full max-w-[180px] text-center"
+                >
+                  {item.icon}
+                  <div>
+                    <p className="text-gray-500 text-xs sm:text-sm font-medium">{item.label}</p>
+                    <p className="text-gray-800 text-sm sm:text-base font-semibold">
+                      {item.value ? item.value.charAt(0).toUpperCase() + item.value.slice(1) : "None"}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+
+          {/* Muscles Section */}
+          {activeTab === "muscles" && (
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              {[
+                {
+                  label: "Primary Muscles",
+                  value: exercise.primaryMuscles,
+                  icon: <GiMuscleUp className="text-white text-2xl sm:text-3xl" />,
+                },
+                {
+                  label: "Secondary Muscles",
+                  value: exercise.secondaryMuscles || ["None"],
+                  icon: <GiMuscleFat className="text-white text-2xl sm:text-3xl" />,
+                },
+              ].map((item) => (
+                <motion.div
+                  key={item.label}
+                  whileHover={{ scale: 1.02 }}
+                  className="bg-rose-500 p-3 sm:p-4 rounded-xl shadow-sm flex flex-col items-center gap-1 transition-transform w-full max-w-[250px] text-center"
+                >
+                  {item.icon}
+                  <div>
+                    <p className="text-white text-sm sm:text-base font-semibold">{item.label}</p>
+                    <p className="text-white font-bold break-words">
+                      {item.value.length === 0
+                        ? "None"
+                        : item.value.map((muscle: string, i: number) => (
+                            <span key={i}>
+                              {muscle.charAt(0).toUpperCase() + muscle.slice(1)}
+                              {i < item.value.length - 1 ? ", " : ""}
+                            </span>
+                          ))}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
         </motion.section>
       </div>
 
