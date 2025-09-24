@@ -31,32 +31,30 @@ const SplitDetailPage = () => {
   }
 
   return (
-    <div className="p-6 space-y-6 relative">
+    <div className="p-6 relative">
       <h1 className="text-2xl font-bold mb-6">{split.name}</h1>
 
-      {/* Mobile-friendly grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* Weekly schedule grid */}
+      <div className="grid grid-cols-7 gap-2 text-center">
         {split.days.map((day) => (
-          <div key={day.day} className="bg-white rounded-xl shadow p-4 flex flex-col justify-between">
-            <div>
-              <h2 className="font-semibold text-lg mb-2">{day.day}</h2>
-              {day.exercises.length > 0 ? (
-                <ul className="list-disc pl-5 space-y-1 text-gray-700 text-sm">
-                  {day.exercises.map((ex) => (
-                    <li key={ex.id}>
-                      {ex.name}{" "}
-                      <span className="text-gray-500">
-                        ({ex.muscleGroup}
-                        {ex.sets ? ` • ${ex.sets} sets` : ""}
-                        {ex.reps ? ` × ${ex.reps} reps` : ""})
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-gray-500 italic text-sm">No exercises</p>
-              )}
-            </div>
+          <div key={day.day} className="bg-white rounded-xl shadow p-3 flex flex-col min-h-[150px]">
+            <h2 className="font-semibold text-md mb-2 border-b pb-1">{day.day}</h2>
+            {day.exercises.length > 0 ? (
+              <ul className="text-sm text-gray-700 space-y-1 mt-1">
+                {day.exercises.map((ex) => (
+                  <li key={ex.id}>
+                    <span className="font-medium">{ex.name}</span>{" "}
+                    <span className="text-gray-500">
+                      ({ex.muscleGroup}
+                      {ex.sets ? ` • ${ex.sets} sets` : ""}
+                      {ex.reps ? ` × ${ex.reps} reps` : ""})
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-400 italic text-sm mt-2">Rest</p>
+            )}
           </div>
         ))}
       </div>

@@ -2,10 +2,12 @@ import { useEffect, useRef, type JSX } from "react";
 import { FiSearch, FiZap, FiSettings, FiBox, FiLayers, FiTarget, FiShuffle, FiRefreshCw, FiX } from "react-icons/fi";
 import { useExerciseStore } from "../../stores/useExerciseStore";
 import { useFilterStore } from "../../stores/useFilterStore";
+import useBreakpoint from "../../hooks/useBreakpoint";
 
 const ExerciseFilter = () => {
   const { exercises } = useExerciseStore();
   const { filters, setFilters, resetFilters, applyFilters } = useFilterStore();
+  const { isDesktop } = useBreakpoint(); // dynamic breakpoint hook
 
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -40,12 +42,13 @@ const ExerciseFilter = () => {
     ["secondaryMuscle", exercises.flatMap((e) => e.secondaryMuscles || []).filter(isString), <FiShuffle />],
   ];
 
-  return (
-    <div className="z-20 sticky w-full top-0 md:top-auto bg-white/90 px-4 py-4 shadow-md border-t border-red-300 md:border-b md:border-t-0 rounded-b-2xl">
-      {/* Desktop layout */}
-      <div className="hidden md:flex flex-row items-center gap-6">
-        {" "}
-        {/* Added more gap for spacing */}
+  // ----------------------
+  // Render
+  // ----------------------
+  if (isDesktop) {
+    // Desktop layout
+    return (
+      <div className="z-20 sticky w-full top-0 md:top-auto bg-white/90 px-4 py-4 shadow-md border-t border-red-300 md:border-b md:border-t-0 rounded-b-2xl flex flex-row items-center gap-6">
         {/* Search */}
         <div className="relative w-full md:w-64 flex-1">
           <input
@@ -57,10 +60,9 @@ const ExerciseFilter = () => {
           />
           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-red-500 text-lg" />
         </div>
+
         {/* Filters */}
         <div className="flex overflow-x-auto gap-4 py-1 flex-1">
-          {" "}
-          {/* Increased gap */}
           {filterOptions.map(([key, options, icon]) => (
             <div key={key} className="relative flex-shrink-0 w-36 md:w-40">
               <div className="absolute left-3 top-1/2 -translate-y-1/2 text-red-500 text-lg">{icon}</div>
@@ -79,6 +81,7 @@ const ExerciseFilter = () => {
             </div>
           ))}
         </div>
+
         {/* Reset */}
         <button
           onClick={resetFilters}
@@ -87,61 +90,60 @@ const ExerciseFilter = () => {
           Reset
         </button>
       </div>
+    );
+  }
 
-      {/* Mobile layout (sticky top) */}
-      <div className="md:hidden sticky top-[60px] z-50 bg-white/95 backdrop-blur-lg flex overflow-x-auto gap-3 items-center px-3 py-2 border-b border-red-200 shadow-sm">
-        {/* Reset */}
-        <button
-          onClick={resetFilters}
-          title="Reset filters"
-          className="p-2 rounded-full bg-red-600 shadow-sm flex items-center justify-center text-white transition-all duration-200 hover:bg-red-700"
-        >
-          <FiRefreshCw className="text-lg" />
-        </button>
+  // Mobile layout
+  return (
+    <div className="sticky top-[60px] z-50 bg-white/95 backdrop-blur-lg flex overflow-x-auto gap-3 items-center px-3 py-2 border-b border-red-200 shadow-sm">
+      {/* Reset */}
+      <button
+        onClick={resetFilters}
+        title="Reset filters"
+        className="p-2 rounded-full bg-red-600 shadow-sm flex items-center justify-center text-white transition-all duration-200 hover:bg-red-700"
+      >
+        <FiRefreshCw className="text-lg" />
+      </button>
 
-        {/* Search input */}
-        <div className="relative flex-1 min-w-[140px]">
-          <input
-            type="text"
-            placeholder="Search"
-            value={filters.name}
-            onChange={(e) => handleChange("name", e.target.value)}
-            className="pl-10 pr-10 py-2 w-full border border-red-300 rounded-full bg-red-50/70 text-gray-800 placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-red-400 shadow-sm transition-all duration-200"
-          />
-          {/* Search icon (left) */}
-          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-red-500 text-lg" />
-
-          {/* Clear button (right) */}
-          {filters.name && (
-            <button
-              type="button"
-              onClick={() => handleChange("name", "")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-red-500 transition-colors"
-            >
-              <FiX className="text-lg" />
-            </button>
-          )}
-        </div>
-
-        {/* Filter dropdowns */}
-        {filterOptions.map(([key, options]) => (
-          <div key={key} className="flex-shrink-0">
-            <select
-              title={key}
-              value={filters[key]}
-              onChange={(e) => handleChange(key, e.target.value)}
-              className="px-3 py-2 rounded-full bg-red-50 shadow-sm text-red-600 text-sm transition-all duration-200 hover:bg-red-100 focus:bg-red-200"
-            >
-              <option value="">{key.charAt(0).toUpperCase() + key.slice(1)}</option>
-              {[...new Set(options)].map((opt) => (
-                <option key={opt} value={opt}>
-                  {opt.charAt(0).toUpperCase() + opt.slice(1)}
-                </option>
-              ))}
-            </select>
-          </div>
-        ))}
+      {/* Search input */}
+      <div className="relative flex-1 min-w-[140px]">
+        <input
+          type="text"
+          placeholder="Search"
+          value={filters.name}
+          onChange={(e) => handleChange("name", e.target.value)}
+          className="pl-10 pr-10 py-2 w-full border border-red-300 rounded-full bg-red-50/70 text-gray-800 placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-red-400 shadow-sm transition-all duration-200"
+        />
+        <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-red-500 text-lg" />
+        {filters.name && (
+          <button
+            type="button"
+            onClick={() => handleChange("name", "")}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-red-500 transition-colors"
+          >
+            <FiX className="text-lg" />
+          </button>
+        )}
       </div>
+
+      {/* Filter dropdowns */}
+      {filterOptions.map(([key, options]) => (
+        <div key={key} className="flex-shrink-0">
+          <select
+            title={key}
+            value={filters[key]}
+            onChange={(e) => handleChange(key, e.target.value)}
+            className="px-3 py-2 rounded-full bg-red-50 shadow-sm text-red-600 text-sm transition-all duration-200 hover:bg-red-100 focus:bg-red-200"
+          >
+            <option value="">{key.charAt(0).toUpperCase() + key.slice(1)}</option>
+            {[...new Set(options)].map((opt) => (
+              <option key={opt} value={opt}>
+                {opt.charAt(0).toUpperCase() + opt.slice(1)}
+              </option>
+            ))}
+          </select>
+        </div>
+      ))}
     </div>
   );
 };
