@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom";
-import HomePage from "../pages/home/HomePage";
+import HomePage from "../pages/Home";
 import Exercise from "../pages/exercise/Exercise";
 import ExerciseDetail from "../pages/exercise/ExerciseDetail";
-import Calendar from "../pages/calendar/Calendar";
+import Calendar from "../pages/Calendar";
 import Splits from "../pages/splits/Splits";
 import SplitDetailPage from "../pages/splits/SplitDetailPage";
 
