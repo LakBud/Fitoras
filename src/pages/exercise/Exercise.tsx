@@ -7,7 +7,7 @@ import ScrollTopButton from "../../components/common/ScrollTopButton";
 
 const Exercise = () => {
   const { exercises, fetchExercises, loading } = useExerciseStore();
-  const { filteredExercises, applyFilters } = useFilterStore();
+  const { applyFilters } = useFilterStore();
   const { scrollY, setScrollY } = useScrollStore();
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -53,7 +53,7 @@ const Exercise = () => {
       {/* Exercise List */}
       <main className="grid gap-6 sm:gap-8 md:gap-10">
         <div className="bg-white rounded-3xl shadow-2xl p-4 sm:p-6 md:p-10 border border-rose-200">
-          <ExerciseList exercises={filteredExercises} />
+          <ExerciseList />
         </div>
       </main>
 
