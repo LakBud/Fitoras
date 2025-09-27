@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useSplitsStore } from "../../stores/useSplitStore";
 import { useCurrentSplitStore } from "../../stores/useCurrentSplitStore";
-import SplitTable from "../../components/split/SplitTable";
-import SplitDetailForm from "../../components/split/SplitDetailForm";
+import SplitTable from "../../components/split/detail/SplitTable";
+import SplitDetailForm from "../../components/split/detail/SplitDetailForm";
 
 const SplitDetailPage = () => {
   const { id } = useParams<{ id: string }>();

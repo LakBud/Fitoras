@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { useCurrentSplitStore } from "../../stores/useCurrentSplitStore";
-import { useExercise } from "../../hooks/useExercise";
+import { useCurrentSplitStore } from "../../../stores/useCurrentSplitStore";
+import { useExercise } from "../../../hooks/useExercise";
 import { motion } from "framer-motion";
 
 const SplitTable = () => {

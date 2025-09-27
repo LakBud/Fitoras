@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useParams } from "react-router-dom";
-import { useSplitsStore } from "../../stores/useSplitStore";
-import { useExerciseStore } from "../../stores/useExerciseStore";
-import { useFilterStore } from "../../stores/useFilterStore";
-import { useExercise } from "../../hooks/useExercise";
-import ExerciseFilter from "../exercise/ExerciseFilter";
-import type { Weekday, WorkoutDay, SplitExercise, WorkoutCategory } from "../../types/splits";
-import type { Exercises } from "../../types/exercise";
+import { useSplitsStore } from "../../../stores/useSplitStore";
+import { useExerciseStore } from "../../../stores/useExerciseStore";
+import { useFilterStore } from "../../../stores/useFilterStore";
+import { useExercise } from "../../../hooks/useExercise";
+import type { Weekday, WorkoutDay, SplitExercise, WorkoutCategory } from "../../../types/splits";
+import type { Exercises } from "../../../types/exercise";
 
 const SplitDetailForm = () => {
   const { id } = useParams<{ id: string }>();
@@ -163,9 +162,6 @@ const SplitDetailForm = () => {
           </button>
         </div>
       </div>
-
-      {/* Exercise Filter */}
-      <ExerciseFilter />
 
       {/* Exercises in the day/category */}
       <div className="space-y-3">
