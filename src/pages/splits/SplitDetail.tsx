@@ -5,7 +5,7 @@ import { useCurrentSplitStore } from "../../stores/useCurrentSplitStore";
 import SplitTable from "../../components/split/detail/SplitTable";
 import SplitDetailForm from "../../components/split/detail/SplitDetailForm";
 
-const SplitDetailPage = () => {
+const SplitDetail = () => {
   const { id } = useParams<{ id: string }>();
   const splits = useSplitsStore((state) => state.splits);
   const { currentSplit, setCurrentSplit } = useCurrentSplitStore();
@@ -61,4 +61,4 @@ const SplitDetailPage = () => {
   );
 };
 
-export default SplitDetailPage;
+export default SplitDetail;

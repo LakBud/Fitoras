@@ -5,47 +5,41 @@ import { GiCogsplosion, GiMuscleFat, GiMuscleUp, GiProgression, GiWeight, GiWeig
 import { RiBarChart2Fill } from "react-icons/ri";
 import { motion } from "framer-motion";
 import ScrollTopButton from "../../components/common/ScrollTopButton";
+import useBreakpoint from "../../hooks/useBreakpoint";
 
 const ExerciseDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { exercises, loading } = useExercise();
+  const { isDesktop, isMobile } = useBreakpoint();
   const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
 
-  // ----------------------
-  // Hooks must always be at top
-  // ----------------------
   const [currentImage, setCurrentImage] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState<"info" | "muscles">("info");
 
-  if (loading) {
+  if (loading)
     return (
       <div className="flex justify-center items-center h-screen bg-rose-50">
         <p className="text-xl text-red-400 animate-pulse">Loading...</p>
       </div>
     );
-  }
 
   const exercise = exercises.find((e) => e.id === id);
 
-  if (!exercise) {
+  if (!exercise)
     return (
       <div className="flex justify-center items-center h-screen bg-rose-50">
         <p className="text-xl text-red-500 font-semibold">404 ERROR: Exercise not found.</p>
       </div>
     );
-  }
 
   const images = exercise.images || [];
 
-  // ----------------------
-  // Slider Handlers
-  // ----------------------
   const nextImage = () => setCurrentImage((prev) => (prev + 1) % images.length);
   const prevImage = () => setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
 
@@ -61,13 +55,13 @@ const ExerciseDetail = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-rose-50 to-rose-100">
+    <div className="min-h-screen bg-gradient-to-b from-rose-50 to-rose-100 relative">
       {/* Image Slider */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className="relative w-full h-80 sm:h-96 md:h-[500px] mb-6 overflow-hidden shadow-2xl"
+        className={`relative w-full mb-6 overflow-hidden shadow-2xl ${isDesktop ? "h-[600px]" : isMobile ? "h-72" : "h-96"}`}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -91,14 +85,18 @@ const ExerciseDetail = () => {
             <motion.button
               onClick={prevImage}
               whileHover={{ scale: 1.15 }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-rose-600 text-white rounded-full w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center shadow-md hover:shadow-lg transition-transform"
+              className={`absolute left-4 top-1/2 -translate-y-1/2 bg-rose-600 text-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-transform ${
+                isDesktop ? "w-16 h-16" : isMobile ? "w-10 h-10" : "w-14 h-14"
+              }`}
             >
               &#8592;
             </motion.button>
             <motion.button
               onClick={nextImage}
               whileHover={{ scale: 1.15 }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-rose-600 text-white rounded-full w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center shadow-md hover:shadow-lg transition-transform"
+              className={`absolute right-4 top-1/2 -translate-y-1/2 bg-rose-600 text-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-transform ${
+                isDesktop ? "w-16 h-16" : isMobile ? "w-10 h-10" : "w-14 h-14"
+              }`}
             >
               &#8594;
             </motion.button>
@@ -149,12 +147,8 @@ const ExerciseDetail = () => {
         </motion.section>
 
         {/* Tab Slider */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-12"
-        >
+        <div className="mb-12">
+          {/* Tabs */}
           <div className="relative flex w-full max-w-xs mx-auto bg-gray-100 rounded-full p-1 mb-6">
             {["info", "muscles"].map((tab) => (
               <button
@@ -176,10 +170,16 @@ const ExerciseDetail = () => {
             ))}
           </div>
 
-          {/* Info Section */}
-          {activeTab === "info" && (
-            <div className="grid grid-cols-2 lg:grid-cols-4 sm:grid-cols-2 gap-4 justify-items-center justify-center">
-              {[
+          {/* Animated Tab Content */}
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="grid gap-4 justify-items-center sm:grid-cols-2 lg:grid-cols-4"
+          >
+            {activeTab === "info" &&
+              [
                 {
                   label: "Category",
                   value: exercise.category,
@@ -211,13 +211,9 @@ const ExerciseDetail = () => {
                   </div>
                 </motion.div>
               ))}
-            </div>
-          )}
 
-          {/* Muscles Section */}
-          {activeTab === "muscles" && (
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              {[
+            {activeTab === "muscles" &&
+              [
                 {
                   label: "Primary Muscles",
                   value: exercise.primaryMuscles,
@@ -250,18 +246,24 @@ const ExerciseDetail = () => {
                   </div>
                 </motion.div>
               ))}
-            </div>
-          )}
-        </motion.section>
+          </motion.div>
+        </div>
       </div>
 
+      {/* Back Button & ScrollTop */}
       <nav>
         <button
           onClick={() => navigate(-1)}
-          className="mb-6 fixed px-5 py-3 bg-rose-200 text-rose-700 font-semibold rounded-full hover:bg-rose-300 shadow-md transition-shadow md:top-20 top-5 left-3 z-10"
+          className={`
+            fixed mb-6 px-4 sm:px-5 py-2 sm:py-3
+            bg-rose-200 text-rose-700 font-semibold rounded-full
+            shadow-md hover:bg-rose-300 transition-shadow
+            ${isDesktop ? "top-20 left-3 text-base sm:text-lg" : isMobile ? "top-5 left-3 text-sm" : "top-10 left-3 text-sm"}
+          `}
         >
           ← Back
         </button>
+
         <ScrollTopButton />
       </nav>
     </div>
