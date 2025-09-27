@@ -1,71 +1,62 @@
+import { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import type { Split } from "../../types/splits";
+import { useSplitsStore } from "../../stores/useSplitStore";
+import { useCurrentSplitStore } from "../../stores/useCurrentSplitStore";
+import SplitTable from "../../components/split/SplitTable";
+import SplitDetailForm from "../../components/split/SplitDetailForm";
 
 const SplitDetailPage = () => {
   const { id } = useParams<{ id: string }>();
-  const [split, setSplit] = useState<Split | null>(null);
+  const splits = useSplitsStore((state) => state.splits);
+  const { currentSplit, setCurrentSplit } = useCurrentSplitStore();
 
+  // Find the split based on the URL ID
+  const split = splits.find((s) => s.id === id);
+
+  // Update current split in Zustand when split changes
   useEffect(() => {
-    const storedSplits = localStorage.getItem("splits");
-    if (storedSplits) {
-      const allSplits: Split[] = JSON.parse(storedSplits);
-      const found = allSplits.find((s) => s.id === id);
-      setSplit(found || null);
-    }
-  }, [id]);
-
-  const handleAddExercise = () => {
-    console.log("Global + button clicked");
-  };
+    if (split) setCurrentSplit(split);
+  }, [split, setCurrentSplit]);
 
   if (!split) {
     return (
-      <div className="p-6">
-        <p className="text-red-500">Split not found.</p>
-        <Link to="/splits" className="text-blue-600 underline">
-          Back to splits
+      <div className="max-w-2xl mx-auto p-6 text-center">
+        <h2 className="text-2xl font-bold mb-4 text-red-600">Split not found</h2>
+        <Link to="/splits" className="text-blue-600 hover:underline font-medium">
+          ← Back to all splits
         </Link>
       </div>
     );
   }
 
-  return (
-    <div className="p-6 relative">
-      <h1 className="text-2xl font-bold mb-6">{split.name}</h1>
-
-      {/* Weekly schedule grid */}
-      <div className="grid grid-cols-7 gap-2 text-center">
-        {split.days.map((day) => (
-          <div key={day.day} className="bg-white rounded-xl shadow p-3 flex flex-col min-h-[150px]">
-            <h2 className="font-semibold text-md mb-2 border-b pb-1">{day.day}</h2>
-            {day.exercises.length > 0 ? (
-              <ul className="text-sm text-gray-700 space-y-1 mt-1">
-                {day.exercises.map((ex) => (
-                  <li key={ex.id}>
-                    <span className="font-medium">{ex.name}</span>{" "}
-                    <span className="text-gray-500">
-                      ({ex.muscleGroup}
-                      {ex.sets ? ` • ${ex.sets} sets` : ""}
-                      {ex.reps ? ` × ${ex.reps} reps` : ""})
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-gray-400 italic text-sm mt-2">Rest</p>
-            )}
-          </div>
-        ))}
+  if (!currentSplit) {
+    return (
+      <div className="max-w-2xl mx-auto p-6 text-center">
+        <p className="text-gray-500">Loading split details...</p>
       </div>
+    );
+  }
 
-      {/* Floating global + button */}
-      <button
-        onClick={handleAddExercise}
-        className="fixed bottom-6 right-6 bg-blue-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-2xl hover:bg-blue-700 transition-transform hover:scale-110"
-      >
-        +
-      </button>
+  return (
+    <div className="max-w-4xl mx-auto p-6 space-y-6 bg-red-300">
+      <header className="space-y-2">
+        <h1 className="text-3xl font-bold text-gray-800">{currentSplit.name}</h1>
+        {currentSplit.description && <p className="text-gray-600">{currentSplit.description}</p>}
+      </header>
+
+      <section>
+        <SplitTable />
+      </section>
+
+      <section>
+        <SplitDetailForm />
+      </section>
+
+      <footer className="mt-6 text-center">
+        <Link to="/splits" className="inline-block text-blue-600 hover:underline font-medium">
+          ← Back to all splits
+        </Link>
+      </footer>
     </div>
   );
 };

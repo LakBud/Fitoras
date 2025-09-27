@@ -1,43 +1,29 @@
-// ========================
-// TYPES
-// ========================
+import type { Exercises } from "./exercise";
 
-export interface Exercise {
-  id: string; // Unique ID
-  name: string; // Exercise name
-  muscleGroup: string; // e.g., "Chest", "Back", "Legs"
-  sets?: number; // Optional sets
-  reps?: number; // Optional reps
-}
+export type Weekday = "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday";
 
-export interface WorkoutDay {
-  day: string; // "Monday", "Tuesday", etc.
-  exercises: Exercise[];
-}
+// Each exercise in a split can have sets/reps
+export type SplitExercise = Exercises & {
+  sets?: number;
+  reps?: number;
+};
 
-export interface Split {
-  id: string; // Unique ID for the split
-  name: string; // Split name
-  days: WorkoutDay[]; // List of days (Mon–Sun)
-}
+// A category inside a day
+export type WorkoutCategory = {
+  id: string; // unique ID
+  name: string;
+  exercises: SplitExercise[];
+};
 
-// ========================
-// CONSTANTS
-// ========================
+export type WorkoutDay = {
+  day: Weekday;
+  exercises: SplitExercise[]; // general exercises without category
+  categories?: WorkoutCategory[]; // optional categories
+};
 
-export const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-
-// ========================
-// HELPER FUNCTIONS
-// ========================
-
-/**
- * Create an empty split template with days Monday–Sunday.
- */
-export const createEmptySplit = (id: string, name: string): Split => {
-  return {
-    id,
-    name,
-    days: dayNames.map((day) => ({ day, exercises: [] })),
-  };
+export type Split = {
+  id: string;
+  name: string;
+  description?: string;
+  days: WorkoutDay[];
 };

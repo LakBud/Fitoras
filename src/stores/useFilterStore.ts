@@ -1,8 +1,6 @@
 import { create } from "zustand";
 import type { Exercises } from "../types/exercise";
 
-const STORAGE_KEY = "exerciseFilters";
-
 interface ExerciseFilters {
   name: string;
   force: string;
@@ -18,7 +16,7 @@ interface FilterState {
   filteredExercises: Exercises[];
   setFilters: (filters: Partial<ExerciseFilters>) => void;
   resetFilters: () => void;
-  applyFilters: (exercises: Exercises[]) => void;
+  applyFilters: (allExercises?: Exercises[]) => void; // optional param
 }
 
 export const useFilterStore = create<FilterState>((set, get) => ({
@@ -36,11 +34,11 @@ export const useFilterStore = create<FilterState>((set, get) => ({
   setFilters: (newFilters) => {
     const updatedFilters = { ...get().filters, ...newFilters };
     set({ filters: updatedFilters });
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedFilters));
+    get().applyFilters(); // re-apply filters automatically
   },
 
   resetFilters: () => {
-    const emptyFilters = {
+    const emptyFilters: ExerciseFilters = {
       name: "",
       force: "",
       mechanic: "",
@@ -50,15 +48,17 @@ export const useFilterStore = create<FilterState>((set, get) => ({
       secondaryMuscle: "",
     };
     set({ filters: emptyFilters, filteredExercises: [] });
-    localStorage.removeItem(STORAGE_KEY);
   },
 
-  applyFilters: (exercises) => {
+  applyFilters: (allExercises) => {
+    const exercisesToFilter = allExercises || get().filteredExercises;
+    if (!exercisesToFilter || exercisesToFilter.length === 0) return;
+
     const { filters } = get();
     const normalize = (str: string) => str.toLowerCase().replace(/-/g, "").trim();
     const search = normalize(filters.name);
 
-    const filtered = exercises.filter((ex) => {
+    const filtered = exercisesToFilter.filter((ex) => {
       const matchesSearch =
         !search ||
         [
@@ -71,6 +71,7 @@ export const useFilterStore = create<FilterState>((set, get) => ({
           ex.category,
           ex.id,
           ...(ex.primaryMuscles || []),
+          ...(ex.secondaryMuscles || []),
         ]
           .filter(Boolean)
           .some((field) => typeof field === "string" && normalize(field).includes(search));

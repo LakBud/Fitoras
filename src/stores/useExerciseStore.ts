@@ -10,6 +10,7 @@ interface ExerciseState {
   visibleCount: number; // how many items are currently loaded
   scrollPosition: number; // scrollY
   fetchExercises: (jsonPath?: string) => void;
+  setExercises: (exercises: Exercises[]) => void; // <--- added
   setVisibleCount: (count: number) => void;
   setScrollPosition: (pos: number) => void;
 }
@@ -20,6 +21,7 @@ export const useExerciseStore = create<ExerciseState>((set) => ({
   visibleCount: 0,
   scrollPosition: 0,
 
+  // Fetch exercises from JSON or localStorage
   fetchExercises: async (jsonPath = "/data/allExercises.json") => {
     set({ loading: true });
 
@@ -43,6 +45,9 @@ export const useExerciseStore = create<ExerciseState>((set) => ({
       set({ loading: false });
     }
   },
+
+  // Set exercises directly
+  setExercises: (exercises) => set({ exercises }),
 
   setVisibleCount: (count) => set({ visibleCount: count }),
   setScrollPosition: (pos) => set({ scrollPosition: pos }),

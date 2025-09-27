@@ -3,39 +3,41 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useExerciseStore } from "../../stores/useExerciseStore";
+import { useFilterStore } from "../../stores/useFilterStore";
 import type { Exercises } from "../../types/exercise";
 
 interface ExerciseListProps {
-  exercises: Exercises[];
   pageSize?: number;
 }
 
-export const ExerciseList: React.FC<ExerciseListProps> = ({ exercises, pageSize = 8 }) => {
+export const ExerciseList: React.FC<ExerciseListProps> = ({ pageSize = 8 }) => {
   const { visibleCount, setVisibleCount } = useExerciseStore();
+  const { filteredExercises } = useFilterStore(); // <-- use filtered exercises from store
   const [visibleExercises, setVisibleExercises] = useState<Exercises[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
 
-  // Initialize visible exercises based on Zustand
+  // Initialize visible exercises whenever filteredExercises changes
   useEffect(() => {
     const count = visibleCount || pageSize;
-    setVisibleExercises(exercises.slice(0, count));
-    setHasMore(exercises.length > count);
+    setVisibleExercises(filteredExercises.slice(0, count));
+    setHasMore(filteredExercises.length > count);
     setLoading(false);
-  }, [exercises, visibleCount, pageSize]);
+  }, [filteredExercises, visibleCount, pageSize]);
 
   const loadMore = () => {
     if (loading || !hasMore) return;
     setLoading(true);
-    const next = exercises.slice(visibleExercises.length, visibleExercises.length + pageSize);
+
+    const next = filteredExercises.slice(visibleExercises.length, visibleExercises.length + pageSize);
 
     setTimeout(() => {
       const updated = [...visibleExercises, ...next];
       setVisibleExercises(updated);
-      setHasMore(updated.length < exercises.length);
-      setVisibleCount(updated.length); // Save visible count in Zustand
+      setHasMore(updated.length < filteredExercises.length);
+      setVisibleCount(updated.length);
       setLoading(false);
-    }, 300); // small simulated delay for UX
+    }, 300);
   };
 
   const renderCard = (exercise: Exercises) => (
@@ -84,7 +86,7 @@ export const ExerciseList: React.FC<ExerciseListProps> = ({ exercises, pageSize 
       next={loadMore}
       hasMore={hasMore && !loading}
       scrollThreshold={0.9}
-      loader={null} // Skeletons handle loading
+      loader={null}
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
         {visibleExercises.map(renderCard)}
