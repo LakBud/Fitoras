@@ -14,68 +14,44 @@ interface ExerciseFilters {
 interface FilterState {
   filters: ExerciseFilters;
   filteredExercises: Exercises[];
+  allExercises: Exercises[];
   setFilters: (filters: Partial<ExerciseFilters>) => void;
   resetFilters: () => void;
-  applyFilters: (allExercises?: Exercises[]) => void; // optional param
+  setAllExercises: (exercises: Exercises[]) => void;
 }
 
-export const useFilterStore = create<FilterState>((set, get) => ({
-  filters: {
-    name: "",
-    force: "",
-    mechanic: "",
-    equipment: "",
-    category: "",
-    primaryMuscle: "",
-    secondaryMuscle: "",
-  },
-  filteredExercises: [],
+const emptyFilters: ExerciseFilters = {
+  name: "",
+  force: "",
+  mechanic: "",
+  equipment: "",
+  category: "",
+  primaryMuscle: "",
+  secondaryMuscle: "",
+};
 
-  setFilters: (newFilters) => {
-    const updatedFilters = { ...get().filters, ...newFilters };
-    set({ filters: updatedFilters });
-    get().applyFilters(); // re-apply filters automatically
-  },
-
-  resetFilters: () => {
-    const emptyFilters: ExerciseFilters = {
-      name: "",
-      force: "",
-      mechanic: "",
-      equipment: "",
-      category: "",
-      primaryMuscle: "",
-      secondaryMuscle: "",
-    };
-    set({ filters: emptyFilters, filteredExercises: [] });
-  },
-
-  applyFilters: (allExercises) => {
-    const exercisesToFilter = allExercises || get().filteredExercises;
-    if (!exercisesToFilter || exercisesToFilter.length === 0) return;
-
+export const useFilterStore = create<FilterState>((set, get) => {
+  // Internal function: applies current filters to a list of exercises
+  const applyFilters = (exercises: Exercises[]) => {
     const { filters } = get();
     const normalize = (str: string) => str.toLowerCase().replace(/-/g, "").trim();
     const search = normalize(filters.name);
 
-    const filtered = exercisesToFilter.filter((ex) => {
-      const matchesSearch =
-        !search ||
-        [
-          ex.name,
-          ex.force,
-          ex.level,
-          ex.mechanic,
-          ex.equipment,
-          ex.instructions,
-          ex.category,
-          ex.id,
-          ...(ex.primaryMuscles || []),
-          ...(ex.secondaryMuscles || []),
-        ]
-          .filter(Boolean)
-          .some((field) => typeof field === "string" && normalize(field).includes(search));
+    const filtered = exercises.filter((ex) => {
+      const fieldsToSearch = [
+        ex.name,
+        ex.force,
+        ex.level,
+        ex.mechanic,
+        ex.equipment,
+        ex.instructions,
+        ex.category,
+        ex.id,
+        ...(ex.primaryMuscles || []),
+        ...(ex.secondaryMuscles || []),
+      ].filter(Boolean) as string[];
 
+      const matchesSearch = !search || fieldsToSearch.some((f) => normalize(f).includes(search));
       const matchesForce = !filters.force || ex.force === filters.force;
       const matchesMechanic = !filters.mechanic || ex.mechanic === filters.mechanic;
       const matchesEquipment = !filters.equipment || ex.equipment === filters.equipment;
@@ -95,5 +71,30 @@ export const useFilterStore = create<FilterState>((set, get) => ({
     });
 
     set({ filteredExercises: filtered });
-  },
-}));
+  };
+
+  return {
+    filters: { ...emptyFilters },
+    filteredExercises: [],
+    allExercises: [],
+
+    // Update filters and automatically re-filter
+    setFilters: (newFilters) => {
+      set({ filters: { ...get().filters, ...newFilters } });
+      if (get().allExercises.length) {
+        applyFilters(get().allExercises);
+      }
+    },
+
+    // Reset filters to empty and show all exercises
+    resetFilters: () => {
+      set({ filters: { ...emptyFilters }, filteredExercises: get().allExercises });
+    },
+
+    // Set all exercises (e.g., when fetched from API) and automatically filter
+    setAllExercises: (exercises) => {
+      set({ allExercises: exercises });
+      applyFilters(exercises);
+    },
+  };
+});

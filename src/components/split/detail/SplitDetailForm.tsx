@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useParams } from "react-router-dom";
 import { useSplitsStore } from "../../../stores/useSplitStore";
-import { useExerciseStore } from "../../../stores/useExerciseStore";
 import { useFilterStore } from "../../../stores/useFilterStore";
 import { useExercise } from "../../../hooks/useExercise";
 import type { Weekday, WorkoutDay, SplitExercise, WorkoutCategory } from "../../../types/splits";
@@ -11,18 +10,18 @@ import type { Exercises } from "../../../types/exercise";
 const SplitDetailForm = () => {
   const { id } = useParams<{ id: string }>();
   const { exercises, loading } = useExercise();
-  const { setExercises } = useExerciseStore();
-  const { filteredExercises } = useFilterStore();
   const { splits, updateSplit } = useSplitsStore();
+  const { filteredExercises, setAllExercises } = useFilterStore();
 
   const split = splits.find((s) => s.id === id);
   const [selectedDay, setSelectedDay] = useState<Weekday>(split?.days[0]?.day || "Monday");
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const [newCategoryName, setNewCategoryName] = useState("");
 
-  useEffect(() => {
-    setExercises(exercises);
-  }, [exercises, setExercises]);
+  // Initialize exercises in the store once
+  if (exercises.length && !filteredExercises.length) {
+    setAllExercises(exercises);
+  }
 
   if (!split) return <div>Split not found.</div>;
   if (loading) return <div>Loading exercises...</div>;
@@ -95,8 +94,6 @@ const SplitDetailForm = () => {
   const displayedExercises: SplitExercise[] | undefined = selectedCategoryId
     ? currentDay.categories?.find((cat) => cat.id === selectedCategoryId)?.exercises
     : currentDay.exercises;
-
-  const exercisesToShow: Exercises[] = filteredExercises.length ? filteredExercises : exercises;
 
   return (
     <div className="p-4 border rounded-lg shadow-sm bg-white space-y-6">
@@ -220,7 +217,7 @@ const SplitDetailForm = () => {
 
       {/* Exercises to add */}
       <div className="max-h-64 overflow-y-auto border rounded p-2 mt-2 space-y-1">
-        {exercisesToShow.map((ex) => (
+        {filteredExercises.map((ex) => (
           <button
             key={ex.id}
             className="block w-full text-left px-2 py-1 rounded hover:bg-gray-100 transition"

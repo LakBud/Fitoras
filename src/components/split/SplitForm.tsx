@@ -1,62 +1,106 @@
-import { useState } from "react";
+import { motion } from "framer-motion";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import { useSplitsStore } from "../../stores/useSplitStore";
 import type { Weekday, WorkoutDay } from "../../types/splits";
 
 const allWeekdays: Weekday[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-const SplitForm = () => {
+interface SplitFormProps {
+  onClose: () => void;
+}
+
+interface FormValues {
+  name: string;
+  description?: string;
+}
+
+const SplitForm = ({ onClose }: SplitFormProps) => {
   const addSplit = useSplitsStore((state) => state.addSplit);
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormValues>();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name.trim()) return;
-
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     const newSplit = {
       id: uuidv4(),
-      name,
-      description: description || undefined,
-      days: allWeekdays.map<WorkoutDay>((day) => ({ day, exercises: [] })), // map to WorkoutDay
+      name: data.name.trim(),
+      description: data.description?.trim() || undefined,
+      days: allWeekdays.map<WorkoutDay>((day) => ({ day, exercises: [] })),
     };
-
     addSplit(newSplit);
-
-    setName("");
-    setDescription("");
+    reset();
+    onClose();
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-2xl p-6 space-y-4 border border-gray-200">
-      <h2 className="text-xl font-bold">Create New Split</h2>
+    <motion.div
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose}
+    >
+      <motion.form
+        onClick={(e) => e.stopPropagation()}
+        onSubmit={handleSubmit(onSubmit)}
+        className="bg-gradient-to-tr from-rose-50 to-rose-100 rounded-3xl shadow-2xl p-8 space-y-6 max-w-lg w-full relative border border-rose-200"
+        initial={{ scale: 0.85, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.85, opacity: 0 }}
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+      >
+        {/* Close Button */}
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-4 right-4 text-red-400 hover:text-red-700 transition text-2xl font-bold"
+        >
+          &times;
+        </button>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Name</label>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          placeholder="e.g. Push/Pull/Legs"
-          required
-        />
-      </div>
+        {/* Header */}
+        <h2 className="text-3xl font-extrabold text-center bg-clip-text   text-rose-500">Create New Split</h2>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Description</label>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          placeholder="Optional description..."
-        />
-      </div>
+        {/* Split Name */}
+        <div className="space-y-1">
+          <label className="block text-sm font-semibold text-red-600">Split Name</label>
+          <input
+            type="text"
+            {...register("name", { required: true })}
+            className={`mt-1 w-full px-4 py-3 rounded-2xl border border-rose-300 shadow-sm focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none transition text-gray-800 ${
+              errors.name ? "border-red-600 ring-red-200" : ""
+            }`}
+            placeholder="e.g. Push/Pull/Legs"
+          />
+          {errors.name && <span className="text-red-600 text-sm">This field is required</span>}
+        </div>
 
-      <button type="submit" className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
-        Create Split
-      </button>
-    </form>
+        {/* Description */}
+        <div className="space-y-1">
+          <label className="block text-sm font-semibold text-red-600">
+            Description <span className="text-gray-400">(Optional)</span>
+          </label>
+          <textarea
+            {...register("description")}
+            className="mt-1 w-full px-4 py-3 rounded-2xl border border-rose-300 shadow-sm focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none transition resize-none text-gray-800"
+            placeholder="Optional description..."
+            rows={3}
+          />
+        </div>
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="w-full py-3 bg-gradient-to-r from-rose-500 to-rose-600 text-white font-semibold rounded-2xl shadow-lg hover:from-rose-600 hover:to-rose-700 hover:shadow-xl transition-all text-lg"
+        >
+          Create Split
+        </button>
+      </motion.form>
+    </motion.div>
   );
 };
 

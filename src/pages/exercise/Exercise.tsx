@@ -7,7 +7,7 @@ import ScrollTopButton from "../../components/common/ScrollTopButton";
 
 const Exercise = () => {
   const { exercises, fetchExercises, loading } = useExerciseStore();
-  const { applyFilters } = useFilterStore();
+  const { setAllExercises } = useFilterStore(); // <-- updated
   const { scrollY, setScrollY } = useScrollStore();
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -16,10 +16,12 @@ const Exercise = () => {
     if (exercises.length === 0) fetchExercises();
   }, [exercises, fetchExercises]);
 
-  // Apply filters whenever exercises change
+  // Initialize exercises in the filter store
   useEffect(() => {
-    if (!loading && exercises.length > 0) applyFilters(exercises);
-  }, [exercises, loading, applyFilters]);
+    if (!loading && exercises.length > 0) {
+      setAllExercises(exercises); // <-- automatically applies filters
+    }
+  }, [exercises, loading, setAllExercises]);
 
   // Restore scroll on mount
   useEffect(() => {
