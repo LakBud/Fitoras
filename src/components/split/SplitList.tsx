@@ -18,7 +18,16 @@ import SplitItem from "./SplitItem";
 const SplitList = () => {
   const splits = useSplitsStore((state) => state.splits);
   const setSplits = useSplitsStore((state) => state.setSplits);
-  const sensors = useSensors(useSensor(PointerSensor));
+
+  // Mobile-friendly sensor with activation constraint
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    })
+  );
+
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
 
   const handleDragStart = (event: DragStartEvent) => setActiveId(event.active.id);
@@ -54,7 +63,14 @@ const SplitList = () => {
       <SortableContext items={splits.map((s) => s.id)} strategy={verticalListSortingStrategy}>
         <div className="space-y-4 max-w-2xl mx-auto w-full">
           {splits.map((split, index) => (
-            <SplitItem key={split.id} id={split.id} name={split.name} description={split.description} index={index} />
+            <SplitItem
+              key={split.id}
+              id={split.id}
+              name={split.name}
+              description={split.description}
+              index={index}
+              category={split.category}
+            />
           ))}
         </div>
       </SortableContext>
@@ -62,18 +78,34 @@ const SplitList = () => {
       <DragOverlay dropAnimation={{ duration: 0.2, easing: "ease" }}>
         {activeSplit && (
           <motion.div
-            className="rounded-3xl border border-rose-50 bg-white p-4 sm:p-5 flex flex-col shadow-lg pointer-events-none"
+            className="rounded-3xl p-4 sm:p-5 flex flex-col shadow-lg pointer-events-none border border-rose-50"
+            style={{
+              backgroundColor: activeSplit.category?.color || "white",
+            }}
             initial={{ scale: 1, opacity: 0.9 }}
             animate={{ scale: 1.05, opacity: 1 }}
           >
-            {/* Only essential overlay content, no nested listeners */}
             <div className="flex items-center justify-between gap-2">
-              <h2 className="text-lg font-semibold text-rose-600 truncate">{activeSplit.name}</h2>
-              <span className="text-xs font-semibold bg-rose-100 text-rose-600 px-2 py-1 rounded-full">Active</span>
+              <h2 className={`text-lg font-semibold truncate ${activeSplit.category ? "text-white" : "text-rose-600"}`}>
+                {activeSplit.name}
+              </h2>
+              {activeSplit.category && (
+                <span
+                  className="text-xs font-semibold px-2 py-1 rounded-full"
+                  style={{
+                    backgroundColor: "rgba(255,255,255,0.3)",
+                    color: "#fff",
+                  }}
+                >
+                  {activeSplit.category.name}
+                </span>
+              )}
             </div>
             <p
               className={
-                activeSplit.description ? "text-gray-600 text-sm leading-snug line-clamp-2" : "text-gray-400 italic text-sm"
+                activeSplit.description
+                  ? `text-sm leading-snug line-clamp-2 ${activeSplit.category ? "text-white/80" : "text-gray-600"}`
+                  : `text-sm italic ${activeSplit.category ? "text-white/60" : "text-gray-400"}`
               }
             >
               {activeSplit.description || "No description"}

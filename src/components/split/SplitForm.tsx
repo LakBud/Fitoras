@@ -1,7 +1,9 @@
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import { useSplitsStore } from "../../stores/splits/useSplitStore";
+import { useCurrentCategories, type UseCurrentCategoriesType, type Category } from "../../stores/splits/useCurrentCategories";
 import type { Weekday, WorkoutDay } from "../../types/splits";
 
 const allWeekdays: Weekday[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -13,25 +15,63 @@ interface SplitFormProps {
 interface FormValues {
   name: string;
   description?: string;
+  categoryId?: string;
+  newCategoryName?: string;
+  newCategoryColor?: string;
 }
+
+const LAST_CATEGORY_KEY = "fitoras_last_selected_category";
 
 const SplitForm = ({ onClose }: SplitFormProps) => {
   const addSplit = useSplitsStore((state) => state.addSplit);
+
+  const categories = useCurrentCategories((state: UseCurrentCategoriesType) => state.categories);
+  const addCategory = useCurrentCategories((state: UseCurrentCategoriesType) => state.addCategory);
+  const updateCategory = useCurrentCategories((state: UseCurrentCategoriesType) => state.updateCategory);
+
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     reset,
     formState: { errors },
   } = useForm<FormValues>();
 
+  const watchCategoryId = watch("categoryId");
+
+  // 📝 Load last selected category on mount
+  useEffect(() => {
+    const lastCategoryId = localStorage.getItem(LAST_CATEGORY_KEY);
+    if (lastCategoryId && categories.some((c) => c.id === lastCategoryId)) {
+      setValue("categoryId", lastCategoryId);
+    }
+  }, [categories, setValue]);
+
   const onSubmit: SubmitHandler<FormValues> = (data) => {
+    let category: Category | undefined;
+
+    if (watchCategoryId === "new" && data.newCategoryName && data.newCategoryColor) {
+      category = addCategory({ name: data.newCategoryName, color: data.newCategoryColor });
+    } else if (data.categoryId) {
+      category = categories.find((c) => c.id === data.categoryId);
+    }
+
     const newSplit = {
       id: uuidv4(),
       name: data.name.trim(),
       description: data.description?.trim() || undefined,
+      category,
       days: allWeekdays.map<WorkoutDay>((day) => ({ day, exercises: [] })),
     };
+
     addSplit(newSplit);
+
+    // ✅ Save the last selected category ID for next time
+    if (category?.id) {
+      localStorage.setItem(LAST_CATEGORY_KEY, category.id);
+    }
+
     reset();
     onClose();
   };
@@ -62,8 +102,7 @@ const SplitForm = ({ onClose }: SplitFormProps) => {
           &times;
         </button>
 
-        {/* Header */}
-        <h2 className="text-3xl font-extrabold text-center bg-clip-text   text-rose-500">Create New Split</h2>
+        <h2 className="text-3xl font-extrabold text-center text-rose-500">Create New Split</h2>
 
         {/* Split Name */}
         <div className="space-y-1">
@@ -92,7 +131,60 @@ const SplitForm = ({ onClose }: SplitFormProps) => {
           />
         </div>
 
-        {/* Submit Button */}
+        {/* Category Selector */}
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-red-600">
+            Category <span className="text-gray-400">(Optional)</span>
+          </label>
+          <select
+            {...register("categoryId")}
+            className="w-full border border-rose-300 rounded px-3 py-3 focus:outline-none focus:ring-2 focus:ring-rose-200 focus:border-rose-500"
+          >
+            <option value="">None</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+            <option value="new">+ Add</option>
+          </select>
+
+          {/* Existing Category Color Editor */}
+          {watchCategoryId && watchCategoryId !== "new" && (
+            <div className="flex items-center gap-2 mt-2">
+              <span
+                className="w-12 h-12 rounded-2xl border border-gray-200"
+                style={{ backgroundColor: categories.find((c) => c.id === watchCategoryId)?.color }}
+              />
+              <input
+                type="color"
+                defaultValue={categories.find((c) => c.id === watchCategoryId)?.color}
+                onChange={(e) => updateCategory(watchCategoryId, { color: e.target.value })}
+                className="w-12 h-12 p-0 border-none cursor-pointer rounded-2xl"
+                title="Pick a color"
+              />
+            </div>
+          )}
+
+          {/* New Category Inputs */}
+          {watchCategoryId === "new" && (
+            <div className="flex gap-2 mt-2">
+              <input
+                {...register("newCategoryName")}
+                placeholder="Category name"
+                className="flex-1 border border-rose-300 rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-rose-200 focus:border-rose-500"
+              />
+              <input
+                type="color"
+                {...register("newCategoryColor")}
+                defaultValue="#ef4444"
+                className="w-12 h-12 p-0 border-none cursor-pointer rounded-2xl"
+                title="Pick a color"
+              />
+            </div>
+          )}
+        </div>
+
         <button
           type="submit"
           className="w-full py-3 bg-gradient-to-r from-rose-500 to-rose-600 text-white font-semibold rounded-2xl shadow-lg hover:from-rose-600 hover:to-rose-700 hover:shadow-xl transition-all text-lg"

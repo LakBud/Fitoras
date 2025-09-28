@@ -30,7 +30,7 @@ const Splits = () => {
     <div
       ref={containerRef}
       onScroll={handleScroll}
-      className="relative bg-gradient-to-b from-red-50 via-rose-50 to-rose-100 min-h-screen py-10 pt-8 px-4 sm:px-6 lg:px-12 overflow-auto  p-3"
+      className="relative bg-gradient-to-b from-red-50 via-rose-50 to-rose-100 min-h-screen py-20 pt-8 px-4 sm:px-6 lg:px-12 overflow-auto  p-3"
     >
       {/* Page Header */}
       <header className="flex flex-col items-center mb-8 pt-10 text-center">
@@ -47,31 +47,21 @@ const Splits = () => {
           <SplitList />
         </div>
       </main>
-
-      {isDesktop && (
-        <motion.button
-          onClick={() => setShowForm(true)}
-          className="fixed bottom-6 right-6 bg-red-600 text-white p-5 rounded-full shadow-xl z-50"
-          whileHover={{ scale: 1.1, boxShadow: "0 15px 25px rgba(0,0,0,0.3)" }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ type: "spring", stiffness: 400, damping: 20 }}
-          title="Add new split"
-        >
-          <FiPlus size={28} />
-        </motion.button>
-      )}
-      {isMobile && (
-        <motion.button
-          onClick={() => setShowForm(true)}
-          className="fixed bottom-23 right-4 bg-red-600 text-white p-5 rounded-full shadow-xl z-50"
-          whileHover={{ scale: 1.1, boxShadow: "0 15px 25px rgba(0,0,0,0.3)" }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ type: "spring", stiffness: 400, damping: 20 }}
-          title="Add new split"
-        >
-          <FiPlus size={28} />
-        </motion.button>
-      )}
+      <motion.button
+        onClick={() => setShowForm(true)}
+        className={`
+          fixed
+          ${isDesktop ? "bottom-5 right-26 z-1000" : ""} 
+          ${isMobile ? "bottom-23 right-4 z-50" : ""}
+          bg-red-600 text-white p-5 rounded-full shadow-xl
+          `}
+        whileHover={isDesktop ? { scale: 1.1, boxShadow: "0 15px 25px rgba(0,0,0,0.3)" } : undefined}
+        whileTap={{ scale: 0.95 }}
+        transition={{ type: "spring", stiffness: 400, damping: 20 }}
+        title="Add new split"
+      >
+        <FiPlus size={28} />
+      </motion.button>
 
       {/* Modal */}
       <AnimatePresence>

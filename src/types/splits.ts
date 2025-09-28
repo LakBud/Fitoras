@@ -1,4 +1,5 @@
 import type { Exercises } from "./exercise";
+import { type Category } from "../stores/splits/useCurrentCategories";
 
 export type Weekday = "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday";
 
@@ -26,4 +27,5 @@ export type Split = {
   name: string;
   description?: string;
   days: WorkoutDay[];
+  category?: Category;
 };
