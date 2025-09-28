@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
-import { useSplitsStore } from "../../stores/useSplitStore";
+import { useSplitsStore } from "../../stores/splits/useSplitStore";
 import type { Weekday, WorkoutDay } from "../../types/splits";
 
 const allWeekdays: Weekday[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];

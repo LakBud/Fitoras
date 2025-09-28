@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Split } from "../types/splits";
+import type { Split } from "../../types/splits";
 import { v4 as uuidv4 } from "uuid";
 
 interface SplitsState {

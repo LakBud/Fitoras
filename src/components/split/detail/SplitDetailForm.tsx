@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useParams } from "react-router-dom";
-import { useSplitsStore } from "../../../stores/useSplitStore";
-import { useFilterStore } from "../../../stores/useFilterStore";
+import { useSplitsStore } from "../../../stores/splits/useSplitStore";
+import { useFilterStore } from "../../../stores/exercises/useFilterStore";
 import { useExercise } from "../../../hooks/useExercise";
 import type { Weekday, WorkoutDay, SplitExercise, WorkoutCategory } from "../../../types/splits";
 import type { Exercises } from "../../../types/exercise";
@@ -26,13 +26,13 @@ const SplitDetailForm = () => {
   if (!split) return <div>Split not found.</div>;
   if (loading) return <div>Loading exercises...</div>;
 
-  const currentDay: WorkoutDay | undefined = split.days.find((d) => d.day === selectedDay);
+  const currentDay: WorkoutDay | undefined = split.days.find((d: any) => d.day === selectedDay);
   if (!currentDay) return null;
 
   const addCategory = () => {
     if (!newCategoryName.trim()) return;
     const newCategory: WorkoutCategory = { id: uuidv4(), name: newCategoryName, exercises: [] };
-    const updatedDays = split.days.map((d) =>
+    const updatedDays = split.days.map((d: any) =>
       d.day === selectedDay ? { ...d, categories: [...(d.categories ?? []), newCategory] } : d
     );
     updateSplit(split.id, { days: updatedDays });
@@ -42,10 +42,10 @@ const SplitDetailForm = () => {
 
   const handleAddExercise = (exercise: Exercises) => {
     const newEx: SplitExercise = { ...exercise, sets: 3, reps: 10 };
-    const updatedDays = split.days.map((d) => {
+    const updatedDays = split.days.map((d: any) => {
       if (d.day !== selectedDay) return d;
       if (selectedCategoryId) {
-        const updatedCategories = (d.categories ?? []).map((cat) =>
+        const updatedCategories = (d.categories ?? []).map((cat: any) =>
           cat.id === selectedCategoryId ? { ...cat, exercises: [...cat.exercises, newEx] } : cat
         );
         return { ...d, categories: updatedCategories };
@@ -56,28 +56,28 @@ const SplitDetailForm = () => {
   };
 
   const handleRemoveExercise = (exerciseId: string, categoryId?: string) => {
-    const updatedDays = split.days.map((d) => {
+    const updatedDays = split.days.map((d: any) => {
       if (d.day !== selectedDay) return d;
       if (categoryId) {
-        const updatedCategories = (d.categories ?? []).map((cat) =>
-          cat.id === categoryId ? { ...cat, exercises: cat.exercises.filter((ex) => ex.id !== exerciseId) } : cat
+        const updatedCategories = (d.categories ?? []).map((cat: any) =>
+          cat.id === categoryId ? { ...cat, exercises: cat.exercises.filter((ex: any) => ex.id !== exerciseId) } : cat
         );
         return { ...d, categories: updatedCategories };
       }
-      return { ...d, exercises: d.exercises.filter((ex) => ex.id !== exerciseId) };
+      return { ...d, exercises: d.exercises.filter((ex: any) => ex.id !== exerciseId) };
     });
     updateSplit(split.id, { days: updatedDays });
   };
 
   const handleChangeSetsReps = (exerciseId: string, field: "sets" | "reps", value: number, categoryId?: string) => {
-    const updatedDays = split.days.map((d) => {
+    const updatedDays = split.days.map((d: any) => {
       if (d.day !== selectedDay) return d;
       if (categoryId) {
-        const updatedCategories = (d.categories ?? []).map((cat) =>
+        const updatedCategories = (d.categories ?? []).map((cat: any) =>
           cat.id === categoryId
             ? {
                 ...cat,
-                exercises: cat.exercises.map((ex) => (ex.id === exerciseId ? { ...ex, [field]: value } : ex)),
+                exercises: cat.exercises.map((ex: any) => (ex.id === exerciseId ? { ...ex, [field]: value } : ex)),
               }
             : cat
         );
@@ -85,7 +85,7 @@ const SplitDetailForm = () => {
       }
       return {
         ...d,
-        exercises: d.exercises.map((ex) => (ex.id === exerciseId ? { ...ex, [field]: value } : ex)),
+        exercises: d.exercises.map((ex: any) => (ex.id === exerciseId ? { ...ex, [field]: value } : ex)),
       };
     });
     updateSplit(split.id, { days: updatedDays });
@@ -101,7 +101,7 @@ const SplitDetailForm = () => {
 
       {/* Day Tabs */}
       <div className="flex gap-2 overflow-x-auto pb-2">
-        {split.days.map((d) => (
+        {split.days.map((d: any) => (
           <button
             key={d.day}
             className={`px-4 py-2 rounded-full font-medium whitespace-nowrap transition ${

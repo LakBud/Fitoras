@@ -1,6 +1,5 @@
 import { useEffect } from "react";
-import { useExerciseStore } from "../stores/useExerciseStore";
-
+import { useExerciseStore } from "../stores/exercises/useExerciseStore";
 export function useExercise(jsonPath?: string) {
   const { exercises, loading, fetchExercises } = useExerciseStore();
 

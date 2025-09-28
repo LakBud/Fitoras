@@ -30,13 +30,14 @@ const Splits = () => {
     <div
       ref={containerRef}
       onScroll={handleScroll}
-      className="relative bg-gradient-to-b from-red-50 via-rose-50 to-rose-100 min-h-screen pb-5 px-4 sm:px-6 lg:px-12 overflow-auto mb-10"
+      className="relative bg-gradient-to-b from-red-50 via-rose-50 to-rose-100 min-h-screen py-10 pt-8 px-4 sm:px-6 lg:px-12 overflow-auto  p-3"
     >
       {/* Page Header */}
-      <header className="flex flex-col items-center mb-8 mt-10 text-center">
+      <header className="flex flex-col items-center mb-8 pt-10 text-center">
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-red-700 tracking-tight">Splits</h1>
         <p className="mt-3 text-gray-700 text-sm sm:text-base md:text-lg max-w-2xl leading-relaxed">
-          Manage and view your workout splits to keep your fitness journey structured and motivating.
+          Manage and view your workout splits to keep your fitness journey structured and motivating. Hover your prioritized split
+          on the top to activate it.
         </p>
       </header>
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { useSplitsStore } from "../../stores/useSplitStore";
+import { useSplitsStore } from "../../stores/splits/useSplitStore";
 import {
   DndContext,
   closestCenter,

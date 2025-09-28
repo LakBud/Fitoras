@@ -2,8 +2,8 @@ import { motion } from "framer-motion";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useExerciseStore } from "../../stores/useExerciseStore";
-import { useFilterStore } from "../../stores/useFilterStore";
+import { useExerciseStore } from "../../stores/exercises/useExerciseStore";
+import { useFilterStore } from "../../stores/exercises/useFilterStore";
 import type { Exercises } from "../../types/exercise";
 
 interface ExerciseListProps {

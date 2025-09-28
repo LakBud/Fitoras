@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Exercises } from "../types/exercise";
+import { type Exercises } from "../../types/exercise";
 import axios from "axios";
 
 const STORAGE_KEY = "exercises";

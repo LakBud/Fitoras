@@ -5,11 +5,13 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import ExerciseFilter from "../exercise/ExerciseFilter";
 import useBreakpoint from "../../hooks/useBreakpoint";
+import { useScrollDirection } from "../../hooks/useScrollDirection";
 
 const NavBar = () => {
   const location = useLocation();
   const isExercisePage = location.pathname === "/exercise";
   const { isDesktop, isMobile } = useBreakpoint();
+  const scrollUp = useScrollDirection();
 
   const links = [
     { to: "/", label: "Home", icon: <FiHome size={22} /> },
@@ -20,10 +22,11 @@ const NavBar = () => {
 
   return (
     <>
+      {/* 🖥 Desktop Navigation */}
       {isDesktop && (
-        // Desktop Nav
         <motion.nav
-          initial={false}
+          initial={{ y: 0 }}
+          animate={{ y: scrollUp ? 0 : -60 }} // hide when scrolling down
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className="bg-white shadow-lg sticky top-0 z-50"
         >
@@ -34,18 +37,19 @@ const NavBar = () => {
             </Link>
 
             <ul className="flex items-center gap-6">
-              {links.map((link) => (
-                <li key={link.to}>
+              {links.map(({ to, icon, label }) => (
+                <li key={to}>
                   <NavLink
-                    to={link.to}
+                    to={to}
                     className={({ isActive }) =>
-                      `flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold transition-all ${
-                        isActive ? "bg-red-500 text-white shadow-md" : "text-gray-700 hover:text-red-500 hover:bg-red-50"
-                      }`
+                      [
+                        "flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold transition-all",
+                        isActive ? "bg-red-500 text-white shadow-md" : "text-gray-700 hover:text-red-500 hover:bg-red-50",
+                      ].join(" ")
                     }
                   >
-                    {link.icon}
-                    <span>{link.label}</span>
+                    {icon}
+                    <span>{label}</span>
                   </NavLink>
                 </li>
               ))}
@@ -56,13 +60,18 @@ const NavBar = () => {
         </motion.nav>
       )}
 
+      {/* 📱 Mobile Navigation */}
       {isMobile && (
-        // Mobile Nav
         <>
           {isExercisePage && (
-            <div className="sticky top-0 z-50">
+            <motion.div
+              className="sticky top-0 z-50"
+              initial={{ y: 0 }}
+              animate={{ y: scrollUp ? 0 : -60 }} // hide when scrolling down
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+            >
               <ExerciseFilter />
-            </div>
+            </motion.div>
           )}
 
           <motion.div
@@ -71,18 +80,19 @@ const NavBar = () => {
             className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl shadow-t-lg z-50"
           >
             <ul className="flex justify-around items-center py-2">
-              {links.map((link) => (
-                <li key={link.to}>
+              {links.map(({ to, icon, label }) => (
+                <li key={to}>
                   <NavLink
-                    to={link.to}
+                    to={to}
                     className={({ isActive }) =>
-                      `flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-md text-xs font-semibold transition-all ${
-                        isActive ? "text-red-500" : "text-gray-600 hover:text-red-500"
-                      }`
+                      [
+                        "flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-md text-xs font-semibold transition-all",
+                        isActive ? "text-red-500" : "text-gray-600 hover:text-red-500",
+                      ].join(" ")
                     }
                   >
-                    {link.icon}
-                    <span className="text-[10px]">{link.label}</span>
+                    {icon}
+                    <span className="text-[10px]">{label}</span>
                   </NavLink>
                 </li>
               ))}

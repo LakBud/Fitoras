@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Exercises } from "../types/exercise";
+import type { Exercises } from "../../types/exercise";
 
 interface ExerciseFilters {
   name: string;

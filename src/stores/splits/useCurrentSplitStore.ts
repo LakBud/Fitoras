@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Split } from "../types/splits";
+import type { Split } from "../../types/splits";
 
 interface CurrentSplitState {
   currentSplit: Split | null;

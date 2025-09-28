@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useExercise } from "../../hooks/useExercise";
 import { GiCogsplosion, GiMuscleFat, GiMuscleUp, GiProgression, GiWeight, GiWeightCrush } from "react-icons/gi";
 import { RiBarChart2Fill } from "react-icons/ri";
 import { motion } from "framer-motion";
 import ScrollTopButton from "../../components/common/ScrollTopButton";
 import useBreakpoint from "../../hooks/useBreakpoint";
+import NavigateBackButton from "../../components/common/NavigateBackButton";
 
 const ExerciseDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { exercises, loading } = useExercise();
   const { isDesktop, isMobile } = useBreakpoint();
-  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -252,18 +252,7 @@ const ExerciseDetail = () => {
 
       {/* Back Button & ScrollTop */}
       <nav>
-        <button
-          onClick={() => navigate(-1)}
-          className={`
-            fixed mb-6 px-4 sm:px-5 py-2 sm:py-3
-            bg-rose-200 text-rose-700 font-semibold rounded-full
-            shadow-md hover:bg-rose-300 transition-shadow
-            ${isDesktop ? "top-20 left-3 text-base sm:text-lg" : isMobile ? "top-5 left-3 text-sm" : "top-10 left-3 text-sm"}
-          `}
-        >
-          ← Back
-        </button>
-
+        <NavigateBackButton />
         <ScrollTopButton />
       </nav>
     </div>
