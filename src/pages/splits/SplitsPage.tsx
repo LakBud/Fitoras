@@ -6,7 +6,7 @@ import { FiPlus } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import useBreakpoint from "../../hooks/useBreakpoint";
 
-const Splits = () => {
+const SplitsPage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollY, setScrollY] = useState(0);
   const { isDesktop, isMobile } = useBreakpoint();
@@ -27,7 +27,7 @@ const Splits = () => {
       <div
         ref={containerRef}
         onScroll={handleScroll}
-        className="relative bg-gradient-to-b from-red-50 via-rose-50 to-rose-100 min-h-screen py-20 px-4 sm:px-6 lg:px-12 overflow-auto"
+        className="relative bg-gradient-to-b from-red-50 via-rose-50 to-rose-100 min-h-screen py-5 pb-20 px-4 sm:px-6 lg:px-12 overflow-auto"
       >
         {/* Page Header */}
         <header className="flex flex-col items-center mb-8 pt-10 text-center">
@@ -83,4 +83,4 @@ const Splits = () => {
   );
 };
 
-export default Splits;
+export default SplitsPage;

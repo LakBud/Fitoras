@@ -106,7 +106,7 @@ const SplitList = () => {
                   : `text-sm italic ${activeSplit.category ? "text-white/60" : "text-gray-400"}`
               }
             >
-              {activeSplit.description || "No description"}
+              {activeSplit.description}
             </p>
           </motion.div>
         )}

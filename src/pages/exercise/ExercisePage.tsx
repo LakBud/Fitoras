@@ -5,7 +5,7 @@ import { useFilterStore } from "../../stores/exercises/useFilterStore";
 import { useScrollStore } from "../../stores/exercises/useExerciseScrollState";
 import ScrollTopButton from "../../components/common/ScrollTopButton";
 
-const Exercise = () => {
+const ExercisePage = () => {
   const { exercises, fetchExercises, loading } = useExerciseStore();
   const { setAllExercises } = useFilterStore(); // <-- updated
   const { scrollY, setScrollY } = useScrollStore();
@@ -64,4 +64,4 @@ const Exercise = () => {
   );
 };
 
-export default Exercise;
+export default ExercisePage;

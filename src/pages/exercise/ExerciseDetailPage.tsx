@@ -8,7 +8,7 @@ import ScrollTopButton from "../../components/common/ScrollTopButton";
 import useBreakpoint from "../../hooks/useBreakpoint";
 import NavigateBackButton from "../../components/common/NavigateBackButton";
 
-const ExerciseDetail = () => {
+const ExerciseDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const { exercises, loading } = useExercise();
   const { isDesktop, isMobile } = useBreakpoint();
@@ -259,4 +259,4 @@ const ExerciseDetail = () => {
   );
 };
 
-export default ExerciseDetail;
+export default ExerciseDetailPage;

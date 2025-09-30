@@ -7,9 +7,8 @@ import SplitTable from "../../components/split/detail/SplitTable";
 import NavigateBackButton from "../../components/common/NavigateBackButton";
 import { BsFillGearFill } from "react-icons/bs";
 import { useThemeColor } from "../../hooks/useThemeColor";
-import SplitDeleteButton from "../../components/split/detail/SplitDeleteButton";
 
-const SplitDetail = () => {
+const SplitDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const splits = useSplitsStore((state) => state.splits);
   const { currentSplit, setCurrentSplit } = useCurrentSplitStore();
@@ -88,20 +87,19 @@ const SplitDetail = () => {
         <SplitTable />
 
         {/* Actions */}
-        <nav className="mt-10 flex flex-wrap justify-center gap-5 sm:gap-6">
-          <button
+        <div className="mt-10 flex flex-wrap justify-center gap-5 sm:gap-6">
+          <Link
+            to={`/splits/${currentSplit.id}/edit`}
             className="flex items-center gap-2 px-6 py-3 rounded-full font-semibold shadow-md transition-all duration-200"
             style={{
               backgroundColor: theme.primary,
-              color: theme.textOnPrimary, // ensures readability on any bright/dark color
+              color: theme.textOnPrimary,
             }}
           >
             <BsFillGearFill className="text-lg" />
             <span>Edit</span>
-          </button>
-
-          <SplitDeleteButton />
-        </nav>
+          </Link>
+        </div>
       </motion.main>
 
       {/* Fixed Back Button */}
@@ -110,4 +108,4 @@ const SplitDetail = () => {
   );
 };
 
-export default SplitDetail;
+export default SplitDetailPage;

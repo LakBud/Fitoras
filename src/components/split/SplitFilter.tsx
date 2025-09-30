@@ -27,6 +27,8 @@ const SplitFilter = () => {
         <div className="relative w-full md:w-64 flex-1">
           <input
             type="text"
+            id="split-search"
+            name="search"
             placeholder="Search Splits..."
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -46,6 +48,8 @@ const SplitFilter = () => {
 
               {/* Select with extra left padding */}
               <select
+                id="split-category"
+                name="categoryId"
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
                 className="pl-10 pr-3 py-2 w-full border border-red-300 rounded-full bg-red-50/70 shadow-sm focus:outline-none focus:ring-1 focus:ring-red-400 text-sm transition-all duration-200"
@@ -89,6 +93,8 @@ const SplitFilter = () => {
         <div className="relative flex-1 min-w-[140px]">
           <input
             type="text"
+            id="split-search"
+            name="search"
             placeholder="Search"
             value={name}
             onChange={(e) => handleChange("name", e.target.value)}
@@ -111,6 +117,8 @@ const SplitFilter = () => {
           <div key={key} className="flex-shrink-0">
             <select
               title={key}
+              id="split-category"
+              name="categoryId"
               value={categoryId}
               onChange={(e) => handleChange("categoryId", e.target.value)}
               className="px-3 py-2 rounded-full bg-red-50 shadow-sm text-red-600 text-sm transition-all duration-200 hover:bg-red-100 focus:bg-red-200"

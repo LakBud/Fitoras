@@ -1,4 +1,4 @@
-import { useMemo, useCallback, type JSX } from "react";
+import { useMemo, useCallback, type JSX, useEffect } from "react";
 import { FiSearch, FiZap, FiSettings, FiBox, FiLayers, FiTarget, FiShuffle, FiRefreshCw, FiX } from "react-icons/fi";
 import { useFilterStore } from "../../stores/exercises/useFilterStore";
 import { useExerciseStore } from "../../stores/exercises/useExerciseStore";
@@ -10,7 +10,7 @@ const ExerciseFilter = () => {
   const { isDesktop, isMobile } = useBreakpoint();
 
   // Initialize store with all exercises once
-  useMemo(() => {
+  useEffect(() => {
     if (exercises.length) setAllExercises(exercises);
   }, [exercises, setAllExercises]);
 
@@ -47,6 +47,8 @@ const ExerciseFilter = () => {
         <div className="relative w-full md:w-64 flex-1">
           <input
             type="text"
+            id="exercise-search"
+            name="search"
             placeholder="Search Exercises..."
             value={filters.name}
             onChange={(e) => handleChange("name", e.target.value)}
@@ -61,6 +63,8 @@ const ExerciseFilter = () => {
             <div key={key} className="relative flex-shrink-0 w-36 md:w-40">
               <div className="absolute left-3 top-1/2 -translate-y-1/2 text-red-500 text-lg">{icon}</div>
               <select
+                id={`filter-${key}`}
+                name={key}
                 value={filters[key]}
                 onChange={(e) => handleChange(key, e.target.value)}
                 className="pl-10 pr-3 py-2 w-full border border-red-300 rounded-full bg-red-50/70 shadow-sm focus:outline-none focus:ring-1 focus:ring-red-400 text-sm transition-all duration-200"
@@ -103,6 +107,8 @@ const ExerciseFilter = () => {
         {/* Search */}
         <div className="relative flex-1 min-w-[140px]">
           <input
+            id="exercise-search"
+            name="search"
             type="text"
             placeholder="Search"
             value={filters.name}
@@ -125,6 +131,8 @@ const ExerciseFilter = () => {
         {filterOptions.map(([key, options]) => (
           <div key={key} className="flex-shrink-0">
             <select
+              id={`filter-${key}`}
+              name={key}
               title={key}
               value={filters[key]}
               onChange={(e) => handleChange(key, e.target.value)}

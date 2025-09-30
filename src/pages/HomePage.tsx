@@ -2,7 +2,7 @@ import { GiClockwork, GiEasel, GiLockedBox, GiMuscleUp, GiPowerLightning } from 
 import { motion } from "framer-motion";
 import React from "react";
 
-const Home = () => {
+const HomePage = () => {
   const features = [
     {
       icon: <GiMuscleUp />,
@@ -96,4 +96,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePage;
