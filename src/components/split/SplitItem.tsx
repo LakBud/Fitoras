@@ -81,7 +81,7 @@ const SplitItem = ({ id, name, description, index, category }: SplitItemProps) =
 
           {/* Description */}
           <p className={description ? "text-gray-600 text-sm leading-snug line-clamp-2" : "text-gray-400 italic text-sm"}>
-            {description || "No description"}
+            {description}
           </p>
         </Link>
       </div>

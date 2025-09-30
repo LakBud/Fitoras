@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useSplitsStore } from "../../stores/splits/useSplitStore";
+import { useSplitFilterStore } from "../../stores/splits/SplitFilterStore";
 import {
   DndContext,
   closestCenter,
@@ -19,14 +20,18 @@ const SplitList = () => {
   const splits = useSplitsStore((state) => state.splits);
   const setSplits = useSplitsStore((state) => state.setSplits);
 
-  // Mobile-friendly sensor with activation constraint
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 5,
-      },
-    })
-  );
+  // Grab filters from store
+  const { name: filterName, categoryId: filterCategoryId } = useSplitFilterStore();
+
+  // Apply filtering
+  const filteredSplits = splits.filter((s) => {
+    const matchesName = s.name.toLowerCase().includes(filterName.toLowerCase());
+    const matchesCategory = filterCategoryId ? s.category?.id === filterCategoryId : true;
+    return matchesName && matchesCategory;
+  });
+
+  // DnD sensors
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
 
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
 
@@ -34,7 +39,6 @@ const SplitList = () => {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-
     if (over && active.id !== over.id) {
       setSplits(
         arrayMove(
@@ -44,25 +48,24 @@ const SplitList = () => {
         )
       );
     }
-
     setActiveId(null);
   };
 
-  if (!splits.length) {
+  if (!filteredSplits.length) {
     return (
       <div className="flex flex-col items-center justify-center text-center py-20 rounded-3xl border-2 border-dashed border-rose-300 bg-gradient-to-b from-white to-rose-50 shadow-inner">
-        <p className="text-lg text-gray-500">No splits have been created yet. Click the "+" icon to create</p>
+        <p className="text-lg text-gray-500">No splits match your filters.</p>
       </div>
     );
   }
 
-  const activeSplit = splits.find((s) => s.id === activeId);
+  const activeSplit = filteredSplits.find((s) => s.id === activeId);
 
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <SortableContext items={splits.map((s) => s.id)} strategy={verticalListSortingStrategy}>
+      <SortableContext items={filteredSplits.map((s) => s.id)} strategy={verticalListSortingStrategy}>
         <div className="space-y-4 max-w-2xl mx-auto w-full">
-          {splits.map((split, index) => (
+          {filteredSplits.map((split, index) => (
             <SplitItem
               key={split.id}
               id={split.id}
@@ -79,9 +82,7 @@ const SplitList = () => {
         {activeSplit && (
           <motion.div
             className="rounded-3xl p-4 sm:p-5 flex flex-col shadow-lg pointer-events-none border border-rose-50"
-            style={{
-              backgroundColor: activeSplit.category?.color || "white",
-            }}
+            style={{ backgroundColor: activeSplit.category?.color || "white" }}
             initial={{ scale: 1, opacity: 0.9 }}
             animate={{ scale: 1.05, opacity: 1 }}
           >
@@ -92,10 +93,7 @@ const SplitList = () => {
               {activeSplit.category && (
                 <span
                   className="text-xs font-semibold px-2 py-1 rounded-full"
-                  style={{
-                    backgroundColor: "rgba(255,255,255,0.3)",
-                    color: "#fff",
-                  }}
+                  style={{ backgroundColor: "rgba(255,255,255,0.3)", color: "#fff" }}
                 >
                   {activeSplit.category.name}
                 </span>

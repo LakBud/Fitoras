@@ -6,10 +6,12 @@ import { motion } from "framer-motion";
 import ExerciseFilter from "../exercise/ExerciseFilter";
 import useBreakpoint from "../../hooks/useBreakpoint";
 import { useScrollDirection } from "../../hooks/useScrollDirection";
+import SplitFilter from "../split/SplitFilter";
 
 const NavBar = () => {
   const location = useLocation();
   const isExercisePage = location.pathname === "/exercise";
+  const isSplitPage = location.pathname === "/splits";
   const { isDesktop, isMobile } = useBreakpoint();
   const scrollUp = useScrollDirection();
 
@@ -26,7 +28,7 @@ const NavBar = () => {
       {isDesktop && (
         <motion.nav
           initial={{ y: 0 }}
-          animate={{ y: scrollUp ? 0 : -60 }} // hide when scrolling down
+          animate={{ y: scrollUp ? 0 : -65 }} // hide when scrolling down
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className="bg-white shadow-lg sticky top-0 z-50"
         >
@@ -57,6 +59,7 @@ const NavBar = () => {
           </div>
 
           {isExercisePage && <ExerciseFilter />}
+          {isSplitPage && <SplitFilter />}
         </motion.nav>
       )}
 
@@ -71,6 +74,16 @@ const NavBar = () => {
               transition={{ duration: 0.2, ease: "easeInOut" }}
             >
               <ExerciseFilter />
+            </motion.div>
+          )}
+          {isSplitPage && (
+            <motion.div
+              className="sticky top-0 z-50"
+              initial={{ y: 0 }}
+              animate={{ y: scrollUp ? 0 : -60 }} // hide when scrolling down
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+            >
+              <SplitFilter />
             </motion.div>
           )}
 

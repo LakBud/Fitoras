@@ -1,45 +1,25 @@
-import { useMemo, useCallback, type JSX } from "react";
-import { FiSearch, FiZap, FiSettings, FiBox, FiLayers, FiTarget, FiShuffle, FiRefreshCw, FiX } from "react-icons/fi";
-import { useFilterStore } from "../../stores/exercises/useFilterStore";
-import { useExerciseStore } from "../../stores/exercises/useExerciseStore";
+import { FiSearch, FiRefreshCw, FiX, FiInbox } from "react-icons/fi";
 import useBreakpoint from "../../hooks/useBreakpoint";
+import { useSplitFilterStore } from "../../stores/splits/SplitFilterStore";
+import { useCurrentCategories } from "../../stores/splits/useCurrentCategories";
 
-const ExerciseFilter = () => {
-  const { exercises } = useExerciseStore();
-  const { filters, setFilters, resetFilters, setAllExercises } = useFilterStore();
+const SplitFilter = () => {
   const { isDesktop, isMobile } = useBreakpoint();
 
-  // Initialize store with all exercises once
-  useMemo(() => {
-    if (exercises.length) setAllExercises(exercises);
-  }, [exercises, setAllExercises]);
+  // Filter state from SplitFilterStore
+  const { name, categoryId, setName, setCategoryId, resetFilters } = useSplitFilterStore();
 
-  const handleChange = useCallback(
-    (key: keyof typeof filters, value: string) => {
-      setFilters({ [key]: value });
-    },
-    [setFilters]
-  );
+  // Categories from store
+  const categories = useCurrentCategories((state) => state.categories);
 
-  const isString = (val: unknown): val is string => typeof val === "string";
+  const handleChange = (key: "name" | "categoryId", value: string) => {
+    if (key === "name") setName(value);
+    else setCategoryId(value);
+  };
 
-  // Memoized unique filter options
-  const filterOptions: [keyof typeof filters, string[], JSX.Element][] = useMemo(
-    () => [
-      ["force", Array.from(new Set(exercises.map((e) => e.force).filter(isString))), <FiZap />],
-      ["mechanic", Array.from(new Set(exercises.map((e) => e.mechanic).filter(isString))), <FiSettings />],
-      ["equipment", Array.from(new Set(exercises.map((e) => e.equipment).filter(isString))), <FiBox />],
-      ["category", Array.from(new Set(exercises.map((e) => e.category).filter(isString))), <FiLayers />],
-      ["primaryMuscle", Array.from(new Set(exercises.flatMap((e) => e.primaryMuscles || []).filter(isString))), <FiTarget />],
-      [
-        "secondaryMuscle",
-        Array.from(new Set(exercises.flatMap((e) => e.secondaryMuscles || []).filter(isString))),
-        <FiShuffle />,
-      ],
-    ],
-    [exercises]
-  );
+  const filterOptions = [["categoryId", categories.map((c) => c.name)]] as const;
 
+  // Desktop layout
   if (isDesktop) {
     return (
       <div className="z-20 sticky w-full top-0 md:top-auto bg-white/90 px-4 py-2 shadow-md border-t border-red-300 md:border-b md:border-t-0 rounded-b-2xl flex flex-row items-center gap-6">
@@ -47,9 +27,9 @@ const ExerciseFilter = () => {
         <div className="relative w-full md:w-64 flex-1">
           <input
             type="text"
-            placeholder="Search Exercises..."
-            value={filters.name}
-            onChange={(e) => handleChange("name", e.target.value)}
+            placeholder="Search Splits..."
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             className="pl-10 pr-4 py-2 w-full border border-red-300 rounded-full bg-red-50/70 focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-red-400 shadow-sm placeholder-gray-500 text-sm transition-all duration-200"
           />
           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-red-500 text-lg" />
@@ -57,18 +37,23 @@ const ExerciseFilter = () => {
 
         {/* Filters */}
         <div className="flex overflow-x-auto gap-4 py-1 flex-1">
-          {filterOptions.map(([key, options, icon]) => (
+          {filterOptions.map(([key, options]) => (
             <div key={key} className="relative flex-shrink-0 w-36 md:w-40">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-red-500 text-lg">{icon}</div>
+              {/* Icon */}
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-red-500 text-lg">
+                <FiInbox />
+              </div>
+
+              {/* Select with extra left padding */}
               <select
-                value={filters[key]}
-                onChange={(e) => handleChange(key, e.target.value)}
+                value={categoryId}
+                onChange={(e) => setCategoryId(e.target.value)}
                 className="pl-10 pr-3 py-2 w-full border border-red-300 rounded-full bg-red-50/70 shadow-sm focus:outline-none focus:ring-1 focus:ring-red-400 text-sm transition-all duration-200"
               >
-                <option value="">{key.charAt(0).toUpperCase() + key.slice(1)}</option>
+                <option value="">Category</option>
                 {options.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt.charAt(0).toUpperCase() + opt.slice(1)}
+                  <option key={opt} value={categories.find((c) => c.name === opt)?.id}>
+                    {opt}
                   </option>
                 ))}
               </select>
@@ -105,12 +90,12 @@ const ExerciseFilter = () => {
           <input
             type="text"
             placeholder="Search"
-            value={filters.name}
+            value={name}
             onChange={(e) => handleChange("name", e.target.value)}
             className="pl-10 pr-10 py-2 w-full border border-red-300 rounded-full bg-red-50/70 text-gray-800 placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-red-400 shadow-sm transition-all duration-200"
           />
           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-red-500 text-lg" />
-          {filters.name && (
+          {name && (
             <button
               type="button"
               onClick={() => handleChange("name", "")}
@@ -126,14 +111,14 @@ const ExerciseFilter = () => {
           <div key={key} className="flex-shrink-0">
             <select
               title={key}
-              value={filters[key]}
-              onChange={(e) => handleChange(key, e.target.value)}
+              value={categoryId}
+              onChange={(e) => handleChange("categoryId", e.target.value)}
               className="px-3 py-2 rounded-full bg-red-50 shadow-sm text-red-600 text-sm transition-all duration-200 hover:bg-red-100 focus:bg-red-200"
             >
-              <option value="">{key.charAt(0).toUpperCase() + key.slice(1)}</option>
+              <option value="">Category</option>
               {options.map((opt) => (
-                <option key={opt} value={opt}>
-                  {opt.charAt(0).toUpperCase() + opt.slice(1)}
+                <option key={opt} value={categories.find((c) => c.name === opt)?.id}>
+                  {opt}
                 </option>
               ))}
             </select>
@@ -142,6 +127,8 @@ const ExerciseFilter = () => {
       </div>
     );
   }
+
+  return null;
 };
 
-export default ExerciseFilter;
+export default SplitFilter;

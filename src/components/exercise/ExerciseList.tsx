@@ -43,8 +43,6 @@ export const ExerciseList: React.FC<ExerciseListProps> = ({ pageSize = 8 }) => {
   const renderCard = (exercise: Exercises) => (
     <Link key={exercise.id} to={`/exercise/${exercise.id}`}>
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
         whileHover={{ scale: 1.03, boxShadow: "0 6px 15px rgba(220,38,38,0.25)" }}
         className="bg-white rounded-2xl shadow-md p-4 flex flex-col items-center border border-red-100 transition-all"
       >

@@ -176,7 +176,7 @@ const ExerciseDetail = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="grid gap-4 justify-items-center sm:grid-cols-2 lg:grid-cols-4"
+            className="grid gap-4 justify-items-center sm:grid-cols-2 "
           >
             {activeTab === "info" &&
               [

@@ -2,7 +2,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import useBreakpoint from "../../hooks/useBreakpoint";
 
-const ScrollTopButton = () => {
+interface ScrollTopButtonProps {
+  className?: string;
+}
+
+const ScrollTopButton = ({ className }: ScrollTopButtonProps) => {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const { isDesktop } = useBreakpoint(); // default breakpoint 1024px
 
@@ -41,7 +45,9 @@ const ScrollTopButton = () => {
           exit={{ opacity: 0, y: 10 }}
           transition={{ duration: 0.3 }}
           onClick={scrollToTop}
-          className="fixed bottom-6 right-4 z-50 bg-rose-600 hover:bg-rose-700 text-white p-4 rounded-full shadow-xl hover:shadow-2xl transition-all"
+          className={`fixed bottom-6 right-4 z-50 bg-rose-600 hover:bg-rose-700 text-white p-4 rounded-full shadow-xl hover:shadow-2xl transition-all ${
+            className ?? ""
+          }`}
         >
           ↑ Top
         </motion.button>

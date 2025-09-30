@@ -44,7 +44,7 @@ export const useCurrentCategories = create<CategoriesState>()(
       setCategories: (categories) => set({ categories }),
     }),
     {
-      name: "fitoras_categories", // 📝 localStorage key
+      name: "fitoras_categories", //  localStorage key
     }
   )
 );

@@ -5,12 +5,15 @@ import { useSplitsStore } from "../../stores/splits/useSplitStore";
 import { useCurrentSplitStore } from "../../stores/splits/useCurrentSplitStore";
 import SplitTable from "../../components/split/detail/SplitTable";
 import NavigateBackButton from "../../components/common/NavigateBackButton";
-import { BsFillGearFill, BsX } from "react-icons/bs";
+import { BsFillGearFill } from "react-icons/bs";
+import { useThemeColor } from "../../hooks/useThemeColor";
+import SplitDeleteButton from "../../components/split/detail/SplitDeleteButton";
 
 const SplitDetail = () => {
   const { id } = useParams<{ id: string }>();
   const splits = useSplitsStore((state) => state.splits);
   const { currentSplit, setCurrentSplit } = useCurrentSplitStore();
+  const theme = useThemeColor(currentSplit?.category?.color);
 
   // Find the split based on the URL ID
   const split = splits.find((s) => s.id === id);
@@ -43,14 +46,22 @@ const SplitDetail = () => {
   }
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-b from-rose-50 via-rose-100 to-rose-200 pb-16 px-4 sm:px-6 lg:px-12">
+    <div
+      className="relative min-h-screen pb-16 px-4 sm:px-6 lg:px-12"
+      style={{
+        background: `linear-gradient(to bottom, ${theme.gradientStart}, ${theme.gradientEnd})`,
+      }}
+    >
       {/* Header */}
       <header className="flex flex-col items-center text-center pt-20 mb-10">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-rose-700 tracking-tight drop-shadow-sm"
+          className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight drop-shadow-sm"
+          style={{
+            color: theme.primary,
+          }}
         >
           {currentSplit.name}
         </motion.h1>
@@ -60,7 +71,7 @@ const SplitDetail = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.6 }}
-            className="mt-3 max-w-2xl text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed"
+            className="mt-3 max-w-2xl text-gray-600 text-sm sm:text-base md:text-lg leading-relaxed"
           >
             {currentSplit.description}
           </motion.p>
@@ -79,20 +90,17 @@ const SplitDetail = () => {
         {/* Actions */}
         <nav className="mt-10 flex flex-wrap justify-center gap-5 sm:gap-6">
           <button
-            className="flex items-center gap-2 px-6 py-3 rounded-full bg-rose-600 text-white font-semibold shadow-md 
-               hover:bg-rose-700 hover:shadow-lg transition-all duration-200"
+            className="flex items-center gap-2 px-6 py-3 rounded-full font-semibold shadow-md transition-all duration-200"
+            style={{
+              backgroundColor: theme.primary,
+              color: theme.textOnPrimary, // ensures readability on any bright/dark color
+            }}
           >
             <BsFillGearFill className="text-lg" />
             <span>Edit</span>
           </button>
 
-          <button
-            className="flex items-center gap-2 px-6 py-3 rounded-full bg-white border border-rose-300 text-rose-700 font-semibold shadow-sm 
-               hover:bg-rose-50 hover:shadow-md transition-all duration-200"
-          >
-            <BsX className="text-xl" />
-            <span>Delete</span>
-          </button>
+          <SplitDeleteButton />
         </nav>
       </motion.main>
 
