@@ -10,6 +10,12 @@ const allWeekdays: Weekday[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "F
 
 interface SplitFormProps {
   onClose: () => void;
+  splitToEdit?: {
+    id: string;
+    name: string;
+    description?: string;
+    category?: Category;
+  };
 }
 
 interface FormValues {

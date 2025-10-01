@@ -14,6 +14,7 @@ export type WorkoutCategory = {
   id: string; // unique ID
   name: string;
   exercises: SplitExercise[];
+  color: string;
 };
 
 export type WorkoutDay = {

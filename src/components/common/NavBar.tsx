@@ -4,8 +4,8 @@ import { BsCalendar2Check, BsSignpostSplit } from "react-icons/bs";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import ExerciseFilter from "../exercise/ExerciseFilter";
-import useBreakpoint from "../../hooks/useBreakpoint";
-import { useScrollDirection } from "../../hooks/useScrollDirection";
+import useBreakpoint from "../../hooks/ui/useBreakpoint";
+import { useScrollDirection } from "../../hooks/ui/useScrollDirection";
 import SplitFilter from "../split/SplitFilter";
 
 const NavBar = () => {

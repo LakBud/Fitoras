@@ -4,7 +4,7 @@ import SplitForm from "../../components/split/SplitForm";
 import ScrollTopButton from "../../components/common/ScrollTopButton";
 import { FiPlus } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
-import useBreakpoint from "../../hooks/useBreakpoint";
+import useBreakpoint from "../../hooks/ui/useBreakpoint";
 
 const SplitsPage = () => {
   const containerRef = useRef<HTMLDivElement>(null);

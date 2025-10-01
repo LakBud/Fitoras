@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useSplitsStore } from "../../stores/splits/useSplitStore";
-import { useSplitFilterStore } from "../../stores/splits/SplitFilterStore";
+import { useSplitFilterStore } from "../../stores/splits/useSplitFilterStore";
 import {
   DndContext,
   closestCenter,
@@ -81,8 +81,6 @@ const SplitList = () => {
           ))}
         </div>
       </SortableContext>
-
-      {/* ...rest of SplitList unchanged */}
 
       <DragOverlay dropAnimation={{ duration: 0.25, easing: "ease-in-out" }}>
         {activeSplit && (

@@ -5,7 +5,7 @@ import { GiCogsplosion, GiMuscleFat, GiMuscleUp, GiProgression, GiWeight, GiWeig
 import { RiBarChart2Fill } from "react-icons/ri";
 import { motion } from "framer-motion";
 import ScrollTopButton from "../../components/common/ScrollTopButton";
-import useBreakpoint from "../../hooks/useBreakpoint";
+import useBreakpoint from "../../hooks/ui/useBreakpoint";
 import NavigateBackButton from "../../components/common/NavigateBackButton";
 
 const ExerciseDetailPage = () => {

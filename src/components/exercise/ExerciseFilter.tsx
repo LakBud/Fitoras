@@ -2,7 +2,7 @@ import { useMemo, useCallback, type JSX, useEffect } from "react";
 import { FiSearch, FiZap, FiSettings, FiBox, FiLayers, FiTarget, FiShuffle, FiRefreshCw, FiX } from "react-icons/fi";
 import { useFilterStore } from "../../stores/exercises/useFilterStore";
 import { useExerciseStore } from "../../stores/exercises/useExerciseStore";
-import useBreakpoint from "../../hooks/useBreakpoint";
+import useBreakpoint from "../../hooks/ui/useBreakpoint";
 
 const ExerciseFilter = () => {
   const { exercises } = useExerciseStore();

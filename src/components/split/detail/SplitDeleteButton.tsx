@@ -2,19 +2,19 @@ import { useState } from "react";
 import { BsTrash } from "react-icons/bs";
 import Modal from "../../common/Modal";
 import { useCurrentSplitStore } from "../../../stores/splits/useCurrentSplitStore";
-import { useThemeColor } from "../../../hooks/useThemeColor";
+import { useThemeColor } from "../../../hooks/ui/useThemeColor";
 import { Link } from "react-router-dom";
 import { useSplitsStore } from "../../../stores/splits/useSplitStore";
 
 const SplitDeleteButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { currentSplit, clearCurrentSplit, setCurrentSplit } = useCurrentSplitStore();
-  const removeeSplit = useSplitsStore((state) => state.removeSplit);
+  const removeSplit = useSplitsStore((state) => state.removeSplit);
   const theme = useThemeColor(currentSplit?.category?.color);
 
   const handleDelete = () => {
     if (currentSplit) {
-      removeeSplit(currentSplit.id);
+      removeSplit(currentSplit.id);
       clearCurrentSplit(); // your delete logic
       setCurrentSplit(null);
       setIsOpen(false);
@@ -45,14 +45,24 @@ const SplitDeleteButton = () => {
         {/* Header */}
         <div className="flex flex-col gap-2">
           <h2
-            className="text-2xl sm:text-3xl font-extrabold"
+            className="text-2xl sm:text-3xl font-extrabold truncate max-w-full"
             style={{
               color: theme.primary,
             }}
-          >{`Delete ${currentSplit?.name}?`}</h2>
-          <p className="text-gray-700 text-sm sm:text-base">
-            Are you sure you want to delete <span className="font-semibold">{currentSplit?.name}</span>? This action cannot be
-            undone.
+            title={`Delete ${currentSplit?.name}?`} // Tooltip with full name
+          >
+            {`Delete ${currentSplit?.name}?`}
+          </h2>
+
+          <p className="text-gray-700 text-sm sm:text-base mt-1">
+            Are you sure you want to delete{" "}
+            <span
+              className="font-semibold inline-block max-w-[250px] sm:max-w-[300px] md:max-w-[400px] truncate align-bottom"
+              title={currentSplit?.name} // Tooltip for full text
+            >
+              {currentSplit?.name}
+            </span>
+            ? This action cannot be undone.
           </p>
         </div>
 

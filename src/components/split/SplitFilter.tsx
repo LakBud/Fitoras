@@ -1,6 +1,6 @@
 import { FiSearch, FiRefreshCw, FiX, FiInbox } from "react-icons/fi";
-import useBreakpoint from "../../hooks/useBreakpoint";
-import { useSplitFilterStore } from "../../stores/splits/SplitFilterStore";
+import useBreakpoint from "../../hooks/ui/useBreakpoint";
+import { useSplitFilterStore } from "../../stores/splits/useSplitFilterStore";
 import { useCurrentCategories } from "../../stores/splits/useCurrentCategories";
 
 const SplitFilter = () => {

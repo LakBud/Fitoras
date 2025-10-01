@@ -5,9 +5,10 @@ import { useSplitsStore } from "../../stores/splits/useSplitStore";
 import { useCurrentSplitStore } from "../../stores/splits/useCurrentSplitStore";
 import SplitTable from "../../components/split/detail/SplitTable";
 import NavigateBackButton from "../../components/common/NavigateBackButton";
-import { BsFillGearFill, BsFilePlus } from "react-icons/bs";
-import { useThemeColor } from "../../hooks/useThemeColor";
+import { BsFillGearFill } from "react-icons/bs";
+import { useThemeColor } from "../../hooks/ui/useThemeColor";
 import SplitDeleteButton from "../../components/split/detail/SplitDeleteButton";
+import EditSplitForm from "../../components/split/detail/EditSplitForm";
 
 const SplitDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -52,13 +53,13 @@ const SplitDetailPage = () => {
       }}
     >
       {/* Header */}
-      <header className="flex flex-col items-center text-center pt-20 mb-12 relative">
-        {/* Animated Title */}
+      <header className="flex flex-col items-center text-center pt-20 mb-12 relative px-4">
+        {/* ================== Title ================== */}
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
-          className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent drop-shadow-md"
+          className="w-full break-words text-balance text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent drop-shadow-md leading-tight"
           style={{
             backgroundImage: `linear-gradient(90deg, ${theme.primary}, ${theme.gradientEnd})`,
           }}
@@ -66,26 +67,30 @@ const SplitDetailPage = () => {
           {currentSplit.name}
         </motion.h1>
 
-        {/* Category Pill */}
+        {/* ================== Category Pill ================== */}
         {currentSplit.category && (
           <motion.span
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="mt-3 px-4 py-1 rounded-full text-xs sm:text-sm font-semibold shadow-md"
-            style={{ backgroundColor: currentSplit.category.color, color: "#fff" }}
+            className="mt-3 px-4 py-1 rounded-full text-xs sm:text-sm font-semibold shadow-md max-w-full truncate"
+            style={{
+              backgroundColor: currentSplit.category.color,
+              color: "#fff",
+            }}
+            title={currentSplit.category.name} // tooltip for overflow
           >
             {currentSplit.category.name}
           </motion.span>
         )}
 
-        {/* Description */}
+        {/* ================== Description ================== */}
         {currentSplit.description && (
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.7 }}
-            className="mt-4 max-w-3xl text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed"
+            className="mt-4 max-w-3xl text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed break-words text-balance"
           >
             {currentSplit.description}
           </motion.p>
@@ -121,9 +126,7 @@ const SplitDetailPage = () => {
 
           <SplitDeleteButton />
 
-          <button className="flex items-center gap-2 px-6 py-3 rounded-full font-semibold shadow-lg hover:scale-105 transition-transform duration-200 bg-green-500 text-white">
-            <BsFilePlus className="text-lg" /> Duplicate
-          </button>
+          <EditSplitForm splitToEdit={split} />
         </div>
       </motion.main>
 

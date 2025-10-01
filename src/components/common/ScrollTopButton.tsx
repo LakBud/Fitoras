@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import useBreakpoint from "../../hooks/useBreakpoint";
+import useBreakpoint from "../../hooks/ui/useBreakpoint";
 
 interface ScrollTopButtonProps {
   className?: string;

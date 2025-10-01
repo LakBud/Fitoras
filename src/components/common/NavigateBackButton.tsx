@@ -1,5 +1,5 @@
 import { RiArrowLeftLine } from "react-icons/ri";
-import useBreakpoint from "../../hooks/useBreakpoint";
+import useBreakpoint from "../../hooks/ui/useBreakpoint";
 import { useNavigate } from "react-router-dom";
 
 const NavigateBackButton = () => {
