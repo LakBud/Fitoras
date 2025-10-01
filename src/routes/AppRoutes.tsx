@@ -5,7 +5,7 @@ import SplitDetailPage from "../pages/splits/SplitDetailPage";
 import CalendarPage from "../pages/CalendarPage";
 import ExercisePage from "../pages/exercise/ExercisePage";
 import ExerciseDetailPage from "../pages/exercise/ExerciseDetailPage";
-import SplitEditorPage from "../pages/splits/SplitEditorPage";
+import SplitControlPage from "../pages/splits/SplitControlPage";
 
 const AppRoutes = () => {
   return (
@@ -15,7 +15,7 @@ const AppRoutes = () => {
           <Route path="/" element={<HomePage />}></Route>
           <Route path="/splits" element={<SplitsPage />}></Route>
           <Route path="/splits/:id" element={<SplitDetailPage />}></Route>
-          <Route path="/splits/:id/edit" element={<SplitEditorPage />}></Route>
+          <Route path="/splits/:id/edit" element={<SplitControlPage />}></Route>
           <Route path="/calendar" element={<CalendarPage />}></Route>
           <Route path="/exercise" element={<ExercisePage />}></Route>
           <Route path="/exercise/:id" element={<ExerciseDetailPage />}></Route>

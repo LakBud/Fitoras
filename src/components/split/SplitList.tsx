@@ -20,23 +20,19 @@ const SplitList = () => {
   const splits = useSplitsStore((state) => state.splits);
   const setSplits = useSplitsStore((state) => state.setSplits);
 
-  // Grab filters from store
   const { name: filterName, categoryId: filterCategoryId } = useSplitFilterStore();
 
-  // Apply filtering
   const filteredSplits = splits.filter((s) => {
     const matchesName = s.name.toLowerCase().includes(filterName.toLowerCase());
     const matchesCategory = filterCategoryId ? s.category?.id === filterCategoryId : true;
     return matchesName && matchesCategory;
   });
 
-  // DnD sensors
-  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
-
+  // --- DnD setup
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }));
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
 
   const handleDragStart = (event: DragStartEvent) => setActiveId(event.active.id);
-
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (over && active.id !== over.id) {
@@ -51,20 +47,28 @@ const SplitList = () => {
     setActiveId(null);
   };
 
+  const activeSplit = filteredSplits.find((s) => s.id === activeId);
+
+  // --- Empty state
   if (!filteredSplits.length) {
     return (
-      <div className="flex flex-col items-center justify-center text-center py-20 rounded-3xl border-2 border-dashed border-rose-300 bg-gradient-to-b from-white to-rose-50 shadow-inner">
-        <p className="text-lg text-gray-500">No splits match your filters.</p>
+      <div className="flex flex-col items-center justify-center text-center py-12 sm:py-16 px-4 rounded-2xl border border-dashed border-rose-200 bg-rose-50/50 shadow-inner">
+        <p className="text-base sm:text-lg text-gray-500 font-medium">No splits match your filters.</p>
+        <p className="text-sm text-gray-400 mt-1">Try adjusting your search or category.</p>
       </div>
     );
   }
 
-  const activeSplit = filteredSplits.find((s) => s.id === activeId);
-
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <SortableContext items={filteredSplits.map((s) => s.id)} strategy={verticalListSortingStrategy}>
-        <div className="space-y-4 max-w-2xl mx-auto w-full">
+        <div
+          className="
+            mx-auto w-full max-w-2xl
+            flex flex-col gap-2 sm:gap-4
+            px-2 sm:px-0
+          "
+        >
           {filteredSplits.map((split, index) => (
             <SplitItem
               key={split.id}
@@ -78,35 +82,51 @@ const SplitList = () => {
         </div>
       </SortableContext>
 
-      <DragOverlay dropAnimation={{ duration: 0.2, easing: "ease" }}>
+      {/* ...rest of SplitList unchanged */}
+
+      <DragOverlay dropAnimation={{ duration: 0.25, easing: "ease-in-out" }}>
         {activeSplit && (
           <motion.div
-            className="rounded-3xl p-4 sm:p-5 flex flex-col shadow-lg pointer-events-none border border-rose-50"
+            className="
+        rounded-2xl p-3 sm:p-5 shadow-xl pointer-events-none border border-rose-100
+        max-w-[90vw] sm:max-w-[500px] overflow-hidden
+      "
             style={{ backgroundColor: activeSplit.category?.color || "white" }}
-            initial={{ scale: 1, opacity: 0.9 }}
-            animate={{ scale: 1.05, opacity: 1 }}
+            initial={{ scale: 0.98, opacity: 0.85 }}
+            animate={{ scale: 1.03, opacity: 1 }}
           >
-            <div className="flex items-center justify-between gap-2">
-              <h2 className={`text-lg font-semibold truncate ${activeSplit.category ? "text-white" : "text-rose-600"}`}>
+            <div className="flex items-center justify-between gap-2 w-full min-w-0">
+              <h2
+                className={`
+            text-sm sm:text-lg font-semibold
+            truncate whitespace-nowrap overflow-hidden
+            max-w-[65vw] sm:max-w-[300px]
+          `}
+                title={activeSplit.name}
+              >
                 {activeSplit.name}
               </h2>
+
               {activeSplit.category && (
                 <span
-                  className="text-xs font-semibold px-2 py-1 rounded-full"
-                  style={{ backgroundColor: "rgba(255,255,255,0.3)", color: "#fff" }}
+                  className="text-xs font-semibold px-2 py-0.5 rounded-full backdrop-blur-sm whitespace-nowrap flex-shrink-0"
+                  style={{ backgroundColor: "rgba(255,255,255,0.25)", color: "#fff" }}
                 >
                   {activeSplit.category.name}
                 </span>
               )}
             </div>
+
             <p
-              className={
-                activeSplit.description
-                  ? `text-sm leading-snug line-clamp-2 ${activeSplit.category ? "text-white/80" : "text-gray-600"}`
-                  : `text-sm italic ${activeSplit.category ? "text-white/60" : "text-gray-400"}`
-              }
+              className="mt-1 text-xs sm:text-sm leading-snug"
+              style={{
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+              }}
             >
-              {activeSplit.description}
+              {activeSplit.description || "No description"}
             </p>
           </motion.div>
         )}

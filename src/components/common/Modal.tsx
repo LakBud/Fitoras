@@ -5,10 +5,11 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
-  className?: string; // optional additional styling
+  className?: string;
+  style?: React.CSSProperties; // <-- add this
 }
 
-export default function Modal({ isOpen, onClose, children, className }: ModalProps) {
+export default function Modal({ isOpen, onClose, children, className, style }: ModalProps) {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -18,14 +19,15 @@ export default function Modal({ isOpen, onClose, children, className }: ModalPro
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4"
-          onClick={onClose} // click overlay to close
+          onClick={onClose}
         >
           <motion.div
             key="modal"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className={`bg-white rounded-3xl p-6 sm:p-8 shadow-lg w-full max-w-md ${className || ""}`}
+            className={`rounded-3xl p-6 sm:p-8 shadow-lg w-full max-w-md ${className || ""}`}
+            style={style} // <-- apply the style here
             onClick={(e) => e.stopPropagation()}
           >
             {children}

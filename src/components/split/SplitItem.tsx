@@ -29,59 +29,69 @@ const SplitItem = ({ id, name, description, index, category }: SplitItemProps) =
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       whileDrag={{ scale: 1.03 }}
-      className="rounded-3xl border border-rose-200 bg-white flex overflow-hidden select-none transition-all"
+      className="
+    w-full max-w-[80vw] sm:max-w-[350px] md:max-w-[500px] 
+    mx-auto
+    rounded-2xl border border-rose-200 bg-white
+    flex flex-row overflow-hidden select-none transition-all
+    shadow-sm hover:shadow-md active:shadow-lg
+  "
     >
-      {/* Left color strip with rounded corners */}
-      <div className="w-2 rounded-l-3xl" style={{ backgroundColor: category?.color || "#f3f4f6" }} />
+      {/* Left color strip */}
+      <div className="w-2 shrink-0 rounded-l-2xl" style={{ backgroundColor: category?.color || "#f3f4f6" }} />
 
-      {/* Card content */}
-      <div className="flex flex-1 p-4 sm:p-5">
+      {/* Content */}
+      <div className="flex flex-1 items-start p-3 sm:p-4 gap-3 min-w-0 overflow-hidden">
         {/* Drag handle */}
         <div
           {...attributes}
           {...listeners}
-          className="flex-shrink-0 text-grey hover:text-rose-600 cursor-grab active:cursor-grabbing p-3 touch-none rounded-full transition-colors"
+          className="flex-shrink-0 cursor-grab active:cursor-grabbing p-2 rounded-full touch-none transition-colors hover:bg-gray-100"
           style={{
-            backgroundColor: category ? `${category.color}33` : "transparent",
-            color: category ? category.color : undefined,
+            backgroundColor: category ? `${category.color}20` : "transparent",
+            color: category ? category.color : "#6b7280",
           }}
         >
-          <FiMove size={20} />
+          <FiMove size={18} />
         </div>
 
         {/* Text content */}
-        <Link to={`/splits/${id}`} className="flex flex-col flex-1 overflow-hidden ml-2">
-          {/* Split name, category, and active badge */}
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2 truncate">
-              <h2
-                className={`text-lg font-semibold truncate ${index === 0 ? "text-rose-600" : "text-gray-800"}`}
-                style={category && !index ? { color: category.color } : undefined}
+        <Link to={`/splits/${id}`} className="flex flex-col flex-1 min-w-0 overflow-hidden">
+          <div className="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
+            <h2
+              className={`
+            text-base sm:text-lg font-semibold
+            truncate whitespace-nowrap overflow-hidden
+            max-w-[70vw] sm:max-w-[300px]
+          `}
+              style={category && !index ? { color: category.color } : undefined}
+              title={name}
+            >
+              {name}
+            </h2>
+
+            {category && (
+              <span
+                className="text-[10px] sm:text-xs font-semibold truncate px-2 py-0.5 rounded-full text-white flex-shrink-0 max-w-[90px] sm:max-w-[120px] whitespace-nowrap"
+                style={{ backgroundColor: `${category.color}cc` }}
+                title={category.name}
               >
-                {name}
-              </h2>
-
-              {/* Category pill */}
-              {category && (
-                <span
-                  className="text-xs font-semibold truncate px-2 py-1 rounded-full text-white"
-                  style={{ backgroundColor: `${category.color}cc` }}
-                  title={category.name}
-                >
-                  {category.name}
-                </span>
-              )}
-            </div>
-
-            {/* Active badge */}
-            {index === 0 && (
-              <span className="text-xs font-semibold bg-rose-100 text-rose-600 px-2 py-1 rounded-full">Active</span>
+                {category.name}
+              </span>
             )}
           </div>
 
-          {/* Description */}
-          <p className={description ? "text-gray-600 text-sm leading-snug line-clamp-2" : "text-gray-400 italic text-sm"}>
-            {description}
+          {/* Description (2-line clamp) */}
+          <p
+            className="mt-1 text-xs sm:text-sm leading-snug text-gray-600"
+            style={{
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+            }}
+          >
+            {description || "No description"}
           </p>
         </Link>
       </div>
