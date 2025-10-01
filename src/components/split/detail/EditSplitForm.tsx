@@ -29,7 +29,7 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
   const addCategory = useCurrentCategories((state: UseCurrentCategoriesType) => state.addCategory);
   const updateCategory = useCurrentCategories((state: UseCurrentCategoriesType) => state.updateCategory);
 
-  const theme = useThemeColor(); // <- Using your hook
+  const theme = useThemeColor(splitToEdit.category?.color);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -43,7 +43,6 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
   } = useForm<FormValues>();
   const watchCategoryId = watch("categoryId");
 
-  // Prefill form
   useEffect(() => {
     setValue("name", splitToEdit.name);
     setValue("description", splitToEdit.description || "");
@@ -71,19 +70,30 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
 
   return (
     <>
+      {/* Configure Details Button */}
       <button
-        className="px-6 py-3 rounded-full font-semibold shadow-lg hover:scale-105 transition-transform duration-200"
-        style={{ backgroundColor: theme.primary, color: theme.textOnPrimary }}
+        className="px-6 py-3 rounded-full font-semibold shadow-lg transition-transform duration-200"
+        style={{
+          backgroundColor: theme.primary,
+          color: theme.textOnPrimary,
+        }}
+        onMouseUp={(e) => {
+          (e.currentTarget as HTMLButtonElement).style.backgroundColor = theme.primary;
+        }}
         onClick={() => setIsOpen(true)}
       >
-        Edit Split
+        Configure Details
       </button>
 
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      <Modal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        style={{ backgroundColor: "white" }} // Solid white background
+      >
         <motion.form
           onSubmit={handleSubmit(onSubmit)}
           onClick={(e) => e.stopPropagation()}
-          className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 space-y-6 max-w-sm sm:max-w-md w-full mx-auto border border-rose-200 relative"
+          className="space-y-6 w-full relative"
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 30, opacity: 0 }}
@@ -93,40 +103,54 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
           <button
             type="button"
             onClick={() => setIsOpen(false)}
-            className="absolute top-4 right-4 text-rose-400 hover:text-rose-600 transition text-2xl font-bold"
+            className="absolute top-4 right-4 text-2xl font-bold hover:opacity-80 transition"
+            style={{ color: theme.darker }}
             aria-label="Close form"
           >
             &times;
           </button>
 
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-center text-rose-500">Edit Split</h2>
+          {/* Heading */}
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-center" style={{ color: theme.primary }}>
+            Edit Split
+          </h2>
 
-          {/* Split Name */}
+          {/* Name */}
           <div className="space-y-1">
-            <label htmlFor="name" className="block text-sm font-semibold text-rose-600">
+            <label htmlFor="name" className="block text-sm font-semibold" style={{ color: theme.darker }}>
               Split Name
             </label>
             <input
               id="name"
               type="text"
               {...register("name", { required: true })}
-              className={`mt-1 w-full px-4 py-3 rounded-2xl border border-rose-300 shadow-sm focus:ring-2 focus:ring-rose-200 focus:border-rose-500 outline-none transition text-gray-800 ${
-                errors.name ? "border-red-600 ring-red-200" : ""
-              }`}
+              className="mt-1 w-full px-4 py-3 rounded-2xl shadow-sm focus:outline-none transition"
+              style={{
+                border: `1px solid ${errors.name ? "#FF4D4F" : theme.translucentStrong}`,
+                color: theme.dark,
+              }}
               placeholder="e.g. Push/Pull/Legs"
             />
-            {errors.name && <p className="text-red-600 text-sm">This field is required</p>}
+            {errors.name && (
+              <p className="text-sm" style={{ color: "#FF4D4F" }}>
+                This field is required
+              </p>
+            )}
           </div>
 
           {/* Description */}
           <div className="space-y-1">
-            <label htmlFor="description" className="block text-sm font-semibold text-rose-600">
+            <label htmlFor="description" className="block text-sm font-semibold" style={{ color: theme.darker }}>
               Description <span className="text-gray-400">(Optional)</span>
             </label>
             <textarea
               id="description"
               {...register("description")}
-              className="mt-1 w-full px-4 py-3 rounded-2xl border border-rose-300 shadow-sm focus:ring-2 focus:ring-rose-200 focus:border-rose-500 outline-none transition resize-none text-gray-800"
+              className="mt-1 w-full px-4 py-3 rounded-2xl shadow-sm focus:outline-none transition resize-none"
+              style={{
+                border: `1px solid ${theme.translucentStrong}`,
+                color: theme.dark,
+              }}
               placeholder="Optional description..."
               rows={3}
             />
@@ -134,14 +158,18 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
 
           {/* Category */}
           <div className="space-y-2">
-            <label htmlFor="category" className="block text-sm font-semibold text-rose-600">
+            <label htmlFor="category" className="block text-sm font-semibold" style={{ color: theme.darker }}>
               Category <span className="text-gray-400">(Optional)</span>
             </label>
 
             <select
               id="category"
               {...register("categoryId")}
-              className="w-full border border-rose-300 rounded-2xl px-3 py-3 focus:outline-none focus:ring-2 focus:ring-rose-200 focus:border-rose-500 transition"
+              className="w-full px-3 py-3 rounded-2xl focus:outline-none transition"
+              style={{
+                border: `1px solid ${theme.translucentStrong}`,
+                color: theme.dark,
+              }}
             >
               <option value="">None</option>
               {categories.map((c) => (
@@ -155,8 +183,11 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
             {watchCategoryId && watchCategoryId !== "new" && (
               <div className="flex items-center justify-between gap-4 mt-3 w-full max-w-xs mx-auto">
                 <div
-                  className="w-12 h-12 rounded-2xl border border-gray-200 shadow-sm"
-                  style={{ backgroundColor: categories.find((c) => c.id === watchCategoryId)?.color || theme.primary }}
+                  className="w-12 h-12 rounded-2xl border shadow-sm"
+                  style={{
+                    backgroundColor: categories.find((c) => c.id === watchCategoryId)?.color || theme.primary,
+                    borderColor: theme.translucentStrong,
+                  }}
                   title="Current color"
                 />
                 <input
@@ -174,18 +205,23 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
                 <input
                   {...register("newCategoryName")}
                   placeholder="Category Name"
-                  className="w-full border border-rose-300 rounded-2xl px-4 py-3 text-gray-800"
+                  className="w-full rounded-2xl px-4 py-3 transition"
+                  style={{
+                    border: `1px solid ${theme.translucentStrong}`,
+                    color: theme.dark,
+                  }}
                 />
                 <input
                   type="color"
                   {...register("newCategoryColor")}
                   defaultValue={theme.primary}
-                  className="w-12 h-12 p-0 border-none cursor-pointer rounded-2xl"
+                  className="w-12 h-12 p-0 border-none cursor-pointer rounded-2xl transition"
                 />
               </div>
             )}
           </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
             className="w-full py-3 font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all text-lg"

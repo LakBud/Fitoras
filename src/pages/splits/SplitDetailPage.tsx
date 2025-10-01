@@ -47,7 +47,7 @@ const SplitDetailPage = () => {
 
   return (
     <div
-      className="relative min-h-screen pb-20 px-4 sm:px-6 lg:px-12"
+      className="relative min-h-screen pb-40 px-4 sm:px-6 lg:px-12"
       style={{
         background: `linear-gradient(to bottom, ${theme.gradientStart}, ${theme.gradientEnd})`,
       }}
