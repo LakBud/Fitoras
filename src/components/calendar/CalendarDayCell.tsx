@@ -24,7 +24,7 @@ const CalendarDayCell = ({
   onSelectDate,
 }: CalendarDayCellProps) => {
   const { currentSplit } = useCurrentSplitStore();
-  const theme = useThemeColor(currentSplit?.category?.color);
+  const theme = useThemeColor(currentSplit?.category?.color, undefined, true);
   const { isMobile } = useBreakpoint();
 
   if (!date) {

@@ -29,7 +29,7 @@ const CalendarGrid = ({
 }: CalendarGridProps) => {
   const { isMobile } = useBreakpoint();
   const { currentSplit } = useCurrentSplitStore();
-  const theme = useThemeColor(currentSplit?.category?.color);
+  const theme = useThemeColor(currentSplit?.category?.color, undefined, true);
 
   return (
     <motion.div

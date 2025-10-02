@@ -19,7 +19,7 @@ const CalendarPage = () => {
   const { isExerciseCompleted } = useCalendarStore();
   const { isDesktop, isMobile } = useBreakpoint();
   const { currentSplit } = useCurrentSplitStore();
-  const theme = useThemeColor(currentSplit?.category?.color);
+  const theme = useThemeColor(currentSplit?.category?.color, undefined, true);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
