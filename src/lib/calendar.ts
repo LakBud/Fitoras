@@ -36,3 +36,4 @@ export function getExercisesForDateFromSplit(split: Split | undefined, date: Dat
   }
   return aggregated;
 }
+
