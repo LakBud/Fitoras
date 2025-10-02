@@ -38,13 +38,13 @@ const HomePage = () => {
   ];
 
   const quickActions = [
-    { label: "Browse Exercises", path: "/exercises", gradient: "from-rose-500 to-red-600" },
-    { label: "Start Workout", path: "/workout", gradient: "from-red-500 to-rose-600" },
-    { label: "View Progress", path: "/progress", gradient: "from-rose-400 to-red-500" },
+    { label: "Browse Exercises", path: "/exercise", gradient: "from-rose-500 to-red-600" },
+    { label: "Start Workout Splits", path: "/splits", gradient: "from-red-500 to-rose-600" },
+    { label: "View Progress", path: "/calendar", gradient: "from-rose-400 to-red-500" },
   ];
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-rose-50 via-rose-100 to-rose-200 px-6 py-10">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-rose-50 via-rose-100 to-rose-200 px-6 py-10 mb-10">
       {/* Logo + Title */}
       <motion.div
         initial={{ opacity: 0, y: -50 }}
@@ -110,30 +110,6 @@ const HomePage = () => {
             <p className="text-gray-600 text-center text-sm">{feature.description}</p>
           </motion.div>
         ))}
-      </motion.div>
-
-      {/* Stats or Recent Activity Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.4, duration: 0.8 }}
-        className="mt-16 w-full max-w-4xl bg-white rounded-3xl shadow-xl p-8"
-      >
-        <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">Your Fitness At A Glance</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="text-center p-6 bg-gradient-to-br from-rose-100 to-rose-200 rounded-2xl">
-            <p className="text-4xl font-bold text-red-600 mb-2">0</p>
-            <p className="text-gray-700 font-medium">Workouts Completed</p>
-          </div>
-          <div className="text-center p-6 bg-gradient-to-br from-rose-100 to-rose-200 rounded-2xl">
-            <p className="text-4xl font-bold text-red-600 mb-2">0</p>
-            <p className="text-gray-700 font-medium">Exercises Tried</p>
-          </div>
-          <div className="text-center p-6 bg-gradient-to-br from-rose-100 to-rose-200 rounded-2xl">
-            <p className="text-4xl font-bold text-red-600 mb-2">0</p>
-            <p className="text-gray-700 font-medium">Days Active</p>
-          </div>
-        </div>
       </motion.div>
 
       {/* Footer */}
