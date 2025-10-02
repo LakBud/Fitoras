@@ -33,7 +33,6 @@ const SplitForm = ({ onClose }: SplitFormProps) => {
 
   const categories = useCurrentCategories((state: UseCurrentCategoriesType) => state.categories);
   const addCategory = useCurrentCategories((state: UseCurrentCategoriesType) => state.addCategory);
-  const updateCategory = useCurrentCategories((state: UseCurrentCategoriesType) => state.updateCategory);
 
   const {
     register,
@@ -163,24 +162,12 @@ const SplitForm = ({ onClose }: SplitFormProps) => {
             <div className="flex flex-row justify-between gap-4 w-full">
               {/* Current Color */}
               <div className="flex flex-col items-center flex-1">
-                <span className="text-xs sm:text-sm font-medium mb-1 text-rose-600">Current Color</span>
+                <span className="text-xs sm:text-sm font-medium mb-1 text-rose-600">Color</span>
                 <div
                   className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl border shadow-sm"
                   style={{
                     backgroundColor: categories.find((c) => c.id === watchCategoryId)?.color || "#ef4444",
                   }}
-                />
-              </div>
-
-              {/* New Color Picker */}
-              <div className="flex flex-col items-center flex-1">
-                <span className="text-xs sm:text-sm font-medium mb-1 text-rose-600">Pick New Color</span>
-                <input
-                  type="color"
-                  defaultValue={categories.find((c) => c.id === watchCategoryId)?.color}
-                  onChange={(e) => updateCategory(watchCategoryId, { color: e.target.value })}
-                  className="w-12 h-12 sm:w-14 sm:h-14 p-0 border-none cursor-pointer rounded-xl shadow-inner transition-transform hover:scale-105 focus:scale-105"
-                  title="Pick a new color"
                 />
               </div>
             </div>

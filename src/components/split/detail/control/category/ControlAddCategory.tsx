@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Modal from "../../../../common/Modal";
+import Modal from "@/components/ui/Modal";
 import { useSplitControl } from "../../../../../hooks/control/useSplitControl";
 import type { WorkoutCategory } from "../../../../../types/splits";
 import { readableColor } from "polished";
@@ -200,9 +200,9 @@ const ControlAddCategory = () => {
       <motion.button
         onClick={() => setIsOpen(true)}
         whileTap={{ scale: 0.97 }}
-        className="min-w-[100px] h-12 flex items-center justify-center font-bold text-white shadow-lg rounded-3xl cursor-pointer transition-all duration-200"
+        className="px-4 py-2 font-medium text-sm rounded-t-lg transition-all whitespace-nowrap border-b-2 border-transparent hover:border-b-2 hover:border-gray-300"
         style={{
-          background: `linear-gradient(to right, ${theme.dark}, ${theme.primary})`,
+          color: theme.dark, // text color
         }}
       >
         + Add

@@ -9,6 +9,7 @@ import { BsFillGearFill } from "react-icons/bs";
 import { useThemeColor } from "../../hooks/ui/useThemeColor";
 import SplitDeleteButton from "../../components/split/detail/SplitDeleteButton";
 import EditSplitForm from "../../components/split/detail/EditSplitForm";
+import { Button } from "@/components/ui/button";
 
 const SplitDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -117,13 +118,11 @@ const SplitDetailPage = () => {
 
           {/* Actions */}
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
-            <Link
-              to={`/splits/${currentSplit.id}/edit`}
-              className="flex items-center gap-2 px-6 py-3 rounded-full font-semibold shadow-lg hover:scale-105 transition-transform duration-200"
-              style={{ backgroundColor: theme.primary, color: theme.textOnPrimary }}
-            >
-              <BsFillGearFill className="text-lg" /> Edit
-            </Link>
+            <Button asChild className="flex items-center gap-2">
+              <Link to={`/splits/${currentSplit.id}/edit`} style={{ backgroundColor: theme.primary, color: theme.textOnPrimary }}>
+                <BsFillGearFill className="text-lg" /> Edit
+              </Link>
+            </Button>
 
             <SplitDeleteButton />
 

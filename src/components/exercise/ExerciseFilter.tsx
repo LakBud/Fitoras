@@ -3,6 +3,7 @@ import { FiSearch, FiZap, FiSettings, FiBox, FiLayers, FiTarget, FiShuffle, FiRe
 import { useFilterStore } from "../../stores/exercises/useFilterStore";
 import { useExerciseStore } from "../../stores/exercises/useExerciseStore";
 import useBreakpoint from "../../hooks/ui/useBreakpoint";
+import { Input } from "../ui/input";
 
 const ExerciseFilter = () => {
   const { exercises } = useExerciseStore();
@@ -45,7 +46,7 @@ const ExerciseFilter = () => {
       <div className="z-20 sticky w-full top-0 md:top-auto bg-white/90 px-4 py-2 shadow-md border-t border-red-300 md:border-b md:border-t-0 rounded-b-2xl flex flex-row items-center gap-6">
         {/* Search */}
         <div className="relative w-full md:w-64 flex-1">
-          <input
+          <Input
             type="text"
             id="exercise-search"
             name="search"

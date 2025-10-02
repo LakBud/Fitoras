@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { BsTrash } from "react-icons/bs";
-import Modal from "../../common/Modal";
-import { useCurrentSplitStore } from "../../../stores/splits/useCurrentSplitStore";
-import { useThemeColor } from "../../../hooks/ui/useThemeColor";
-import { Link } from "react-router-dom";
-import { useSplitsStore } from "../../../stores/splits/useSplitStore";
+import { useCurrentSplitStore } from "@/stores/splits/useCurrentSplitStore";
+import { useThemeColor } from "@/hooks/ui/useThemeColor";
+import { useSplitsStore } from "@/stores/splits/useSplitStore";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 
 const SplitDeleteButton = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,86 +13,72 @@ const SplitDeleteButton = () => {
   const theme = useThemeColor(currentSplit?.category?.color);
 
   const handleDelete = () => {
-    if (currentSplit) {
-      removeSplit(currentSplit.id);
-      clearCurrentSplit(); // your delete logic
-      setCurrentSplit(null);
-      setIsOpen(false);
-    }
+    if (!currentSplit) return;
+    removeSplit(currentSplit.id);
+    clearCurrentSplit();
+    setCurrentSplit(null);
+    setIsOpen(false);
   };
 
+  if (!currentSplit) return null; // nothing to delete
+
   return (
-    <div>
+    <>
       {/* Delete Button */}
-      <button
+      <Button
+        variant="destructive"
+        className="flex items-center gap-2"
+        style={{ backgroundColor: theme.darker }}
         onClick={() => setIsOpen(true)}
-        className="flex items-center gap-2 px-6 py-3 rounded-full font-semibold shadow-lg hover:scale-105 transition-transform duration-200
-                   bg-red-500 text-white"
       >
         <BsTrash className="text-lg" /> Delete
-      </button>
+      </Button>
 
-      {/* Modal */}
-      <Modal
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        className="flex flex-col gap-6 rounded-3xl w-full max-w-md mx-auto p-6 sm:p-8 shadow-xl"
-        style={{
-          backgroundColor: theme.lighter,
-          color: theme.textOnPrimary,
-        }}
-      >
-        {/* Header */}
-        <div className="flex flex-col gap-2">
-          <h2
-            className="text-2xl sm:text-3xl font-extrabold truncate max-w-full"
-            style={{
-              color: theme.primary,
-            }}
-            title={`Delete ${currentSplit?.name}?`} // Tooltip with full name
-          >
-            {`Delete ${currentSplit?.name}?`}
-          </h2>
-
-          <p className="text-gray-700 text-sm sm:text-base mt-1">
-            Are you sure you want to delete{" "}
-            <span
-              className="font-semibold inline-block max-w-[250px] sm:max-w-[300px] md:max-w-[400px] truncate align-bottom"
-              title={currentSplit?.name} // Tooltip for full text
+      {/* Dialog */}
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent
+          className="sm:max-w-md w-full rounded-3xl p-6 sm:p-8"
+          style={{ backgroundColor: theme.lighter, color: theme.textOnPrimary }}
+        >
+          <DialogHeader>
+            <DialogTitle
+              className="text-2xl sm:text-3xl font-extrabold break-words"
+              style={{ color: theme.primary }}
+              title={`Delete ${currentSplit.name}?`}
             >
-              {currentSplit?.name}
-            </span>
-            ? This action cannot be undone.
-          </p>
-        </div>
+              {`Delete ${currentSplit.name}?`}
+            </DialogTitle>
+            <p className="text-gray-700 text-sm sm:text-base mt-2 break-words">
+              Are you sure you want to delete{" "}
+              <span className="font-semibold break-words" title={currentSplit.name}>
+                {currentSplit.name}
+              </span>
+              ? This action cannot be undone.
+            </p>
+          </DialogHeader>
 
-        {/* Actions */}
-        <div className="flex flex-col sm:flex-row gap-4 mt-6 justify-end">
-          <button
-            onClick={() => setIsOpen(false)}
-            className="flex-1 sm:flex-none px-6 py-3 rounded-2xl font-semibold shadow hover:shadow-md transition-all duration-200 transform hover:-translate-y-0.5"
-            style={{
-              backgroundColor: theme.translucentStrong,
-              color: theme.primary,
-            }}
-          >
-            Cancel
-          </button>
+          <DialogFooter className="flex flex-col sm:flex-row gap-4 mt-6 justify-end">
+            <Button
+              variant="outline"
+              className="flex-1 sm:flex-none"
+              style={{ backgroundColor: theme.translucentStrong, color: theme.primary }}
+              onClick={() => setIsOpen(false)}
+            >
+              Cancel
+            </Button>
 
-          <Link
-            to="/splits"
-            onClick={handleDelete}
-            className="flex-1 sm:flex-none px-6 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
-            style={{
-              backgroundColor: theme.primary,
-              color: theme.textOnPrimary,
-            }}
-          >
-            <BsTrash className="inline text-lg" /> Delete
-          </Link>
-        </div>
-      </Modal>
-    </div>
+            <Button
+              variant="destructive"
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2"
+              style={{ backgroundColor: theme.primary, color: theme.textOnPrimary }}
+              onClick={handleDelete}
+            >
+              <BsTrash className="inline text-lg" /> Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
