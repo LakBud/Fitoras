@@ -6,20 +6,16 @@ import useBreakpoint from "../../../../../hooks/ui/useBreakpoint";
 import { FiInfo } from "react-icons/fi";
 
 const ControlSelectedExercises = () => {
-  const { selectedCategoryId, categories } = useCategoryControl();
+  const { selectedCategoryId } = useCategoryControl();
   const { displayedExercises, handleChangeSetsReps, handleRemoveExercise } = useExerciseControl();
   const { split } = useSplitControl();
-  const { isMobile, isDesktop } = useBreakpoint();
+  const { isMobile } = useBreakpoint();
 
   const theme = useThemeColor(split?.category?.color);
-  const selectedCategoryName = categories?.find((cat) => cat.id === selectedCategoryId)?.name || selectedCategoryId;
 
   return (
     <div className="space-y-4">
       {/* Heading */}
-      <h4 className={`font-semibold ${isDesktop ? "text-lg" : "text-base"}`} style={{ color: theme.dark }}>
-        {selectedCategoryId ? `Selected Exercises in ${selectedCategoryName}` : "Selected Exercises"}
-      </h4>
 
       {/* Empty state */}
       {displayedExercises?.length === 0 ? (
@@ -40,11 +36,19 @@ const ControlSelectedExercises = () => {
           </p>
         </div>
       ) : (
-        <div className={`grid gap-6 ${isMobile ? "grid-cols-2" : isDesktop ? "grid-cols-4" : "grid-cols-2 sm:grid-cols-3"}`}>
+        <div
+          className={`
+          grid gap-4
+          grid-cols-2
+          sm:grid-cols-2
+          md:grid-cols-3
+          lg:grid-cols-4
+        `}
+        >
           {displayedExercises?.map((ex, idx) => (
             <div
               key={`${ex.id}-${idx}`}
-              className="rounded-xl border p-4 flex flex-col items-center transition-transform hover:shadow-lg hover:scale-[1.02] bg-white"
+              className="rounded-xl border p-3 sm:p-4 flex flex-col items-center transition-transform hover:shadow-lg hover:scale-[1.02] bg-white"
               style={{ borderColor: theme.translucentStrong }}
             >
               {/* Image */}
@@ -74,9 +78,10 @@ const ControlSelectedExercises = () => {
                 {ex.name}
               </h5>
 
-              <div className={`flex w-full gap-4 flex-wrap ${isMobile ? "flex-col items-stretch" : "flex-row items-center"}`}>
+              {/* Sets × Reps + Remove */}
+              <div className="flex flex-col w-full gap-2">
                 {/* Sets × Reps Inputs */}
-                <div className="flex gap-4 flex-shrink-0">
+                <div className="flex justify-center gap-2">
                   {/* Sets */}
                   <div className="flex flex-col items-center">
                     <label className="text-xs text-gray-500 mb-1">Sets</label>
@@ -87,7 +92,7 @@ const ControlSelectedExercises = () => {
                       onChange={(e) =>
                         handleChangeSetsReps(ex.id, "sets", Number(e.target.value), selectedCategoryId || undefined)
                       }
-                      className="w-16 border rounded-lg px-2 py-1 text-center focus:outline-none focus:ring-2 focus:ring-offset-1 transition"
+                      className="w-13 border rounded-lg px-2 py-1 text-center focus:outline-none focus:ring-2 focus:ring-offset-1 transition text-sm"
                       style={{ borderColor: theme.translucentStrong }}
                     />
                   </div>
@@ -104,7 +109,7 @@ const ControlSelectedExercises = () => {
                       onChange={(e) =>
                         handleChangeSetsReps(ex.id, "reps", Number(e.target.value), selectedCategoryId || undefined)
                       }
-                      className="w-16 border rounded-lg px-2 py-1 text-center focus:outline-none focus:ring-2 focus:ring-offset-1 transition"
+                      className="w-14 border rounded-lg px-2 py-1 text-center focus:outline-none focus:ring-2 focus:ring-offset-1 transition text-sm"
                       style={{ borderColor: theme.translucentStrong }}
                     />
                   </div>
@@ -112,7 +117,7 @@ const ControlSelectedExercises = () => {
 
                 {/* Remove Button */}
                 <button
-                  className="px-3 py-1 rounded-full text-sm font-semibold text-white mt-2 md:mt-0 transition hover:opacity-90"
+                  className="px-3 py-1 rounded-full text-xs sm:text-sm font-semibold text-white transition hover:opacity-90 mt-2"
                   style={{ backgroundColor: theme.darker }}
                   onClick={() => handleRemoveExercise(ex.id, selectedCategoryId || undefined)}
                 >

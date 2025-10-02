@@ -149,7 +149,7 @@ const ExerciseDetailPage = () => {
         {/* Tab Slider */}
         <div className="mb-12">
           {/* Tabs */}
-          <div className="relative flex w-full max-w-xs mx-auto bg-gray-100 rounded-full p-1 mb-6">
+          <div className="relative flex w-full max-w-xs mx-auto bg-gray-100 rounded-full p-1 mb-6 z-0">
             {["info", "muscles"].map((tab) => (
               <button
                 key={tab}
@@ -159,11 +159,13 @@ const ExerciseDetailPage = () => {
                 }`}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
+
+                {/* Slider */}
                 {activeTab === tab && (
                   <motion.div
                     layoutId="tabSlider"
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    className="absolute inset-0 bg-rose-600 rounded-full z-[-1]"
+                    className="absolute inset-0 bg-rose-600 rounded-full -z-10"
                   />
                 )}
               </button>
@@ -176,7 +178,7 @@ const ExerciseDetailPage = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="grid gap-4 justify-items-center sm:grid-cols-2 "
+            className="grid gap-4 justify-items-center sm:grid-cols-2"
           >
             {activeTab === "info" &&
               [
@@ -251,7 +253,7 @@ const ExerciseDetailPage = () => {
       </div>
 
       {/* Back Button & ScrollTop */}
-      <nav>
+      <nav className="z-50">
         <NavigateBackButton />
         <ScrollTopButton />
       </nav>

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useCurrentSplitStore } from "../../stores/splits/useCurrentSplitStore";
 import { useSplitsStore } from "../../stores/splits/useSplitStore";
@@ -12,15 +12,21 @@ import ControlCategoryTab from "../../components/split/detail/control/category/C
 import ControlSelectedExercises from "../../components/split/detail/control/exercise/ControlSelectedExercises";
 import ControlExerciseList from "../../components/split/detail/control/exercise/ControlExerciseList";
 import ControlExerciseFilter from "../../components/split/detail/control/exercise/ControlExerciseFilter";
+import { useCategoryControl } from "../../hooks/control/useCategoryControl";
 
 const SplitControlPage = () => {
   const currentSplit = useCurrentSplitStore((s) => s.currentSplit);
   const setCurrentSplit = useCurrentSplitStore((s) => s.setCurrentSplit);
   const splits = useSplitsStore((s) => s.splits);
   const { id } = useParams<{ id: string }>();
+  const { categories, selectedCategoryId } = useCategoryControl();
 
   const theme = useThemeColor(currentSplit?.category?.color);
   const { isDesktop, isMobile } = useBreakpoint();
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isSelectedCollapsed, setIsSelectedCollapsed] = useState(false);
+  const selectedCategoryName = categories?.find((cat) => cat.id === selectedCategoryId)?.name || selectedCategoryId;
+  const selectedCategory = categories.find((cat) => cat.id === selectedCategoryId);
 
   useEffect(() => {
     const split = splits.find((s) => s.id === id);
@@ -67,7 +73,7 @@ const SplitControlPage = () => {
             {currentSplit ? (
               <>
                 <span
-                  className="truncate max-w-[65vw] sm:max-w-[50vw] md:max-w-[600px] inline-block font-extrabold"
+                  className=" inline-block font-extrabold"
                   title={currentSplit.name}
                   style={{
                     background: `linear-gradient(90deg, ${theme.primary}, $theme.gradientEnd})`,
@@ -124,32 +130,112 @@ const SplitControlPage = () => {
               custom={2}
               initial="hidden"
               animate="visible"
-              className="rounded-2xl p-4 shadow-xl border border-transparent hover:border-white/20 transition-colors duration-300"
+              className="rounded-2xl shadow-xl border border-transparent hover:border-white/20 transition-colors duration-300 overflow-hidden"
               style={{
                 backgroundColor: theme.translucentStrong,
                 backdropFilter: "blur(10px)",
               }}
             >
-              <ControlSelectedExercises />
+              {/* --- Collapse Toggle Header --- */}
+              <div className="flex justify-between items-center p-4 border-b border-white/20">
+                <h4 className={`font-semibold ${isDesktop ? "text-lg" : "text-base"}`} style={{ color: theme.dark }}>
+                  {selectedCategoryId ? (
+                    <>
+                      Selected Exercises in
+                      <span className="ml-1" style={{ color: selectedCategory?.color || theme.primary }}>
+                        {selectedCategoryName}
+                      </span>
+                    </>
+                  ) : (
+                    "Selected Exercises"
+                  )}
+                </h4>
+
+                <button
+                  onClick={() => setIsSelectedCollapsed((prev) => !prev)}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold transition hover:opacity-90"
+                  style={{
+                    color: theme.textOnPrimary,
+                    backgroundColor: theme.primary,
+                  }}
+                >
+                  {isSelectedCollapsed ? "Show" : "Hide"}
+                  <motion.span
+                    animate={{ rotate: isSelectedCollapsed ? 0 : 180 }}
+                    transition={{ duration: 0.3 }}
+                    className="inline-block text-xs"
+                  >
+                    ▼
+                  </motion.span>
+                </button>
+              </div>
+
+              {/* --- Collapsible Content --- */}
+              <motion.div
+                initial={false}
+                animate={{
+                  maxHeight: isSelectedCollapsed ? 0 : 2000,
+                  opacity: isSelectedCollapsed ? 0 : 1,
+                }}
+                transition={{ duration: 0.45, ease: "easeInOut" }}
+                className="overflow-hidden px-4 sm:px-6 py-4"
+              >
+                <ControlSelectedExercises />
+              </motion.div>
             </motion.div>
           </div>
         </section>
 
-        {/* =========== Bottom Section =========== */}
+        {/* =========== Bottom Section (Collapsible Panel) =========== */}
         <section className="flex flex-col gap-6">
           <motion.div
             variants={fadeSlide}
             custom={4}
             initial="hidden"
             animate="visible"
-            className="rounded-2xl p-4 shadow-xl border border-transparent hover:border-white/20 transition-colors duration-300"
+            className="rounded-2xl shadow-xl border border-transparent hover:border-white/20 transition-colors duration-300 overflow-hidden"
             style={{
               backgroundColor: theme.translucentStrong,
               backdropFilter: "blur(10px)",
             }}
           >
-            <ControlExerciseFilter />
-            <ControlExerciseList />
+            {/* --- Collapse Toggle Header --- */}
+            <div className="flex justify-between items-center p-4 border-b border-white/20">
+              <h3 className="font-semibold text-base sm:text-lg" style={{ color: theme.primary }}>
+                Exercises
+              </h3>
+              <button
+                onClick={() => setIsCollapsed((prev) => !prev)}
+                className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold transition hover:opacity-90"
+                style={{
+                  color: theme.textOnPrimary,
+                  backgroundColor: theme.primary,
+                }}
+              >
+                {isCollapsed ? "Show" : "Hide"}
+                <motion.span
+                  animate={{ rotate: isCollapsed ? 0 : 180 }}
+                  transition={{ duration: 0.3 }}
+                  className="inline-block text-xs"
+                >
+                  ▼
+                </motion.span>
+              </button>
+            </div>
+
+            {/* --- Collapsible Content --- */}
+            <motion.div
+              initial={false}
+              animate={{
+                maxHeight: isCollapsed ? 0 : 2000,
+                opacity: isCollapsed ? 0 : 1,
+              }}
+              transition={{ duration: 0.45, ease: "easeInOut" }}
+              className="overflow-hidden px-4 sm:px-6 py-4 space-y-4"
+            >
+              <ControlExerciseFilter />
+              <ControlExerciseList />
+            </motion.div>
           </motion.div>
         </section>
       </motion.main>

@@ -77,12 +77,7 @@ const NavBar = () => {
             </motion.div>
           )}
           {isSplitPage && (
-            <motion.div
-              className="sticky top-0 z-50"
-              initial={{ y: 0 }}
-              animate={{ y: scrollUp ? 0 : -60 }} // hide when scrolling down
-              transition={{ duration: 0.2, ease: "easeInOut" }}
-            >
+            <motion.div className="sticky top-0 z-50">
               <SplitFilter />
             </motion.div>
           )}

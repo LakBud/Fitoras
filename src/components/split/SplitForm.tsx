@@ -85,24 +85,24 @@ const SplitForm = ({ onClose }: SplitFormProps) => {
     <motion.form
       onSubmit={handleSubmit(onSubmit)}
       onClick={(e) => e.stopPropagation()}
-      className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 space-y-6 max-w-sm sm:max-w-md w-full mx-auto border border-rose-200 relative"
-      initial={{ y: 30, opacity: 0 }}
+      className="relative flex flex-col max-h-[90vh] w-full max-w-md mx-auto overflow-y-auto px-4 sm:px-6 py-6 space-y-6 bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-rose-200"
+      initial={{ y: 40, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      exit={{ y: 30, opacity: 0 }}
+      exit={{ y: 40, opacity: 0 }}
       transition={{ type: "spring", stiffness: 250, damping: 25 }}
     >
       {/* Close Button */}
       <button
         type="button"
         onClick={onClose}
-        className="absolute top-4 right-4 text-rose-400 hover:text-rose-600 transition text-2xl font-bold"
+        className="absolute top-3 right-3 text-2xl font-bold text-rose-400 hover:text-rose-600 transition sm:top-4 sm:right-4"
         aria-label="Close form"
       >
         &times;
       </button>
 
-      {/* Title */}
-      <h2 className="text-2xl sm:text-3xl font-extrabold text-center text-rose-500">Create New Split</h2>
+      {/* Heading */}
+      <h2 className="text-3xl sm:text-3xl font-extrabold text-center pt-2 pb-1 text-rose-500">Create New Split</h2>
 
       {/* Split Name */}
       <div className="space-y-1">
@@ -113,12 +113,14 @@ const SplitForm = ({ onClose }: SplitFormProps) => {
           id="name"
           type="text"
           {...register("name", { required: true })}
-          className={`mt-1 w-full px-4 py-3 rounded-2xl border border-rose-300 shadow-sm focus:ring-2 focus:ring-rose-200 focus:border-rose-500 outline-none transition text-gray-800 ${
-            errors.name ? "border-red-600 ring-red-200" : ""
+          className={`mt-1 w-full px-4 py-3 rounded-xl shadow-sm focus:outline-none transition text-base text-gray-800 ${
+            errors.name
+              ? "border-red-600 ring-red-200 border focus:ring-2"
+              : "border border-rose-300 focus:ring-2 focus:ring-rose-200 focus:border-rose-500"
           }`}
           placeholder="e.g. Push/Pull/Legs"
         />
-        {errors.name && <p className="text-red-600 text-sm">This field is required</p>}
+        {errors.name && <p className="text-sm text-red-600">This field is required</p>}
       </div>
 
       {/* Description */}
@@ -129,7 +131,7 @@ const SplitForm = ({ onClose }: SplitFormProps) => {
         <textarea
           id="description"
           {...register("description")}
-          className="mt-1 w-full px-4 py-3 rounded-2xl border border-rose-300 shadow-sm focus:ring-2 focus:ring-rose-200 focus:border-rose-500 outline-none transition resize-none text-gray-800"
+          className="mt-1 w-full px-4 py-3 rounded-xl shadow-sm focus:outline-none transition resize-none text-base text-gray-800 border border-rose-300 focus:ring-2 focus:ring-rose-200 focus:border-rose-500"
           placeholder="Optional description..."
           rows={3}
         />
@@ -144,7 +146,7 @@ const SplitForm = ({ onClose }: SplitFormProps) => {
         <select
           id="category"
           {...register("categoryId")}
-          className="w-full border border-rose-300 rounded-2xl px-3 py-3 focus:outline-none focus:ring-2 focus:ring-rose-200 focus:border-rose-500 transition"
+          className="w-full px-3 py-3 rounded-xl focus:outline-none transition text-base border border-rose-300 focus:ring-2 focus:ring-rose-200 focus:border-rose-500"
         >
           <option value="">None</option>
           {categories.map((c) => (
@@ -155,64 +157,71 @@ const SplitForm = ({ onClose }: SplitFormProps) => {
           <option value="new">+ Add New</option>
         </select>
 
-        {/* Selected category color preview */}
+        {/* Existing Category Colors */}
         {watchCategoryId && watchCategoryId !== "new" && (
-          <div className="flex items-center justify-between gap-4 mt-3 w-full max-w-xs mx-auto">
-            {/* Color preview */}
-            <div className="flex flex-col items-center">
-              <span
-                className="w-12 h-12 rounded-2xl border border-gray-200 shadow-sm"
-                style={{ backgroundColor: categories.find((c) => c.id === watchCategoryId)?.color || "#ef4444" }}
-                title="Current color"
-              />
-              <span className="mt-1 text-xs text-gray-600">Current</span>
-            </div>
+          <div className="mt-4 w-full">
+            <div className="flex flex-row justify-between gap-4 w-full">
+              {/* Current Color */}
+              <div className="flex flex-col items-center flex-1">
+                <span className="text-xs sm:text-sm font-medium mb-1 text-rose-600">Current Color</span>
+                <div
+                  className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl border shadow-sm"
+                  style={{
+                    backgroundColor: categories.find((c) => c.id === watchCategoryId)?.color || "#ef4444",
+                  }}
+                />
+              </div>
 
-            {/* Color picker */}
-            <div className="flex flex-col items-center">
-              <input
-                type="color"
-                defaultValue={categories.find((c) => c.id === watchCategoryId)?.color}
-                onChange={(e) => updateCategory(watchCategoryId, { color: e.target.value })}
-                className="w-12 h-12 p-0 border-none cursor-pointer rounded-2xl shadow-inner transition hover:scale-105"
-                title="Pick a new color"
-              />
-              <span className="mt-1 text-xs font-semibold text-rose-500">Change</span>
+              {/* New Color Picker */}
+              <div className="flex flex-col items-center flex-1">
+                <span className="text-xs sm:text-sm font-medium mb-1 text-rose-600">Pick New Color</span>
+                <input
+                  type="color"
+                  defaultValue={categories.find((c) => c.id === watchCategoryId)?.color}
+                  onChange={(e) => updateCategory(watchCategoryId, { color: e.target.value })}
+                  className="w-12 h-12 sm:w-14 sm:h-14 p-0 border-none cursor-pointer rounded-xl shadow-inner transition-transform hover:scale-105 focus:scale-105"
+                  title="Pick a new color"
+                />
+              </div>
             </div>
           </div>
         )}
 
-        {/* New category inputs */}
+        {/* New Category */}
         {watchCategoryId === "new" && (
-          <div className="flex flex-col sm:flex-row sm:items-center gap-3 mt-3">
-            <div className="flex-1 flex flex-col">
-              <label className="text-sm font-semibold text-rose-600 mb-1">Category Name</label>
-              <input
-                {...register("newCategoryName")}
-                placeholder="Enter category name"
-                className="w-full border border-rose-300 rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-rose-200 focus:border-rose-500 transition text-gray-800"
-              />
-            </div>
+          <div className="mt-3 space-y-2">
+            <label className="block text-sm font-medium text-rose-600">New Category</label>
+            <p className="text-xs text-gray-500">Give your new category a name and color.</p>
 
-            <div className="flex flex-col items-center">
-              <label className="text-sm font-semibold text-rose-600 mb-1">Color</label>
-              <div className="w-12 h-12 rounded-2xl border border-gray-200 overflow-hidden" title="Pick a color">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+              {/* Name */}
+              <div className="relative flex-1">
+                <input
+                  {...register("newCategoryName")}
+                  placeholder="Enter category name"
+                  className="w-full rounded-xl px-4 py-3 border text-base text-gray-800 border-rose-300 focus:ring-2 focus:ring-rose-200 focus:border-rose-500 transition placeholder-gray-400"
+                />
+              </div>
+
+              {/* Color Picker */}
+              <div className="relative flex-shrink-0 group self-start sm:self-center">
                 <input
                   type="color"
                   {...register("newCategoryColor")}
                   defaultValue="#ef4444"
-                  className="w-full h-full p-0 border-none cursor-pointer rounded-2xl"
+                  className="appearance-none w-10 h-10 sm:w-12 sm:h-12 rounded-xl border cursor-pointer transition-transform transform group-hover:scale-110 focus:scale-110"
                 />
+                <div className="absolute inset-0 rounded-xl pointer-events-none shadow-inner" />
               </div>
             </div>
           </div>
         )}
       </div>
 
-      {/* Submit */}
+      {/* Submit Button */}
       <button
         type="submit"
-        className="w-full py-3 bg-gradient-to-r from-rose-500 to-rose-600 text-white font-semibold rounded-2xl shadow-lg hover:from-rose-600 hover:to-rose-700 hover:shadow-xl transition-all text-lg"
+        className="w-full py-3 font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all text-base sm:text-lg bg-gradient-to-r from-rose-500 to-rose-600 text-white mt-2"
       >
         Create Split
       </button>

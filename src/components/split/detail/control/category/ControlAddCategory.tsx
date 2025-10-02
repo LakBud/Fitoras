@@ -53,19 +53,25 @@ const ControlAddCategory = () => {
 
   const renderCategoryRow = () => (
     <div className="flex gap-3 mb-4 items-center">
+      {/* New Category Input */}
       <input
         type="text"
         value={newCategoryName}
-        onChange={(e) => setNewCategoryName?.(e.target.value)}
+        onChange={(e) => {
+          // Remove non-alphabet characters and limit to 20
+          const lettersOnly = e.target.value.replace(/[^a-zA-Z]/g, "").slice(0, 20);
+          setNewCategoryName?.(lettersOnly);
+        }}
         placeholder="New category..."
-        className="flex-1 border rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-indigo-400 transition shadow-sm text-sm"
-        style={{ borderColor: theme.translucentStrong }}
+        className="flex-1 border rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-offset-1 transition shadow-sm text-sm w-[80px]"
+        style={{ borderColor: theme.translucentStrong, color: theme.dark }}
       />
+
       <input
         type="color"
         value={newCategoryColor ?? "#ff0000"}
         onChange={(e) => setNewCategoryColor?.(e.target.value)}
-        className="w-16 h-16 p-0 rounded-full border cursor-pointer shadow-inner"
+        className="w-16 h-16 p-0 rounded-2xl cursor-pointer shadow-inner"
         title="Pick a category color"
       />
 
@@ -120,7 +126,10 @@ const ControlAddCategory = () => {
         <input
           type="text"
           value={editName}
-          onChange={(e) => setEditName(e.target.value)}
+          onChange={(e) => {
+            const lettersOnly = e.target.value.replace(/[^a-zA-Z]/g, "").slice(0, 20);
+            setEditName(lettersOnly);
+          }}
           placeholder="Enter category name"
           className="border rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-indigo-400 transition shadow-sm text-sm"
           style={{ borderColor: theme.translucentStrong }}

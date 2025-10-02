@@ -7,7 +7,7 @@ export function useThemeColor(baseColor?: string) {
   const dark = darken(0.1, primary);
   const darker = darken(0.2, primary);
   const light = lighten(0.15, primary);
-  const lighter = lighten(0.3, primary);
+  const lighter = lighten(0.4, primary);
   const translucent = rgba(primary, 0.1);
   const translucentStrong = rgba(primary, 0.25);
 

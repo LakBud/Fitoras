@@ -20,10 +20,10 @@ export function useSplitBase() {
   }, [split]);
 
   useEffect(() => {
-    if (exercises.length && !filteredExercises.length) {
+    if (exercises.length && filteredExercises.length === 0) {
       setAllExercises(exercises);
     }
-  }, [exercises, filteredExercises]);
+  }, [exercises]);
 
   const currentDay: WorkoutDay | undefined = useMemo(() => split?.days.find((d) => d.day === selectedDay), [split, selectedDay]);
 

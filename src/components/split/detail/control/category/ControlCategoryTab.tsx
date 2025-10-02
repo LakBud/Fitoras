@@ -38,12 +38,18 @@ const ControlCategoryTab = () => {
     };
   }, []);
 
+  useEffect(() => {
+    return () => {
+      setSelectedCategoryId?.(null); // deselect category when leaving the page
+    };
+  }, []);
+
   return (
     <div className="flex-1 relative">
       {/* === Fade Gradients for mobile === */}
       {!isDesktop && canScrollLeft && (
         <div
-          className="pointer-events-none absolute top-0 left-0 h-full w-6 z-10"
+          className="pointer-events-noneabsolute top-0 left-0 h-full w-6 z-10"
           style={{
             background: `linear-gradient(to right, ${theme.translucentStrong}, transparent)`,
           }}
@@ -100,11 +106,14 @@ const ControlCategoryTab = () => {
                 {isActive && (
                   <motion.div
                     layoutId="category-underline"
-                    className="absolute bottom-0 left-0 w-full h-[3px] rounded-full"
+                    className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-[3px] rounded-full"
                     style={{
-                      backgroundColor: textColor,
-                      opacity: 0.85,
+                      background: `linear-gradient(90deg, ${rgba(textColor, 0.9)}, ${rgba(textColor, 0.5)})`,
+                      boxShadow: `0 2px 8px ${rgba(textColor, 0.3)}`,
                     }}
+                    initial={{ width: 0, opacity: 0 }}
+                    animate={{ width: "70%", opacity: 1 }}
+                    exit={{ width: 0, opacity: 0 }}
                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
                   />
                 )}

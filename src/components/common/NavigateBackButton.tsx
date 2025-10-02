@@ -7,7 +7,7 @@ const NavigateBackButton = () => {
   const { isDesktop, isMobile } = useBreakpoint();
 
   return (
-    <div>
+    <div className="z-50">
       <button
         onClick={() => navigate(-1)}
         className={`fixed bottom-6 left-4 flex items-center gap-2 px-4 py-2 bg-red-200 backdrop-blur-md border border-rose-300 text-rose-700 font-medium rounded-full shadow-sm hover:bg-red-100 hover:shadow-md transition-all ${
