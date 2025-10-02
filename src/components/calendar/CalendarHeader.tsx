@@ -12,7 +12,7 @@ type CalendarHeaderProps = {
 };
 
 const CalendarHeader = ({ currentDate, onPrev, onNext, splitName, splitDescription }: CalendarHeaderProps) => {
-  const { isMobile, isDesktop } = useBreakpoint();
+  const { isMobile } = useBreakpoint();
   const theme = useThemeColor();
 
   return (

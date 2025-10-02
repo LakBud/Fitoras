@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Modal from "@/components/ui/Modal";
+import Modal from "@/components/ui/modal";
 import { useSplitControl } from "../../../../../hooks/control/useSplitControl";
 import type { WorkoutCategory } from "../../../../../types/splits";
 import { readableColor } from "polished";
