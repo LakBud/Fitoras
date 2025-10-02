@@ -27,7 +27,7 @@ const CalendarChecklist = ({
 }: CalendarChecklistProps) => {
   const { toggleExercise, isExerciseCompleted } = useCalendarStore();
   const { currentSplit, splits } = useCurrentSplitStore();
-  const theme = useThemeColor(currentSplit?.category?.color || splits?.[0]?.category?.color);
+  const theme = useThemeColor(currentSplit?.category?.color || splits?.[0]?.category?.color, undefined, true);
 
   const dateKey = formatDateKey(selectedDate);
   const getExerciseById = (id: string) => exercises.find((ex) => ex.id === id);
