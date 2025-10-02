@@ -3,6 +3,7 @@ import CalendarDayCell from "./CalendarDayCell";
 import { motion } from "framer-motion";
 import { useThemeColor } from "../../hooks/ui/useThemeColor";
 import useBreakpoint from "../../hooks/ui/useBreakpoint";
+import { useCurrentSplitStore } from "@/stores/splits/useCurrentSplitStore";
 
 type Exercise = { id: string; name: string };
 
@@ -27,7 +28,8 @@ const CalendarGrid = ({
   onSelectDate,
 }: CalendarGridProps) => {
   const { isMobile } = useBreakpoint();
-  const theme = useThemeColor();
+  const { currentSplit } = useCurrentSplitStore();
+  const theme = useThemeColor(currentSplit?.category?.color);
 
   return (
     <motion.div

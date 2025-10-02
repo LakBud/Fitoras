@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useThemeColor } from "../../hooks/ui/useThemeColor";
 import useBreakpoint from "../../hooks/ui/useBreakpoint";
+import { useCurrentSplitStore } from "@/stores/splits/useCurrentSplitStore";
 
 type CalendarHeaderProps = {
   currentDate: Date;
@@ -13,7 +14,8 @@ type CalendarHeaderProps = {
 
 const CalendarHeader = ({ currentDate, onPrev, onNext, splitName, splitDescription }: CalendarHeaderProps) => {
   const { isMobile } = useBreakpoint();
-  const theme = useThemeColor();
+  const { currentSplit } = useCurrentSplitStore();
+  const theme = useThemeColor(currentSplit?.category?.color);
 
   return (
     <div className="mb-6">

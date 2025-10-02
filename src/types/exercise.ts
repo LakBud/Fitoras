@@ -10,4 +10,6 @@ export type Exercises = {
   category: string;
   images?: string[];
   id: string;
+  sets?: number;
+  reps?: number;
 };

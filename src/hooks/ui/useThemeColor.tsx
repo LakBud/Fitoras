@@ -1,7 +1,12 @@
 import { darken, lighten, readableColor, rgba } from "polished";
 
-export function useThemeColor(baseColor?: string) {
-  const primary = baseColor || "#be123c";
+/**
+ * Returns a theme object based on a base color.
+ * If baseColor is undefined, you can optionally pass a fallbackColor.
+ */
+export function useThemeColor(baseColor?: string, fallbackColor?: string) {
+  // Use baseColor if provided, otherwise fallbackColor, otherwise default red
+  const primary = baseColor || fallbackColor || "#be123c";
 
   const textOnPrimary = readableColor(primary, "#000000", "#ffffff", false);
   const dark = darken(0.1, primary);

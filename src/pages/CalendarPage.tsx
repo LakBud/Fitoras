@@ -1,6 +1,4 @@
 import { useState, useRef, useLayoutEffect } from "react";
-import { Check } from "lucide-react";
-import { motion } from "framer-motion";
 import { useSplitsStore } from "../stores/splits/useSplitStore";
 import { useCalendarStore } from "../stores/useCalendarStore";
 import type { Weekday } from "../types/splits";
@@ -11,13 +9,14 @@ import ScrollTopButton from "../components/common/ScrollTopButton";
 import useBreakpoint from "../hooks/ui/useBreakpoint";
 import { useThemeColor } from "../hooks/ui/useThemeColor";
 import { useCurrentSplitStore } from "@/stores/splits/useCurrentSplitStore";
+import CalendarChecklist from "@/components/calendar/CalendarChecklist";
 
 const CalendarPage = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [scrollY, setScrollY] = useState(0);
   const splits = useSplitsStore((state) => state.splits);
-  const { toggleExercise, isExerciseCompleted } = useCalendarStore();
+  const { isExerciseCompleted } = useCalendarStore();
   const { isDesktop, isMobile } = useBreakpoint();
   const { currentSplit } = useCurrentSplitStore();
   const theme = useThemeColor(currentSplit?.category?.color);
@@ -121,99 +120,14 @@ const CalendarPage = () => {
         />
 
         {selectedDate && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="mt-6 bg-white rounded-2xl shadow-sm border p-6"
-            style={{ borderColor: theme.translucentStrong }}
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h3 className={`${isMobile ? "text-lg" : "text-xl"} font-semibold text-gray-800`}>
-                  {selectedDate.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
-                </h3>
-                <p className={`${isMobile ? "text-xs" : "text-sm"} text-gray-500 mt-1`}>
-                  {getExercisesForDate(selectedDate).length} exercises • {getCompletionPercentage(selectedDate).toFixed(0)}%
-                  complete
-                </p>
-              </div>
-              {isFullyCompleted(selectedDate) && (
-                <div className="flex items-center gap-2 text-green-600">
-                  <div
-                    className={`${isMobile ? "w-5 h-5" : "w-6 h-6"} bg-green-100 rounded-full flex items-center justify-center`}
-                  >
-                    <Check className={`${isMobile ? "w-3 h-3" : "w-4 h-4"}`} />
-                  </div>
-                  <span className={`${isMobile ? "text-xs" : "text-sm"} font-medium`}>All Complete!</span>
-                </div>
-              )}
-            </div>
-
-            <div className="space-y-3">
-              {getExercisesForDate(selectedDate).map((exercise) => {
-                const dateKey = formatDateKey(selectedDate);
-                const done = isExerciseCompleted(dateKey, exercise.id);
-                return (
-                  <motion.div
-                    key={exercise.id}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className={`flex items-center justify-between gap-4 ${
-                      isMobile ? "p-3" : "p-4"
-                    } rounded-lg border transition-colors ${
-                      done ? "bg-green-50 border-green-200" : "bg-gray-50 border-gray-200 hover:bg-gray-100"
-                    }`}
-                  >
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <div
-                          className={`${isMobile ? "w-3.5 h-3.5" : "w-4 h-4"} rounded border-2 flex items-center justify-center ${
-                            done ? "bg-green-500 border-green-500" : "border-gray-300"
-                          }`}
-                        >
-                          {done && <Check className={`${isMobile ? "w-2 h-2" : "w-2.5 h-2.5"} text-white`} />}
-                        </div>
-                        <div className={`${isMobile ? "text-xs" : "text-sm"} font-medium text-gray-800 truncate`}>
-                          {exercise.name}
-                        </div>
-                      </div>
-                      {(exercise.sets || exercise.reps) && (
-                        <div className="text-xs text-gray-500 ml-6">
-                          {exercise.sets && exercise.reps
-                            ? `${exercise.sets} sets × ${exercise.reps} reps`
-                            : exercise.sets
-                            ? `${exercise.sets} sets`
-                            : `${exercise.reps} reps`}
-                        </div>
-                      )}
-                    </div>
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={`${
-                        isMobile ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm"
-                      } font-medium rounded-lg border transition-colors ${
-                        done
-                          ? "bg-green-500 text-white border-green-500 hover:bg-green-600"
-                          : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-                      }`}
-                      onClick={() => toggleExercise(dateKey, exercise.id)}
-                    >
-                      {done ? "Completed" : "Mark as done"}
-                    </motion.button>
-                  </motion.div>
-                );
-              })}
-              {getExercisesForDate(selectedDate).length === 0 && (
-                <div className="text-center py-8">
-                  <div className={`${isMobile ? "text-3xl" : "text-4xl"} mb-2`}>🏋️</div>
-                  <div className={`${isMobile ? "text-xs" : "text-sm"} text-gray-500`}>No exercises scheduled for this day.</div>
-                </div>
-              )}
-            </div>
-          </motion.div>
+          <CalendarChecklist
+            selectedDate={selectedDate}
+            exercises={getExercisesForDate(selectedDate)}
+            completionPercentage={getCompletionPercentage(selectedDate)}
+            fullyCompleted={isFullyCompleted(selectedDate)}
+            isMobile={isMobile}
+            themeColor={theme.translucentStrong}
+          />
         )}
       </main>
 

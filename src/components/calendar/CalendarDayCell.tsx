@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { useThemeColor } from "../../hooks/ui/useThemeColor";
 import useBreakpoint from "../../hooks/ui/useBreakpoint";
+import { useCurrentSplitStore } from "@/stores/splits/useCurrentSplitStore";
 
 type Exercise = { id: string; name: string; sets?: number; reps?: number };
 
@@ -22,8 +23,9 @@ const CalendarDayCell = ({
   isFullyCompleted,
   onSelectDate,
 }: CalendarDayCellProps) => {
+  const { currentSplit } = useCurrentSplitStore();
+  const theme = useThemeColor(currentSplit?.category?.color);
   const { isMobile } = useBreakpoint();
-  const theme = useThemeColor();
 
   if (!date) {
     return (
@@ -38,12 +40,22 @@ const CalendarDayCell = ({
     <motion.div
       key={date.getTime()}
       className={`
-        ${isMobile ? "min-h-[80px] p-1" : "min-h-[120px] p-2"} border-r border-b last:border-r-0 relative
-        ${isFullyCompleted ? "bg-green-50" : isToday ? "bg-red-50" : "hover:bg-gray-50"}
-        transition-colors cursor-pointer
-      `}
+    ${isMobile ? "min-h-[80px] p-1" : "min-h-[120px] p-2"} 
+    border-r border-b last:border-r-0 relative
+    transition-colors cursor-pointer
+    ${isFullyCompleted ? "hover:bg-green-100" : "hover:bg-gray-50"}
+  `}
       style={{
-        borderColor: isFullyCompleted ? "#dcfce7" : isToday ? theme.translucent : theme.translucent,
+        backgroundColor: isFullyCompleted
+          ? "#dcfce7" // Tailwind green-50 equivalent
+          : isToday
+          ? theme.lighter // dynamic theme color for today
+          : undefined,
+        borderColor: isFullyCompleted
+          ? "#bbf7d0" // Tailwind green-200 equivalent
+          : isToday
+          ? theme.translucent
+          : theme.translucent,
       }}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
@@ -60,10 +72,14 @@ const CalendarDayCell = ({
 
       <div className="flex items-center justify-between mb-2">
         <span
-          className={`
-              ${isMobile ? "text-xs" : "text-sm"} font-medium
-              ${isFullyCompleted ? "text-green-700" : isToday ? "text-red-600" : "text-gray-700"}
-            `}
+          className={`${isMobile ? "text-xs" : "text-sm"} font-medium`}
+          style={{
+            color: isFullyCompleted
+              ? "#15803d" // Tailwind green-700 equivalent
+              : isToday
+              ? theme.dark // dynamic color for today
+              : "#374151", // Tailwind gray-700 equivalent
+          }}
         >
           {date.getDate()}
         </span>
