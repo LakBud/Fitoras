@@ -38,14 +38,29 @@ const ExerciseDetailPage = () => {
       </div>
     );
 
-  const images = exercise.images || [];
+  const images = Array.isArray(exercise.images) ? exercise.images : [];
 
-  const nextImage = () => setCurrentImage((prev) => (prev + 1) % images.length);
-  const prevImage = () => setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
+  const hasMultipleImages = images.length > 1;
 
-  const handleTouchStart = (e: React.TouchEvent) => setTouchStart(e.targetTouches[0].clientX);
-  const handleTouchMove = (e: React.TouchEvent) => setTouchEnd(e.targetTouches[0].clientX);
+  const nextImage = () => {
+    if (!hasMultipleImages) return;
+    setCurrentImage((prev) => (prev + 1) % images.length);
+  };
+  const prevImage = () => {
+    if (!hasMultipleImages) return;
+    setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (!hasMultipleImages) return;
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!hasMultipleImages) return;
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
   const handleTouchEnd = () => {
+    if (!hasMultipleImages) return;
     if (touchStart === null || touchEnd === null) return;
     const diff = touchStart - touchEnd;
     if (diff > 50) nextImage();
@@ -80,7 +95,7 @@ const ExerciseDetailPage = () => {
           <div className="w-full h-full flex items-center justify-center bg-white text-gray-400 rounded-3xl">No Image</div>
         )}
 
-        {images.length > 1 && (
+        {hasMultipleImages && (
           <>
             <motion.button
               onClick={prevImage}

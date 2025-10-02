@@ -49,7 +49,7 @@ const ControlCategoryTab = () => {
       {/* === Fade Gradients for mobile === */}
       {!isDesktop && canScrollLeft && (
         <div
-          className="pointer-events-noneabsolute top-0 left-0 h-full w-6 z-10"
+          className="pointer-events-none absolute top-0 left-0 h-full w-6 z-10"
           style={{
             background: `linear-gradient(to right, ${theme.translucentStrong}, transparent)`,
           }}
