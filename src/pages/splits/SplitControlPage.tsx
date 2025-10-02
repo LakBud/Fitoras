@@ -21,7 +21,7 @@ const SplitControlPage = () => {
   const { id } = useParams<{ id: string }>();
   const { categories, selectedCategoryId } = useCategoryControl();
 
-  const theme = useThemeColor(currentSplit?.category?.color);
+  const theme = useThemeColor(currentSplit?.category?.color, selectedCategoryId ?? undefined);
   const { isDesktop, isMobile } = useBreakpoint();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isSelectedCollapsed, setIsSelectedCollapsed] = useState(false);
