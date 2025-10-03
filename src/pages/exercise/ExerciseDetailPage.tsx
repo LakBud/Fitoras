@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useExercise } from "../../hooks/useExercise";
 import { GiCogsplosion, GiMuscleFat, GiMuscleUp, GiProgression, GiWeight, GiWeightCrush } from "react-icons/gi";
 import { RiBarChart2Fill } from "react-icons/ri";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import ScrollTopButton from "../../components/common/ScrollTopButton";
 import useBreakpoint from "../../hooks/ui/useBreakpoint";
 import NavigateBackButton from "../../components/common/NavigateBackButton";
@@ -22,21 +22,45 @@ const ExerciseDetailPage = () => {
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState<"info" | "muscles">("info");
 
-  if (loading)
+  if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen bg-rose-50">
-        <p className="text-xl text-red-400 animate-pulse">Loading...</p>
+      <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-rose-50 via-rose-100 to-rose-200">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          className="w-16 h-16 border-4 border-rose-300 border-t-rose-600 rounded-full mb-4"
+        />
+        <p className="text-lg text-rose-600 font-semibold">Loading exercise...</p>
       </div>
     );
+  }
 
   const exercise = exercises.find((e) => e.id === id);
 
-  if (!exercise)
+  if (!exercise) {
     return (
-      <div className="flex justify-center items-center h-screen bg-rose-50">
-        <p className="text-xl text-red-500 font-semibold">404 ERROR: Exercise not found.</p>
-      </div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-rose-50 via-rose-100 to-rose-200 p-4"
+      >
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.1 }}
+          className="text-center space-y-6 max-w-md"
+        >
+          <div className="w-20 h-20 mx-auto rounded-full bg-rose-200 flex items-center justify-center">
+            <span className="text-4xl">🏋️</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-bold text-rose-700">Exercise Not Found</h2>
+          <p className="text-rose-600/80 text-base sm:text-lg">
+            The exercise you're looking for doesn't exist or may have been removed.
+          </p>
+        </motion.div>
+      </motion.div>
     );
+  }
 
   const images = exercise.images || [];
 
@@ -55,208 +79,328 @@ const ExerciseDetailPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-rose-50 to-rose-100 relative">
+    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-rose-100 to-rose-200 relative pb-20">
+      {/* Decorative Background Elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.05, 0.1, 0.05],
+          }}
+          transition={{ duration: 8, repeat: Infinity }}
+          className="absolute -top-1/4 -right-1/4 w-96 h-96 bg-rose-400 rounded-full blur-3xl"
+        />
+        <motion.div
+          animate={{
+            scale: [1.2, 1, 1.2],
+            opacity: [0.03, 0.08, 0.03],
+          }}
+          transition={{ duration: 10, repeat: Infinity }}
+          className="absolute -bottom-1/4 -left-1/4 w-96 h-96 bg-rose-300 rounded-full blur-3xl"
+        />
+      </div>
+
       {/* Image Slider */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-        className={`relative w-full mb-6 overflow-hidden shadow-2xl ${isDesktop ? "h-[600px]" : isMobile ? "h-72" : "h-96"}`}
+        transition={{ duration: 0.6 }}
+        className="relative w-full mb-8 overflow-hidden shadow-2xl"
+        style={{ height: isDesktop ? "70vh" : isMobile ? "50vh" : "60vh", maxHeight: "700px" }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        {images.length ? (
-          <motion.img
-            key={currentImage}
-            src={`/data/exercises/${images[currentImage]}`}
-            alt={exercise.name}
-            className="w-full h-full object-cover"
-            initial={{ opacity: 0.5, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-white text-gray-400 rounded-3xl">No Image</div>
+        <AnimatePresence mode="wait">
+          {images.length ? (
+            <motion.img
+              key={currentImage}
+              src={`/data/exercises/${images[currentImage]}`}
+              alt={exercise.name}
+              className="w-full h-full object-cover"
+              initial={{ opacity: 0, scale: 1.1 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.4 }}
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+              <div className="text-center">
+                <span className="text-6xl mb-4 block">🏋️‍♂️</span>
+                <p className="text-gray-400 font-medium">No Image Available</p>
+              </div>
+            </div>
+          )}
+        </AnimatePresence>
+
+        {/* Image Counter */}
+        {images.length > 1 && (
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold">
+            {currentImage + 1} / {images.length}
+          </div>
         )}
 
+        {/* Navigation Arrows */}
         {images.length > 1 && (
           <>
             <motion.button
               onClick={prevImage}
-              whileHover={{ scale: 1.15 }}
-              className={`absolute left-4 top-1/2 -translate-y-1/2 bg-rose-600 text-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-transform ${
-                isDesktop ? "w-16 h-16" : isMobile ? "w-10 h-10" : "w-14 h-14"
-              }`}
+              whileHover={{ scale: 1.1, x: -4 }}
+              whileTap={{ scale: 0.95 }}
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm text-rose-600 rounded-full p-3 sm:p-4 shadow-lg hover:bg-white transition-all"
             >
-              &#8592;
+              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
+              </svg>
             </motion.button>
             <motion.button
               onClick={nextImage}
-              whileHover={{ scale: 1.15 }}
-              className={`absolute right-4 top-1/2 -translate-y-1/2 bg-rose-600 text-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-transform ${
-                isDesktop ? "w-16 h-16" : isMobile ? "w-10 h-10" : "w-14 h-14"
-              }`}
+              whileHover={{ scale: 1.1, x: 4 }}
+              whileTap={{ scale: 0.95 }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm text-rose-600 rounded-full p-3 sm:p-4 shadow-lg hover:bg-white transition-all"
             >
-              &#8594;
+              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+              </svg>
             </motion.button>
           </>
         )}
+
+        {/* Image Dots */}
+        {images.length > 1 && (
+          <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex gap-2">
+            {images.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentImage(idx)}
+                className={`transition-all rounded-full ${
+                  idx === currentImage ? "w-8 bg-white" : "w-2 bg-white/50 hover:bg-white/80"
+                } h-2`}
+              />
+            ))}
+          </div>
+        )}
       </motion.div>
 
-      <div className="px-4 sm:px-8 md:px-12 pb-10 max-w-5xl mx-auto">
-        {/* Header */}
+      <div className="relative px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+        {/* Header with Badges */}
         <motion.header
-          initial={{ opacity: 0, y: -40 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12 mt-10"
+          className="text-center mb-10"
         >
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-rose-700 mb-3 drop-shadow-lg tracking-tight">
-            {exercise.name || "Unknown"}
+          {/* Category & Level Badges */}
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-4">
+            <span className="px-4 py-1.5 bg-rose-500 text-white text-xs sm:text-sm font-semibold rounded-full shadow-md">
+              {exercise.category ? exercise.category.charAt(0).toUpperCase() + exercise.category.slice(1) : "Unknown"}
+            </span>
+            <span className="px-4 py-1.5 bg-rose-600 text-white text-xs sm:text-sm font-semibold rounded-full shadow-md">
+              {exercise.level ? exercise.level.charAt(0).toUpperCase() + exercise.level.slice(1) : "Unknown"}
+            </span>
+          </div>
+
+          {/* Title */}
+          <h1
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-rose-700 mb-2 leading-tight"
+            style={{ textShadow: "0 4px 20px rgba(225, 29, 72, 0.2)" }}
+          >
+            {exercise.name || "Unknown Exercise"}
           </h1>
-          <p className="text-gray-700 sm:text-lg md:text-xl tracking-wide">
-            {exercise.category ? exercise.category.charAt(0).toUpperCase() + exercise.category.slice(1) : "Unknown"} •{" "}
-            {exercise.level ? exercise.level.charAt(0).toUpperCase() + exercise.level.slice(1) : "Unknown"}
-          </p>
         </motion.header>
 
-        {/* Instructions */}
+        {/* Instructions Card */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="bg-white/90 backdrop-blur-sm p-6 sm:p-8 rounded-3xl shadow-md mb-12"
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="bg-white/90 backdrop-blur-xl p-6 sm:p-8 lg:p-10 rounded-3xl shadow-2xl mb-10 border border-white/50"
         >
-          <p className="flex items-center gap-2 sm:gap-3 text-xl sm:text-3xl text-rose-700 font-bold mb-4 justify-center">
-            <GiWeightCrush /> Instructions
-          </p>
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <GiWeightCrush className="text-rose-600 text-3xl sm:text-4xl" />
+            <h2 className="text-2xl sm:text-3xl text-rose-700 font-bold">How To Perform</h2>
+          </div>
 
           {exercise.instructions ? (
-            <ol className="list-decimal list-inside text-gray-700 leading-relaxed whitespace-pre-line text-sm sm:text-base">
+            <ol className="space-y-3 text-gray-700 leading-relaxed text-sm sm:text-base">
               {typeof exercise.instructions === "string"
-                ? exercise.instructions.split("\n").map((step, i) => <li key={i}>{step.trim()}</li>)
+                ? exercise.instructions.split("\n").map((step, i) => (
+                    <motion.li
+                      key={i}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.2 + i * 0.1 }}
+                      className="flex gap-3"
+                    >
+                      <span className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 bg-rose-500 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                        {i + 1}
+                      </span>
+                      <span className="pt-1">{step.trim()}</span>
+                    </motion.li>
+                  ))
                 : Object.values(exercise.instructions)
                     .map((step) => String(step).trim())
                     .filter(Boolean)
-                    .map((step, i) => <li key={i}>{step}</li>)}
+                    .map((step, i) => (
+                      <motion.li
+                        key={i}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.2 + i * 0.1 }}
+                        className="flex gap-3"
+                      >
+                        <span className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 bg-rose-500 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                          {i + 1}
+                        </span>
+                        <span className="pt-1">{step}</span>
+                      </motion.li>
+                    ))}
             </ol>
           ) : (
-            <p className="text-gray-700 text-center sm:text-left text-sm sm:text-base">No instructions available.</p>
+            <p className="text-gray-500 text-center italic">No instructions available for this exercise.</p>
           )}
         </motion.section>
 
-        {/* Tab Slider */}
-        <div className="mb-12">
-          {/* Tabs */}
-          <div className="relative flex w-full max-w-xs mx-auto bg-gray-100 rounded-full p-1 mb-6 z-0">
-            {["info", "muscles"].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab as "info" | "muscles")}
-                className={`relative z-10 flex-1 px-4 py-2 text-sm sm:text-base font-semibold rounded-full transition-colors ${
-                  activeTab === tab ? "text-white" : "text-gray-600"
-                }`}
-              >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-
-                {/* Slider */}
-                {activeTab === tab && (
-                  <motion.div
-                    layoutId="tabSlider"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    className="absolute inset-0 bg-rose-600 rounded-full -z-10"
-                  />
-                )}
-              </button>
-            ))}
+        {/* Tabs Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mb-10"
+        >
+          {/* Tab Buttons */}
+          <div className="flex justify-center mb-8">
+            <div className="relative inline-flex bg-white/80 backdrop-blur-sm rounded-2xl p-1.5 shadow-lg">
+              {["info", "muscles"].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab as "info" | "muscles")}
+                  className={`relative px-6 sm:px-8 py-3 text-sm sm:text-base font-bold rounded-xl transition-colors z-10 ${
+                    activeTab === tab ? "text-white" : "text-gray-600 hover:text-gray-800"
+                  }`}
+                >
+                  {tab === "info" ? "Exercise Info" : "Muscle Groups"}
+                  {activeTab === tab && (
+                    <motion.div
+                      layoutId="activeTab"
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      className="absolute inset-0 bg-gradient-to-r from-rose-500 to-rose-600 rounded-xl shadow-lg -z-10"
+                    />
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* Animated Tab Content */}
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="grid gap-4 justify-items-center sm:grid-cols-2"
-          >
-            {activeTab === "info" &&
-              [
-                {
-                  label: "Category",
-                  value: exercise.category,
-                  icon: <RiBarChart2Fill className="text-rose-600 text-2xl sm:text-3xl" />,
-                },
-                {
-                  label: "Equipment",
-                  value: exercise.equipment,
-                  icon: <GiWeight className="text-rose-600 text-2xl sm:text-3xl" />,
-                },
-                { label: "Level", value: exercise.level, icon: <GiProgression className="text-rose-600 text-2xl sm:text-3xl" /> },
-                {
-                  label: "Mechanic",
-                  value: exercise.mechanic,
-                  icon: <GiCogsplosion className="text-rose-600 text-2xl sm:text-3xl" />,
-                },
-              ].map((item) => (
-                <motion.div
-                  key={item.label}
-                  whileHover={{ scale: 1.03 }}
-                  className="bg-white p-3 sm:p-4 rounded-xl shadow-sm flex flex-col items-center gap-2 transition-transform w-full max-w-[180px] text-center"
-                >
-                  {item.icon}
-                  <div>
-                    <p className="text-gray-500 text-xs sm:text-sm font-medium">{item.label}</p>
-                    <p className="text-gray-800 text-sm sm:text-base font-semibold">
-                      {item.value ? item.value.charAt(0).toUpperCase() + item.value.slice(1) : "None"}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
+          {/* Tab Content */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
+            >
+              {activeTab === "info" &&
+                [
+                  {
+                    label: "Category",
+                    value: exercise.category,
+                    icon: <RiBarChart2Fill className="text-rose-600 text-3xl sm:text-4xl" />,
+                  },
+                  {
+                    label: "Equipment",
+                    value: exercise.equipment,
+                    icon: <GiWeight className="text-rose-600 text-3xl sm:text-4xl" />,
+                  },
+                  {
+                    label: "Level",
+                    value: exercise.level,
+                    icon: <GiProgression className="text-rose-600 text-3xl sm:text-4xl" />,
+                  },
+                  {
+                    label: "Mechanic",
+                    value: exercise.mechanic,
+                    icon: <GiCogsplosion className="text-rose-600 text-3xl sm:text-4xl" />,
+                  },
+                ].map((item, idx) => (
+                  <motion.div
+                    key={item.label}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: idx * 0.1 }}
+                    whileHover={{ y: -4, scale: 1.02 }}
+                    className="bg-white/90 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-white/50 flex flex-col items-center gap-3 text-center"
+                  >
+                    <div className="p-3 bg-rose-50 rounded-xl">{item.icon}</div>
+                    <div>
+                      <p className="text-gray-500 text-xs sm:text-sm font-semibold uppercase tracking-wide mb-1">{item.label}</p>
+                      <p className="text-gray-800 text-base sm:text-lg font-bold">
+                        {item.value ? item.value.charAt(0).toUpperCase() + item.value.slice(1) : "Not specified"}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
 
-            {activeTab === "muscles" &&
-              [
-                {
-                  label: "Primary Muscles",
-                  value: exercise.primaryMuscles,
-                  icon: <GiMuscleUp className="text-white text-2xl sm:text-3xl" />,
-                },
-                {
-                  label: "Secondary Muscles",
-                  value: exercise.secondaryMuscles || ["None"],
-                  icon: <GiMuscleFat className="text-white text-2xl sm:text-3xl" />,
-                },
-              ].map((item) => (
-                <motion.div
-                  key={item.label}
-                  whileHover={{ scale: 1.02 }}
-                  className="bg-rose-500 p-3 sm:p-4 rounded-xl shadow-sm flex flex-col items-center gap-1 transition-transform w-full max-w-[250px] text-center"
-                >
-                  {item.icon}
-                  <div>
-                    <p className="text-white text-sm sm:text-base font-semibold">{item.label}</p>
-                    <p className="text-white font-bold break-words">
-                      {item.value.length === 0
-                        ? "None"
-                        : item.value.map((muscle: string, i: number) => (
-                            <span key={i}>
+              {activeTab === "muscles" &&
+                [
+                  {
+                    label: "Primary Muscles",
+                    value: exercise.primaryMuscles || [],
+                    icon: <GiMuscleUp className="text-white text-3xl sm:text-4xl" />,
+                  },
+                  {
+                    label: "Secondary Muscles",
+                    value: exercise.secondaryMuscles || [],
+                    icon: <GiMuscleFat className="text-white text-3xl sm:text-4xl" />,
+                  },
+                ].map((item, idx) => (
+                  <motion.div
+                    key={item.label}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: idx * 0.1 }}
+                    whileHover={{ y: -4, scale: 1.02 }}
+                    className="bg-gradient-to-br from-rose-500 to-rose-600 p-6 sm:p-8 rounded-2xl shadow-xl flex flex-col items-center gap-4 text-center sm:col-span-2 lg:col-span-2"
+                  >
+                    <div className="p-4 bg-white/20 backdrop-blur-sm rounded-xl">{item.icon}</div>
+                    <div>
+                      <p className="text-white text-sm sm:text-base font-bold uppercase tracking-wide mb-3">{item.label}</p>
+                      <div className="flex flex-wrap justify-center gap-2">
+                        {item.value.length === 0 ? (
+                          <span className="px-3 py-1 bg-white/20 backdrop-blur-sm text-white rounded-full text-sm">
+                            None specified
+                          </span>
+                        ) : (
+                          item.value.map((muscle: string, i: number) => (
+                            <motion.span
+                              key={i}
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: 0.3 + i * 0.05 }}
+                              className="px-3 py-1.5 bg-white/25 backdrop-blur-sm text-white rounded-full text-sm font-semibold"
+                            >
                               {muscle.charAt(0).toUpperCase() + muscle.slice(1)}
-                              {i < item.value.length - 1 ? ", " : ""}
-                            </span>
-                          ))}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-          </motion.div>
-        </div>
+                            </motion.span>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+            </motion.div>
+          </AnimatePresence>
+        </motion.div>
       </div>
 
-      {/* Back Button & ScrollTop */}
-      <nav className="z-50">
+      {/* Navigation Buttons */}
+      <div className="fixed bottom-6 left-6 z-50">
         <NavigateBackButton />
+      </div>
+      <div className="fixed bottom-6 right-6 z-50">
         <ScrollTopButton />
-      </nav>
+      </div>
     </div>
   );
 };
