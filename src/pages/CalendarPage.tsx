@@ -84,13 +84,17 @@ const CalendarPage = () => {
             Track your daily workouts and mark exercises as complete. Click on any day to see detailed exercise lists.
           </p>
         </header>
-        <div className="flex flex-col items-center justify-center min-h-[400px] text-center p-8">
-          <div className="text-6xl mb-4">
-            <FiInfo />
-          </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">No Split Available</h2>
-          <p className="text-gray-600">Create a split first to see your workout calendar.</p>
-        </div>
+
+        {/* Empty State */}
+        <main
+          role="status"
+          aria-live="polite"
+          className="flex flex-col items-center justify-center text-center py-10 sm:py-16 px-6 sm:px-12 rounded-2xl border border-dashed border-rose-200 bg-rose-50/50 shadow-inner animate-fadeIn"
+        >
+          <FiInfo className="w-8 h-8 text-rose-400 mb-3" aria-hidden="true" />
+          <p className="text-base sm:text-lg text-gray-500 font-medium">No split has been created.</p>
+          <p className="text-sm text-gray-400 mt-1">Click the "+" icon to get started.</p>
+        </main>
       </div>
     );
   }
