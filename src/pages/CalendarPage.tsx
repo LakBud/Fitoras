@@ -14,7 +14,7 @@ import { FiInfo } from "react-icons/fi";
 
 const CalendarPage = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [scrollY, setScrollY] = useState(0);
   const splits = useSplitsStore((state) => state.splits);
   const { isExerciseCompleted } = useCalendarStore();

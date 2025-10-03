@@ -44,7 +44,7 @@ const HomePage = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-rose-50 via-rose-100 to-rose-200 px-6 py-10 mb-10">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-rose-50 via-rose-100 to-rose-200 px-6">
       {/* Logo + Title */}
       <header>
         <header className="flex justify-center mt-10 mb-6">
@@ -123,7 +123,7 @@ const HomePage = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.8, duration: 0.8 }}
-        className="mt-16 text-gray-500 text-sm mb-6 text-center"
+        className="mt-16 text-gray-500 text-sm mb-25 text-center"
       >
         © {new Date().getFullYear()} Fitoras. All rights reserved.
       </motion.footer>
