@@ -5,12 +5,14 @@ import { useThemeColor } from "@/hooks/ui/useThemeColor";
 import { useSplitsStore } from "@/stores/splits/useSplitStore";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { useNavigate } from "react-router-dom";
 
 const SplitDeleteButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { currentSplit, clearCurrentSplit, setCurrentSplit } = useCurrentSplitStore();
   const removeSplit = useSplitsStore((state) => state.removeSplit);
   const theme = useThemeColor(currentSplit?.category?.color);
+  const navigate = useNavigate();
 
   const handleDelete = () => {
     if (!currentSplit) return;
@@ -18,6 +20,7 @@ const SplitDeleteButton = () => {
     clearCurrentSplit();
     setCurrentSplit(null);
     setIsOpen(false);
+    navigate("/splits");
   };
 
   if (!currentSplit) return null; // nothing to delete

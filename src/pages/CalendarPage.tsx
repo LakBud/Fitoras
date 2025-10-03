@@ -10,6 +10,7 @@ import useBreakpoint from "../hooks/ui/useBreakpoint";
 import { useThemeColor } from "../hooks/ui/useThemeColor";
 import { useCurrentSplitStore } from "@/stores/splits/useCurrentSplitStore";
 import CalendarChecklist from "@/components/calendar/CalendarChecklist";
+import { FiInfo } from "react-icons/fi";
 
 const CalendarPage = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -76,8 +77,17 @@ const CalendarPage = () => {
         onScroll={handleScroll}
         className="relative bg-gradient-to-b from-red-50 via-rose-50 to-rose-100 min-h-screen py-10 px-4 sm:px-6 lg:px-12 overflow-auto"
       >
+        {/* Page Header */}
+        <header className="flex flex-col items-center mb-8 pt-10 text-center">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-red-700 tracking-tight">Workout Calendar</h1>
+          <p className="mt-3 text-gray-700 text-sm sm:text-base md:text-lg max-w-2xl leading-relaxed">
+            Track your daily workouts and mark exercises as complete. Click on any day to see detailed exercise lists.
+          </p>
+        </header>
         <div className="flex flex-col items-center justify-center min-h-[400px] text-center p-8">
-          <div className="text-6xl mb-4">📅</div>
+          <div className="text-6xl mb-4">
+            <FiInfo />
+          </div>
           <h2 className="text-2xl font-bold text-gray-800 mb-2">No Split Available</h2>
           <p className="text-gray-600">Create a split first to see your workout calendar.</p>
         </div>

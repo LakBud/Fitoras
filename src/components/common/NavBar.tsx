@@ -16,10 +16,10 @@ const NavBar = () => {
   const scrollUp = useScrollDirection();
 
   const links = [
-    { to: "/", label: "Home", icon: <FiHome size={22} /> },
-    { to: "/splits", label: "Splits", icon: <BsSignpostSplit size={22} /> },
-    { to: "/calendar", label: "Calendar", icon: <BsCalendar2Check size={22} /> },
-    { to: "/exercise", label: "Exercises", icon: <GiWeightLiftingUp size={22} /> },
+    { to: "/", label: "Home", icon: <FiHome size={22} aria-hidden="true" /> },
+    { to: "/splits", label: "Splits", icon: <BsSignpostSplit size={22} aria-hidden="true" /> },
+    { to: "/calendar", label: "Calendar", icon: <BsCalendar2Check size={22} aria-hidden="true" /> },
+    { to: "/exercise", label: "Exercises", icon: <GiWeightLiftingUp size={22} aria-hidden="true" /> },
   ];
 
   return (
@@ -27,15 +27,20 @@ const NavBar = () => {
       {/* 🖥 Desktop Navigation */}
       {isDesktop && (
         <motion.nav
+          role="navigation"
+          aria-label="Main navigation"
           initial={{ y: 0 }}
-          animate={{ y: scrollUp ? 0 : -65 }} // hide when scrolling down
+          animate={{ y: scrollUp ? 0 : -65 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="bg-white shadow-lg sticky top-0 z-50"
+          className="bg-white shadow-lg sticky top-0 z-50 border-b border-gray-200"
         >
           <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-            <Link to="/" className="flex items-center gap-2">
-              <GiPowerLightning className="text-red-500 text-3xl drop-shadow-md" />
-              <h1 className="text-2xl font-extrabold text-red-500 tracking-wide">Fitoras</h1>
+            <Link
+              to="/"
+              className="flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 rounded-md"
+            >
+              <GiPowerLightning className="text-red-600 text-3xl drop-shadow-md" aria-hidden="true" />
+              <span className="text-2xl font-extrabold text-red-700 tracking-wide">Fitoras</span>
             </Link>
 
             <ul className="flex items-center gap-6">
@@ -43,10 +48,11 @@ const NavBar = () => {
                 <li key={to}>
                   <NavLink
                     to={to}
+                    aria-label={label}
                     className={({ isActive }) =>
                       [
-                        "flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold transition-all",
-                        isActive ? "bg-red-500 text-white shadow-md" : "text-gray-700 hover:text-red-500 hover:bg-red-50",
+                        "flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500",
+                        isActive ? "bg-red-600 text-white shadow-md" : "text-gray-800 hover:text-red-600 hover:bg-red-50",
                       ].join(" ")
                     }
                   >
@@ -70,7 +76,7 @@ const NavBar = () => {
             <motion.div
               className="sticky top-0 z-50"
               initial={{ y: 0 }}
-              animate={{ y: scrollUp ? 0 : -60 }} // hide when scrolling down
+              animate={{ y: scrollUp ? 0 : -60 }}
               transition={{ duration: 0.2, ease: "easeInOut" }}
             >
               <ExerciseFilter />
@@ -82,20 +88,23 @@ const NavBar = () => {
             </motion.div>
           )}
 
-          <motion.div
+          <motion.nav
+            role="navigation"
+            aria-label="Bottom navigation"
             initial={false}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl shadow-t-lg z-50"
+            className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl shadow-t-lg z-50 border-t border-gray-200"
           >
             <ul className="flex justify-around items-center py-2">
               {links.map(({ to, icon, label }) => (
                 <li key={to}>
                   <NavLink
                     to={to}
+                    aria-label={label}
                     className={({ isActive }) =>
                       [
-                        "flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-md text-xs font-semibold transition-all",
-                        isActive ? "text-red-500" : "text-gray-600 hover:text-red-500",
+                        "flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-md text-xs font-semibold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+                        isActive ? "text-red-600" : "text-gray-700 hover:text-red-600",
                       ].join(" ")
                     }
                   >
@@ -105,7 +114,7 @@ const NavBar = () => {
                 </li>
               ))}
             </ul>
-          </motion.div>
+          </motion.nav>
         </>
       )}
     </>

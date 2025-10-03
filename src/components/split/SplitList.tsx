@@ -15,6 +15,7 @@ import {
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import SplitItem from "./SplitItem";
+import { FiInfo } from "react-icons/fi";
 
 const SplitList = () => {
   const splits = useSplitsStore((state) => state.splits);
@@ -49,10 +50,22 @@ const SplitList = () => {
 
   const activeSplit = filteredSplits.find((s) => s.id === activeId);
 
-  // --- Empty state
-  if (!filteredSplits.length) {
+  // --- No splits created
+  if (splits.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center text-center py-12 sm:py-16 px-4 rounded-2xl border border-dashed border-rose-200 bg-rose-50/50 shadow-inner">
+        <FiInfo className="w-8 h-8 text-rose-400 mb-3" />
+        <p className="text-base sm:text-lg text-gray-500 font-medium">No split has been created.</p>
+        <p className="text-sm text-gray-400 mt-1">Click the "+" icon to get started.</p>
+      </div>
+    );
+  }
+
+  // --- Empty state after filtering
+  if (filteredSplits.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center text-center py-12 sm:py-16 px-4 rounded-2xl border border-dashed border-rose-200 bg-rose-50/50 shadow-inner">
+        <FiInfo className="w-8 h-8 text-rose-400 mb-3" />
         <p className="text-base sm:text-lg text-gray-500 font-medium">No splits match your filters.</p>
         <p className="text-sm text-gray-400 mt-1">Try adjusting your search or category.</p>
       </div>
