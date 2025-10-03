@@ -33,8 +33,8 @@ const SplitsPage = () => {
         <header className="flex flex-col items-center mb-8 pt-10 text-center">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-red-700 tracking-tight">Splits</h1>
           <p className="mt-3 text-gray-700 text-sm sm:text-base md:text-lg max-w-2xl leading-relaxed">
-            Manage and view your workout splits to keep your fitness journey structured and motivating. Hover your prioritized
-            split on the top to activate it.
+            Manage and view your workout splits to keep your fitness journey structured and motivating. Drag your prioritized
+            split on the top to activate it in the Workout Calendar.
           </p>
         </header>
 
