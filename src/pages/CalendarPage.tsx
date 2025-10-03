@@ -92,8 +92,8 @@ const CalendarPage = () => {
           className="flex flex-col items-center justify-center text-center py-10 sm:py-16 px-6 sm:px-12 rounded-2xl border border-dashed border-rose-200 bg-rose-50/50 shadow-inner animate-fadeIn"
         >
           <FiInfo className="w-8 h-8 text-rose-400 mb-3" aria-hidden="true" />
-          <p className="text-base sm:text-lg text-gray-500 font-medium">No split has been created.</p>
-          <p className="text-sm text-gray-400 mt-1">Click the "+" icon to get started.</p>
+          <p className="text-base sm:text-lg text-gray-500 font-medium">No split available</p>
+          <p className="text-sm text-gray-400 mt-1">Create a split first to see your workout calendar.</p>
         </main>
       </div>
     );
