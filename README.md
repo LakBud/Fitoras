@@ -91,6 +91,10 @@ fitora/
 
 - **Zustand** - Lightweight state management
 
+### Database
+
+- **IndexedDB** - Lightweight Browser Database (50MB+)
+
 ### UI & Styling
 
 - **Tailwind CSS** - Utility-first CSS framework
@@ -208,7 +212,6 @@ Contributions are welcome! Please ensure:
 ## 🐛 Known Issues
 
 - Exercise data is loaded from static JSON files
-- Local storage has browser-specific size limits
 - No backup/export functionality yet
 
 ## 🔮 Future Enhancements
