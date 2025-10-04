@@ -94,7 +94,7 @@ fitora/
 ### UI & Styling
 
 - **Tailwind CSS** - Utility-first CSS framework
-- **Radix UI** - Accessible UI components
+- **Shadcn UI** - Accessible UI components
 - **Framer Motion** - Animation library
 - **Lucide React** - Icon library
 - **React Icons** - Additional icons
@@ -132,6 +132,11 @@ fitora/
 | `/calendar`        | Calendar view for workout planning   |
 
 ## 🎨 Key Features Details
+
+### Home/Dashboard
+
+- CTA Buttons
+- Statsitics cards based on Total Splits, Workouts this week, Workout Streaks, and Total Splits.
 
 ### Exercise Management
 
