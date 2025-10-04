@@ -1,4 +1,4 @@
-# Fitoras 💪
+# Fitoras
 
 A modern, privacy-focused fitness web application for managing workout routines, tracking exercises, and planning your fitness journey. Built with React, TypeScript, and Tailwind CSS.
 
