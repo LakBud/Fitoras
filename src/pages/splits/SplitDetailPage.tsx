@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useSplitsStore } from "../../stores/splits/useSplitStore";
 import { useCurrentSplitStore } from "../../stores/splits/useCurrentSplitStore";
-import SplitTable from "../../components/split/detail/SplitTable";
+import SplitTable from "@/components/split/detail/splitTable/SplitTable";
 import NavigateBackButton from "../../components/common/NavigateBackButton";
 import { BsFillGearFill } from "react-icons/bs";
 import { useThemeColor } from "../../hooks/ui/useThemeColor";
@@ -104,7 +104,7 @@ const SplitDetailPage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="max-w-5xl mx-auto w-full flex flex-col gap-8"
+          className="max-w-8xl mx-auto w-full flex flex-col gap-8"
         >
           {/* SplitTable Card */}
           <motion.div

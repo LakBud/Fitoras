@@ -178,25 +178,6 @@ const SplitControlPage = () => {
               )}
             </h1>
           </div>
-
-          {/* Quick Stats */}
-          {!isMobile && currentSplit && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.4 }}
-              className="flex gap-3"
-            >
-              <div className="px-3 py-2 rounded-lg backdrop-blur-sm" style={{ backgroundColor: `${theme.primary}15` }}>
-                <div className="text-xs opacity-70" style={{ color: theme.dark }}>
-                  Days
-                </div>
-                <div className="text-lg font-bold" style={{ color: theme.primary }}>
-                  {currentSplit.days?.length || 0}
-                </div>
-              </div>
-            </motion.div>
-          )}
         </div>
       </motion.header>
 

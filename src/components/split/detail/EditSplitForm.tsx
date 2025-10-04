@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useSplitsStore } from "@/stores/splits/useSplitStore";
 import { useCurrentCategories, type UseCurrentCategoriesType, type Category } from "@/stores/splits/useCurrentCategories";
@@ -6,6 +6,9 @@ import { useThemeColor } from "@/hooks/ui/useThemeColor";
 import { BsPersonFillGear } from "react-icons/bs";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import CategoryDeleteButton from "./CategoryDeleteButton";
+import { useCurrentSplitStore } from "@/stores/splits/useCurrentSplitStore";
+
 interface EditSplitFormProps {
   splitToEdit: {
     id: string;
@@ -27,8 +30,8 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
   const updateSplit = useSplitsStore((state) => state.updateSplit);
   const categories = useCurrentCategories((state: UseCurrentCategoriesType) => state.categories);
   const addCategory = useCurrentCategories((state: UseCurrentCategoriesType) => state.addCategory);
+  const { currentSplit } = useCurrentSplitStore();
 
-  const theme = useThemeColor(splitToEdit.category?.color);
   const [isOpen, setIsOpen] = useState(false);
 
   const {
@@ -40,6 +43,21 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
     formState: { errors },
   } = useForm<FormValues>();
   const watchCategoryId = watch("categoryId");
+  const watchNewCategoryColor = watch("newCategoryColor");
+
+  // Dynamically determine the color based on current form selection
+  const currentColor = useMemo(() => {
+    if (watchCategoryId === "new" && watchNewCategoryColor) {
+      return watchNewCategoryColor;
+    } else if (watchCategoryId) {
+      const selectedCategory = categories.find((c) => c.id === watchCategoryId);
+      return selectedCategory?.color;
+    }
+    return splitToEdit.category?.color;
+  }, [watchCategoryId, watchNewCategoryColor, categories, splitToEdit.category?.color]);
+
+  const originalTheme = useThemeColor(currentSplit?.category?.color);
+  const theme = useThemeColor(currentColor);
 
   useEffect(() => {
     setValue("name", splitToEdit.name);
@@ -66,18 +84,21 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
     setIsOpen(false);
   };
 
+  const handleCategoryDeleted = () => {
+    // Reset form selection to None if the selected category is deleted
+    setValue("categoryId", "");
+  };
+
   return (
     <>
-      {/* Configure Details Button */}
       <Button
         className="flex items-center gap-2"
-        style={{ backgroundColor: theme.primary, color: theme.textOnPrimary }}
+        style={{ backgroundColor: originalTheme.primary, color: originalTheme.textOnPrimary }}
         onClick={() => setIsOpen(true)}
       >
         <BsPersonFillGear className="text-lg" /> Configure
       </Button>
 
-      {/* Dialog */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="sm:max-w-lg w-full rounded-3xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
           <DialogHeader>
@@ -135,7 +156,6 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
                 <option value="new">+ Add New</option>
               </select>
 
-              {/* New Category Inputs */}
               {watchCategoryId === "new" && (
                 <div className="mt-2 flex flex-col sm:flex-row gap-3">
                   <input
@@ -152,9 +172,16 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
                   />
                 </div>
               )}
+
+              {/* Delete Selected Category */}
+              {watchCategoryId && watchCategoryId !== "new" && (
+                <CategoryDeleteButton
+                  category={categories.find((c) => c.id === watchCategoryId)}
+                  onDeleted={handleCategoryDeleted}
+                />
+              )}
             </div>
 
-            {/* Submit Button */}
             <Button type="submit" className="w-full" style={{ backgroundColor: theme.primary, color: theme.textOnPrimary }}>
               Save Changes
             </Button>

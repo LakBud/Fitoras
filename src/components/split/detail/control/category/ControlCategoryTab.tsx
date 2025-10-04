@@ -2,7 +2,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCategoryControl } from "../../../../../hooks/control/useCategoryControl";
 import { useSplitControl } from "../../../../../hooks/control/useSplitControl";
 import { readableColor } from "polished";
-import ControlAddCategory from "./ControlAddCategory";
+import ControlAddCategory from "./manage/ControlManageExerciseCategory";
 
 const ControlCategoryTab = () => {
   const { selectedCategoryId, setSelectedCategoryId, split } = useSplitControl();

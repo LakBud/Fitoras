@@ -4,7 +4,13 @@ import { useCurrentSplitStore } from "@/stores/splits/useCurrentSplitStore";
 import { useThemeColor } from "@/hooks/ui/useThemeColor";
 import { useSplitsStore } from "@/stores/splits/useSplitStore";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogFooter,
+} from "@/components/ui/alert-dialog";
 import { useNavigate } from "react-router-dom";
 
 const SplitDeleteButton = () => {
@@ -38,19 +44,19 @@ const SplitDeleteButton = () => {
       </Button>
 
       {/* Dialog */}
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent
+      <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+        <AlertDialogContent
           className="sm:max-w-md w-full rounded-3xl p-6 sm:p-8"
           style={{ backgroundColor: theme.lighter, color: theme.textOnPrimary }}
         >
-          <DialogHeader>
-            <DialogTitle
+          <AlertDialogHeader>
+            <AlertDialogTitle
               className="text-2xl sm:text-3xl font-extrabold break-words"
               style={{ color: theme.primary }}
               title={`Delete ${currentSplit.name}?`}
             >
               {`Delete ${currentSplit.name}?`}
-            </DialogTitle>
+            </AlertDialogTitle>
             <p className="text-gray-700 text-sm sm:text-base mt-2 break-words">
               Are you sure you want to delete{" "}
               <span className="font-semibold break-words" title={currentSplit.name}>
@@ -58,9 +64,9 @@ const SplitDeleteButton = () => {
               </span>
               ? This action cannot be undone.
             </p>
-          </DialogHeader>
+          </AlertDialogHeader>
 
-          <DialogFooter className="flex flex-col sm:flex-row gap-4 mt-6 justify-end">
+          <AlertDialogFooter className="flex flex-col sm:flex-row gap-4 mt-6 justify-end">
             <Button
               variant="outline"
               className="flex-1 sm:flex-none"
@@ -78,9 +84,9 @@ const SplitDeleteButton = () => {
             >
               <BsTrash className="inline text-lg" /> Delete
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };

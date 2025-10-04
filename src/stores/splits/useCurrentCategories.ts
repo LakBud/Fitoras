@@ -1,7 +1,7 @@
-// useCurrentCategories.tsx
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { v4 as uuidv4 } from "uuid";
+import { useSplitsStore } from "@/stores/splits/useSplitStore"; // import your splits store
 
 export interface Category {
   id: string;
@@ -36,8 +36,19 @@ export const useCurrentCategories = create<CategoriesState>()(
       },
 
       removeCategory: (id) => {
+        // Remove category from current categories
         set({
           categories: get().categories.filter((c) => c.id !== id),
+        });
+
+        // Reset category for any splits that had this category
+        const splits = useSplitsStore.getState().splits;
+        const updateSplit = useSplitsStore.getState().updateSplit;
+
+        splits.forEach((split) => {
+          if (split.category?.id === id) {
+            updateSplit(split.id, { category: undefined });
+          }
         });
       },
 
