@@ -1,16 +1,19 @@
+// stores/exercises/useExerciseStore.ts
 import { create } from "zustand";
+import { getFromDB, saveToDB } from "../../lib/indexedDB";
 import { type Exercises } from "../../types/exercise";
 import axios from "axios";
 
-const STORAGE_KEY = "exercises";
+const STORE_NAME = "exercises";
+const KEY = "exerciseData";
 
 interface ExerciseState {
   exercises: Exercises[];
   loading: boolean;
-  visibleCount: number; // how many items are currently loaded
-  scrollPosition: number; // scrollY
+  visibleCount: number;
+  scrollPosition: number;
   fetchExercises: (jsonPath?: string) => void;
-  setExercises: (exercises: Exercises[]) => void; // <--- added
+  setExercises: (exercises: Exercises[]) => void;
   setVisibleCount: (count: number) => void;
   setScrollPosition: (pos: number) => void;
 }
@@ -21,33 +24,33 @@ export const useExerciseStore = create<ExerciseState>((set) => ({
   visibleCount: 0,
   scrollPosition: 0,
 
-  // Fetch exercises from JSON or localStorage
   fetchExercises: async (jsonPath = "/data/allExercises.json") => {
     set({ loading: true });
 
-    const stored = localStorage.getItem(STORAGE_KEY);
+    // Try to get from IndexedDB first
+    const stored = await getFromDB<Exercises[]>(STORE_NAME, KEY);
     if (stored) {
-      try {
-        set({ exercises: JSON.parse(stored), loading: false });
-        return;
-      } catch {
-        localStorage.removeItem(STORAGE_KEY);
-      }
+      set({ exercises: stored, loading: false });
+      return;
     }
 
+    // Fetch from network if not in IndexedDB
     try {
       const res = await axios.get<Exercises[]>(jsonPath);
       set({ exercises: res.data });
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(res.data));
+      // Save to IndexedDB for future use
+      await saveToDB(STORE_NAME, KEY, res.data);
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching exercises:", err);
     } finally {
       set({ loading: false });
     }
   },
 
-  // Set exercises directly
-  setExercises: (exercises) => set({ exercises }),
+  setExercises: (exercises) => {
+    set({ exercises });
+    saveToDB(STORE_NAME, KEY, exercises);
+  },
 
   setVisibleCount: (count) => set({ visibleCount: count }),
   setScrollPosition: (pos) => set({ scrollPosition: pos }),

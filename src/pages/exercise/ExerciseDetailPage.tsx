@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useExercise } from "../../hooks/useExercise";
 import { GiCogsplosion, GiMuscleFat, GiMuscleUp, GiProgression, GiWeight, GiWeightCrush } from "react-icons/gi";
 import { RiBarChart2Fill } from "react-icons/ri";
 import { motion, AnimatePresence } from "framer-motion";
 import ScrollTopButton from "../../components/common/ScrollTopButton";
 import useBreakpoint from "../../hooks/ui/useBreakpoint";
 import NavigateBackButton from "../../components/common/NavigateBackButton";
+import { useExerciseStore } from "@/stores/exercises/useExerciseStore";
 
 const ExerciseDetailPage = () => {
   const { id } = useParams<{ id: string }>();
-  const { exercises, loading } = useExercise();
+  const { exercises, loading } = useExerciseStore();
   const { isDesktop, isMobile } = useBreakpoint();
 
   useEffect(() => {

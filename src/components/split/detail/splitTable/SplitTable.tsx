@@ -1,13 +1,13 @@
 import { useCurrentSplitStore } from "@/stores/splits/useCurrentSplitStore";
-import { useExercise } from "@/hooks/useExercise";
 import useBreakpoint from "@/hooks/ui/useBreakpoint";
 import { useThemeColor } from "@/hooks/ui/useThemeColor";
 import MobileSplitTable from "./mobile/MobileSplitTable";
 import DesktopSplitTable from "./desktop/DesktopSplitTable";
+import { useExerciseStore } from "@/stores/exercises/useExerciseStore";
 
 const SplitTable = () => {
   const currentSplit = useCurrentSplitStore((state) => state.currentSplit);
-  const { exercises: allExercises, loading } = useExercise();
+  const { exercises: allExercises, loading } = useExerciseStore();
   const { isDesktop } = useBreakpoint();
   const theme = useThemeColor(currentSplit?.category?.color);
 
