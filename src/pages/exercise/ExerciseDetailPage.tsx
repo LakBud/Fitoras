@@ -11,7 +11,7 @@ import { useExerciseStore } from "@/stores/exercises/useExerciseStore";
 const ExerciseDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const { exercises, loading } = useExerciseStore();
-  const { isDesktop, isMobile } = useBreakpoint();
+  const { isDesktop, isMobile } = useBreakpoint(830);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -80,106 +80,89 @@ const ExerciseDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-rose-100 to-rose-200 relative pb-20">
-      {/* Decorative Background Elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.05, 0.1, 0.05],
-          }}
-          transition={{ duration: 8, repeat: Infinity }}
-          className="absolute -top-1/4 -right-1/4 w-96 h-96 bg-rose-400 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.03, 0.08, 0.03],
-          }}
-          transition={{ duration: 10, repeat: Infinity }}
-          className="absolute -bottom-1/4 -left-1/4 w-96 h-96 bg-rose-300 rounded-full blur-3xl"
-        />
-      </div>
-
       {/* Image Slider */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="relative w-full mb-8 overflow-hidden shadow-2xl"
-        style={{ height: isDesktop ? "70vh" : isMobile ? "50vh" : "60vh", maxHeight: "700px" }}
+        className="relative w-full mb-8 flex justify-center"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
         <AnimatePresence mode="wait">
           {images.length ? (
-            <motion.img
-              key={currentImage}
-              src={`/data/exercises/${images[currentImage]}`}
-              alt={exercise.name}
-              className="w-full h-full object-cover"
-              initial={{ opacity: 0, scale: 1.1 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.4 }}
-            />
+            <motion.div key={currentImage} className="relative w-full flex justify-center" layout>
+              {/* Image */}
+              <motion.img
+                src={`/data/exercises/${images[currentImage]}`}
+                alt={exercise.name}
+                className={`${isDesktop ? "mx-auto rounded-2xl object-contain" : "w-full h-full object-cover"}`}
+                style={{
+                  maxHeight: isDesktop ? "80vh" : isMobile ? "50vh" : "60vh",
+                }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              />
+
+              {/* Image Counter */}
+              {images.length > 1 && (
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold">
+                  {currentImage + 1} / {images.length}
+                </div>
+              )}
+
+              {/* Navigation Arrows */}
+              {images.length > 1 && (
+                <>
+                  <motion.button
+                    onClick={prevImage}
+                    whileHover={{ scale: 1.1, x: -4 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm text-rose-600 rounded-full p-3 sm:p-4 shadow-lg hover:bg-white transition-all"
+                  >
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </motion.button>
+                  <motion.button
+                    onClick={nextImage}
+                    whileHover={{ scale: 1.1, x: 4 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm text-rose-600 rounded-full p-3 sm:p-4 shadow-lg hover:bg-white transition-all"
+                  >
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </motion.button>
+                </>
+              )}
+
+              {/* Image Dots */}
+              {images.length > 1 && (
+                <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex gap-2">
+                  {images.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setCurrentImage(idx)}
+                      className={`transition-all rounded-full ${
+                        idx === currentImage ? "w-8 bg-white" : "w-2 bg-white/50 hover:bg-white/80"
+                      } h-2`}
+                    />
+                  ))}
+                </div>
+              )}
+            </motion.div>
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+            <div className="flex items-center justify-center w-full h-60 bg-gradient-to-br from-gray-100 to-gray-200">
               <div className="text-center">
-                <span className="text-6xl mb-4 block">🏋️‍♂️</span>
                 <p className="text-gray-400 font-medium">No Image Available</p>
               </div>
             </div>
           )}
         </AnimatePresence>
-
-        {/* Image Counter */}
-        {images.length > 1 && (
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold">
-            {currentImage + 1} / {images.length}
-          </div>
-        )}
-
-        {/* Navigation Arrows */}
-        {images.length > 1 && (
-          <>
-            <motion.button
-              onClick={prevImage}
-              whileHover={{ scale: 1.1, x: -4 }}
-              whileTap={{ scale: 0.95 }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm text-rose-600 rounded-full p-3 sm:p-4 shadow-lg hover:bg-white transition-all"
-            >
-              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
-              </svg>
-            </motion.button>
-            <motion.button
-              onClick={nextImage}
-              whileHover={{ scale: 1.1, x: 4 }}
-              whileTap={{ scale: 0.95 }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm text-rose-600 rounded-full p-3 sm:p-4 shadow-lg hover:bg-white transition-all"
-            >
-              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
-              </svg>
-            </motion.button>
-          </>
-        )}
-
-        {/* Image Dots */}
-        {images.length > 1 && (
-          <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex gap-2">
-            {images.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setCurrentImage(idx)}
-                className={`transition-all rounded-full ${
-                  idx === currentImage ? "w-8 bg-white" : "w-2 bg-white/50 hover:bg-white/80"
-                } h-2`}
-              />
-            ))}
-          </div>
-        )}
       </motion.div>
 
       <div className="relative px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
@@ -224,22 +207,29 @@ const ExerciseDetailPage = () => {
           {exercise.instructions ? (
             <ol className="space-y-3 text-gray-700 leading-relaxed text-sm sm:text-base">
               {typeof exercise.instructions === "string"
-                ? exercise.instructions.split("\n").map((step, i) => (
-                    <motion.li
-                      key={i}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.2 + i * 0.1 }}
-                      className="flex gap-3"
-                    >
-                      <span className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 bg-rose-500 text-white rounded-full flex items-center justify-center font-bold text-sm">
-                        {i + 1}
-                      </span>
-                      <span className="pt-1">{step.trim()}</span>
-                    </motion.li>
-                  ))
+                ? exercise.instructions.split("\n").map((step, i) => {
+                    const formattedStep = step.trim().replace(/\.(\S)/g, ". $1");
+                    return (
+                      <motion.li
+                        key={i}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.2 + i * 0.1 }}
+                        className="flex gap-3"
+                      >
+                        <span className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 bg-rose-500 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                          {i + 1}
+                        </span>
+                        <span className="pt-1">{formattedStep}</span>
+                      </motion.li>
+                    );
+                  })
                 : Object.values(exercise.instructions)
-                    .map((step) => String(step).trim())
+                    .map((step) =>
+                      String(step)
+                        .trim()
+                        .replace(/\.(\S)/g, ". $1")
+                    )
                     .filter(Boolean)
                     .map((step, i) => (
                       <motion.li
