@@ -5,25 +5,12 @@ import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import MobileCategoryExercise from "./MobileCategoryExercise";
 
 import type { Split, SplitExercise, WorkoutCategory, WorkoutDay } from "@/types/splits";
-
-// ---------------- Props Interface ----------------
-interface Theme {
-  primary: string;
-  textOnPrimary: string;
-  dark: string;
-  darker: string;
-  light: string;
-  lighter: string;
-  translucent: string;
-  translucentStrong: string;
-  gradientStart: string;
-  gradientEnd: string;
-}
+import type { useThemeColor } from "@/hooks/ui/useThemeColor";
 
 interface MobileSplitTableProps {
   currentSplit: Split;
   allExercises: SplitExercise[];
-  theme: Theme;
+  theme: ReturnType<typeof useThemeColor>;
 }
 
 // ---------------- Component ----------------

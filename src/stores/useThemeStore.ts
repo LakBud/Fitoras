@@ -3,7 +3,6 @@ import { getFromDB, saveToDB } from "@/lib/indexedDB";
 import { darken, lighten, readableColor, rgba } from "polished";
 
 interface ThemeColors {
-  main: string;
   primary: string;
   textOnPrimary: string;
   dark: string;
@@ -36,13 +35,11 @@ const generateThemeColors = (primary: string): ThemeColors => {
   const lighter = lighten(0.4, primary);
   const translucent = rgba(primary, 0.1);
   const translucentStrong = rgba(primary, 0.25);
-  const main = primary;
 
   const gradientStart = rgba(darken(0.05, primary), 0.2);
   const gradientEnd = rgba(darken(0.05, primary), 0.6);
 
   return {
-    main,
     primary,
     textOnPrimary,
     dark,
