@@ -26,7 +26,7 @@ const SplitItem = ({ id, name, description, index, category }: SplitItemProps) =
         boxShadow: isDragging ? "0 15px 25px rgba(0,0,0,0.2)" : undefined,
       }}
       layout
-      initial={{ opacity: 0, y: 15 }}
+      initial={{ opacity: 0, y: 5 }}
       animate={{ opacity: 1, y: 0 }}
       whileDrag={{ scale: 1.03 }}
       className="
@@ -46,7 +46,7 @@ const SplitItem = ({ id, name, description, index, category }: SplitItemProps) =
         <div
           {...attributes}
           {...listeners}
-          className="flex-shrink-0 cursor-grab active:cursor-grabbing p-2 rounded-full touch-none transition-colors hover:bg-gray-100"
+          className="flex-shrink-0 cursor-grab active:cursor-grabbing p-3 rounded-full touch-none transition-colors hover:bg-gray-100"
           style={{
             backgroundColor: category ? `${category.color}20` : "transparent",
             color: category ? category.color : "#6b7280",

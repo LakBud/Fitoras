@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useThemeColor } from "../../hooks/ui/useThemeColor";
 import useBreakpoint from "../../hooks/ui/useBreakpoint";
 import { useCurrentSplitStore } from "@/stores/splits/useCurrentSplitStore";
+import { useState } from "react";
 
 type Exercise = { id: string; name: string };
 
@@ -16,6 +17,7 @@ type CalendarGridProps = {
   isToday: (date: Date) => boolean;
   isFullyCompleted: (date: Date) => boolean;
   onSelectDate?: (date: Date) => void;
+  selectedDate?: Date | null;
 };
 
 const CalendarGrid = ({
@@ -26,10 +28,28 @@ const CalendarGrid = ({
   isToday,
   isFullyCompleted,
   onSelectDate,
+  selectedDate: externalSelectedDate,
 }: CalendarGridProps) => {
   const { isMobile } = useBreakpoint();
   const { currentSplit } = useCurrentSplitStore();
-  const theme = useThemeColor(currentSplit?.category?.color, undefined, true);
+  const theme = useThemeColor(currentSplit?.category?.color);
+
+  // Internal state for selection (if not controlled by parent)
+  const [internalSelectedDate, setInternalSelectedDate] = useState<Date | null>(null);
+
+  // Use external state if provided, otherwise use internal state
+  const selectedDate = externalSelectedDate !== undefined ? externalSelectedDate : internalSelectedDate;
+
+  const handleSelectDate = (date: Date) => {
+    // Update internal state if not controlled
+    if (externalSelectedDate === undefined) {
+      setInternalSelectedDate(date);
+    }
+    // Always call parent callback if provided
+    if (onSelectDate) {
+      onSelectDate(date);
+    }
+  };
 
   return (
     <motion.div
@@ -88,7 +108,8 @@ const CalendarGrid = ({
               exercises={exercises}
               completionPercentage={completionPercentage}
               isFullyCompleted={fullyCompleted}
-              onSelectDate={onSelectDate}
+              onSelectDate={handleSelectDate}
+              isSelected={selectedDate?.toDateString() === date.toDateString()}
             />
           );
         })}

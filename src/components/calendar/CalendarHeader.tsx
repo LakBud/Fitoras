@@ -15,7 +15,7 @@ type CalendarHeaderProps = {
 const CalendarHeader = ({ currentDate, onPrev, onNext, splitName, splitDescription }: CalendarHeaderProps) => {
   const { isMobile } = useBreakpoint();
   const { currentSplit } = useCurrentSplitStore();
-  const theme = useThemeColor(currentSplit?.category?.color, undefined, true);
+  const theme = useThemeColor(currentSplit?.category?.color, undefined);
 
   return (
     <div className="mb-6">

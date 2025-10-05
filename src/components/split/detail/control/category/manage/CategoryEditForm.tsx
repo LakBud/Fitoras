@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 import type { Theme } from "@/types/theme";
 import type { WorkoutCategory } from "@/types/splits";
+import DeleteExerciseCategoryButton from "./DeleteExerciseCategoryButton";
+import { Button } from "@/components/ui/button";
 
-interface Props {
+interface CategoryEditProps {
   theme: Theme;
   category: WorkoutCategory;
   onDelete: (id: string) => void;
@@ -11,34 +12,48 @@ interface Props {
   onSave: (name: string, color: string) => void;
 }
 
-const CategoryEditForm = ({ theme, category, onDelete, onCancel, onSave }: Props) => {
+const CategoryEditForm = ({ theme, category, onDelete, onCancel, onSave }: CategoryEditProps) => {
   const [name, setName] = useState<string>(category.name);
   const [color, setColor] = useState<string>(category.color ?? "#ff0000");
 
+  const borderColor = theme.translucentStrong;
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const sanitized = e.target.value.replace(/[^a-zA-Z]/g, "").slice(0, 20);
+    setName(sanitized);
+  };
+
+  const handleSave = () => {
+    if (!name.trim()) return;
+    onSave(name.trim(), color);
+  };
+
   return (
-    <div className="flex flex-col gap-5">
-      {/* Name */}
+    <div className="flex flex-col gap-6">
+      {/* Name Input */}
       <div className="flex flex-col">
-        <label className="text-sm font-semibold mb-1" style={{ color: theme.dark }}>
+        <label htmlFor="category-name" className="text-sm font-semibold mb-1" style={{ color: theme.dark }}>
           Category Name
         </label>
         <input
+          id="category-name"
           type="text"
           value={name}
-          onChange={(e) => setName(e.target.value.replace(/[^a-zA-Z]/g, "").slice(0, 20))}
-          className="border rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-indigo-400 transition shadow-sm text-sm"
-          style={{ borderColor: theme.translucentStrong }}
+          onChange={handleNameChange}
+          placeholder="Enter category name"
+          className="border rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-offset-1  transition shadow-sm text-sm"
+          style={{ borderColor }}
         />
       </div>
 
-      {/* Color */}
+      {/* Color Picker */}
       <div className="flex flex-col items-center">
         <label className="text-sm font-semibold mb-1" style={{ color: theme.dark }}>
           Category Color
         </label>
         <div
           className="w-12 h-12 rounded-full shadow-inner cursor-pointer border"
-          style={{ backgroundColor: color, borderColor: theme.translucentStrong }}
+          style={{ backgroundColor: color, borderColor }}
         >
           <input
             type="color"
@@ -46,36 +61,45 @@ const CategoryEditForm = ({ theme, category, onDelete, onCancel, onSave }: Props
             onChange={(e) => setColor(e.target.value)}
             className="w-full h-full opacity-0 cursor-pointer"
             title="Pick a category color"
+            aria-label="Pick a category color"
           />
         </div>
       </div>
 
-      {/* Buttons */}
+      {/* Action Buttons */}
       <div className="flex justify-between mt-4 gap-3">
-        <motion.button
-          whileTap={{ scale: 0.96 }}
-          onClick={() => onDelete(category.id)}
-          className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-full font-semibold shadow-md transition"
-        >
-          Delete
-        </motion.button>
+        {/* Delete */}
+        <DeleteExerciseCategoryButton
+          category={category}
+          onConfirm={() => {
+            onDelete(category.id);
+            onCancel();
+          }}
+        />
 
-        <motion.button
-          whileTap={{ scale: 0.96 }}
+        {/* Cancel */}
+        <Button
           onClick={onCancel}
-          className="flex-1 px-4 py-3 bg-gray-200 hover:bg-gray-300 rounded-full font-medium transition"
+          className="flex-1 bg-gray-400 hover:bg-gray-300 font-medium transition focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-300"
+          aria-label="Cancel editing category"
         >
           Cancel
-        </motion.button>
+        </Button>
 
-        <motion.button
-          whileTap={{ scale: 0.96 }}
-          onClick={() => onSave(name, color)}
-          className="flex-1 px-4 py-3 text-white rounded-full font-medium shadow-md hover:shadow-lg transition"
-          style={{ background: `linear-gradient(to right, ${theme.dark}, ${theme.primary})` }}
+        {/* Save */}
+        <Button
+          onClick={handleSave}
+          disabled={!name.trim()}
+          className={`flex-1 font-medium shadow-md hover:shadow-lg transition ${
+            name.trim() ? "text-white" : "text-gray-400 cursor-not-allowed"
+          }`}
+          style={{
+            background: name.trim() ? `linear-gradient(to right, ${theme.dark}, ${theme.primary})` : theme.translucentStrong,
+          }}
+          aria-label="Save category changes"
         >
           Save
-        </motion.button>
+        </Button>
       </div>
     </div>
   );

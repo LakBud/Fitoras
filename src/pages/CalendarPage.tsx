@@ -14,13 +14,13 @@ import { FiInfo } from "react-icons/fi";
 
 const CalendarPage = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(currentDate);
   const [scrollY, setScrollY] = useState(0);
   const splits = useSplitsStore((state) => state.splits);
   const { isExerciseCompleted } = useCalendarStore();
   const { isDesktop, isMobile } = useBreakpoint();
   const { currentSplit } = useCurrentSplitStore();
-  const theme = useThemeColor(currentSplit?.category?.color, undefined, true);
+  const theme = useThemeColor(currentSplit?.category?.color, undefined);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {

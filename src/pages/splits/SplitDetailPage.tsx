@@ -55,7 +55,7 @@ const SplitDetailPage = () => {
         }}
       >
         {/* Header */}
-        <header className="flex flex-col items-center text-center pt-20 mb-12 relative px-4">
+        <header className="flex flex-col items-center text-center pt-20 mb-12 mr-10 px-4 justify-center">
           {/* ================== Title ================== */}
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
@@ -106,16 +106,6 @@ const SplitDetailPage = () => {
           transition={{ duration: 0.6 }}
           className="max-w-8xl mx-auto w-full flex flex-col gap-8"
         >
-          {/* SplitTable Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="bg-white/70 backdrop-blur-md rounded-3xl p-4 sm:p-6 shadow-lg overflow-x-auto"
-          >
-            <SplitTable />
-          </motion.div>
-
           {/* Actions */}
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
             <Button asChild className="flex items-center gap-2">
@@ -128,6 +118,15 @@ const SplitDetailPage = () => {
 
             <EditSplitForm splitToEdit={split} />
           </div>
+          {/* SplitTable Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="bg-white/70 backdrop-blur-md rounded-3xl p-4 sm:p-6 shadow-lg overflow-x-auto"
+          >
+            <SplitTable />
+          </motion.div>
         </motion.main>
 
         {/* Fixed Back Button */}

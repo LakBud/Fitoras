@@ -35,7 +35,10 @@ const ControlAddCategory = () => {
     setNewCategoryColor?.("#ff0000");
   };
 
-  const handleDeleteCategory = (id: string): void => deleteCategory?.(id);
+  const handleDeleteCategory = (id: string): void => {
+    deleteCategory?.(id);
+    setEditingCategory(null);
+  };
 
   return (
     <div className="relative">

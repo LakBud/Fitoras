@@ -13,6 +13,7 @@ type CalendarDayCellProps = {
   completionPercentage: number;
   isFullyCompleted: boolean;
   onSelectDate?: (date: Date) => void;
+  isSelected?: boolean;
 };
 
 const CalendarDayCell = ({
@@ -22,9 +23,10 @@ const CalendarDayCell = ({
   completionPercentage,
   isFullyCompleted,
   onSelectDate,
+  isSelected = false,
 }: CalendarDayCellProps) => {
   const { currentSplit } = useCurrentSplitStore();
-  const theme = useThemeColor(currentSplit?.category?.color, undefined, true);
+  const theme = useThemeColor(currentSplit?.category?.color);
   const { isMobile } = useBreakpoint();
 
   if (!date) {
@@ -48,14 +50,19 @@ const CalendarDayCell = ({
       style={{
         backgroundColor: isFullyCompleted
           ? "#dcfce7" // Tailwind green-50 equivalent
+          : isSelected
+          ? theme.lighter // dynamic theme color for selected
           : isToday
-          ? theme.lighter // dynamic theme color for today
+          ? theme.translucent // lighter version for today
           : undefined,
         borderColor: isFullyCompleted
           ? "#bbf7d0" // Tailwind green-200 equivalent
+          : isSelected
+          ? theme.primary // bold border for selected
           : isToday
           ? theme.translucent
           : theme.translucent,
+        borderWidth: isSelected ? "2px" : "1px",
       }}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
@@ -76,6 +83,8 @@ const CalendarDayCell = ({
           style={{
             color: isFullyCompleted
               ? "#15803d" // Tailwind green-700 equivalent
+              : isSelected
+              ? theme.dark // dynamic color for selected
               : isToday
               ? theme.dark // dynamic color for today
               : "#374151", // Tailwind gray-700 equivalent
