@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://fitoras.vercel.app/sitemap.xml
