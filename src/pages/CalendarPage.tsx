@@ -1,6 +1,6 @@
 import { useState, useRef, useLayoutEffect } from "react";
 import { useSplitsStore } from "../stores/splits/useSplitStore";
-import { useCalendarStore } from "../stores/useCalendarStore";
+import { useCalendarStore } from "@/stores/useCalendarStore";
 import type { Weekday } from "../types/splits";
 import { WEEKDAYS, getMonthMetadata, getExercisesForDateFromSplit, formatDateKey, isSameDay } from "../lib/calendar";
 import CalendarHeader from "../components/calendar/CalendarHeader";

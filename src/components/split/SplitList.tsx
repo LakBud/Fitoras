@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useSplitsStore } from "../../stores/splits/useSplitStore";
 import { useSplitFilterStore } from "../../stores/splits/useSplitFilterStore";
@@ -16,10 +16,12 @@ import {
 import { SortableContext, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import SplitItem from "./SplitItem";
 import { FiInfo } from "react-icons/fi";
+import { useCurrentSplitStore } from "@/stores/splits/useCurrentSplitStore";
 
 const SplitList = () => {
   const splits = useSplitsStore((state) => state.splits);
   const setSplits = useSplitsStore((state) => state.setSplits);
+  const { setCurrentSplit } = useCurrentSplitStore();
 
   const { name: filterName, categoryId: filterCategoryId } = useSplitFilterStore();
 
@@ -49,6 +51,9 @@ const SplitList = () => {
   };
 
   const activeSplit = filteredSplits.find((s) => s.id === activeId);
+  useEffect(() => {
+    if (activeSplit) setCurrentSplit(activeSplit);
+  }, [activeSplit, setCurrentSplit]);
 
   // --- No splits created
   if (splits.length === 0) {

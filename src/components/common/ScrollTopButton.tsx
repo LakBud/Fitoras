@@ -45,7 +45,7 @@ const ScrollTopButton = ({ className }: ScrollTopButtonProps) => {
           exit={{ opacity: 0, y: 10 }}
           transition={{ duration: 0.3 }}
           onClick={scrollToTop}
-          className={`fixed bottom-6 right-4 z-50 bg-rose-600 hover:bg-rose-700 text-white p-4 rounded-full shadow-xl hover:shadow-2xl transition-all ${
+          className={`fixed bottom-6 right-4 z-50 bg-rose-600 hover:bg-rose-700 text-white p-3 rounded-2xl shadow-xl hover:shadow-2xl transition-all ${
             className ?? ""
           }`}
         >

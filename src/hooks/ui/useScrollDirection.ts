@@ -8,7 +8,7 @@ export function useScrollDirection() {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
-      if (currentScrollY < 10) {
+      if (currentScrollY < 80) {
         setScrollUp(true); // always show navbar at top
       } else if (currentScrollY > lastScrollY) {
         setScrollUp(false); // scrolling down → hide
