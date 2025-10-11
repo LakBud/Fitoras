@@ -172,7 +172,7 @@ Fitoras prioritizes your privacy:
 - All workout data is stored locally in your browser
 - No data is sent to external servers
 - No account creation required
-- No tracking or analytics
+- Only Google Analytics is used
 
 ## 🌐 Deployment
 
@@ -211,18 +211,13 @@ Contributions are welcome! Please ensure:
 
 ## 🐛 Known Issues
 
-- Exercise data is loaded from static JSON files
+- Exercise data is loaded from a single JSON file
 - No backup/export functionality yet
 
 ## 🔮 Future Enhancements
 
 - Export/import workout data
-- Progress tracking and statistics
 - Custom exercise creation
-- Workout timer
-- Rest period tracking
-- Body measurements tracking
-- Dark mode support
 
 ---
 
