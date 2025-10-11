@@ -9,11 +9,13 @@ import { formatDateKey } from "@/lib/calendar";
 import StatCards from "@/components/home/StatCards";
 import FeatureCards from "@/components/home/FeatureCards";
 import CTAButtons from "@/components/home/CTAButtons";
+import useBreakpoint from "@/hooks/ui/useBreakpoint";
 
 const HomePage = () => {
   const splits = useSplitsStore((state) => state.splits);
   const { completedExercises } = useCalendarStore();
   const { exercises, fetchExercises } = useExerciseStore();
+  const { isMobile } = useBreakpoint();
 
   // Fetch exercises on first mount if not loaded
   useEffect(() => {
@@ -61,7 +63,7 @@ const HomePage = () => {
   }, [splits, completedExercises]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-rose-100 to-rose-200 pb-24">
+    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-rose-100 to-rose-200 flex flex-col">
       {/* Decorative Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <motion.div
@@ -76,7 +78,7 @@ const HomePage = () => {
         />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14">
+      <div className="flex-1 relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-6">
         {/* Header */}
         <motion.header
           initial={{ opacity: 0, y: -20 }}
@@ -119,18 +121,35 @@ const HomePage = () => {
 
         {/* Feature Cards */}
         <FeatureCards />
-
-        {/* Footer */}
-        <motion.footer
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-          className="mt-16 text-center text-gray-400 text-sm"
-        >
-          <p className="font-medium">© {new Date().getFullYear()} Fitoras. All rights reserved.</p>
-          <p className="mt-2 text-xs">Transform your fitness journey, one workout at a time.</p>
-        </motion.footer>
       </div>
+
+      {/* Footer */}
+      <motion.footer
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8, duration: 0.6 }}
+        className={`w-full py-4 bg-red-200 text-gray-800 text-center text-sm mt-auto ${isMobile ? "mb-18" : ""}`}
+      >
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:justify-between md:items-center gap-3 px-4">
+          <p className="font-semibold">
+            © {new Date().getFullYear()}{" "}
+            <a
+              href="https://github.com/LakBud/Fitoras"
+              className="text-rose-800 hover:text-rose-900 transition-colors duration-200"
+            >
+              Fitoras
+            </a>
+            . All rights reserved.
+          </p>
+
+          <p className="text-xs font-semibold md:text-sm mt-1 md:mt-0">
+            Developed by{" "}
+            <a href="https://github.com/LakBud/" className="text-rose-800 hover:text-rose-900 transition-colors duration-200">
+              Buddo
+            </a>
+          </p>
+        </div>
+      </motion.footer>
     </div>
   );
 };

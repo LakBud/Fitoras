@@ -7,7 +7,7 @@ import ControlAddCategory from "./manage/ControlManageExerciseCategory";
 const ControlCategoryTab = () => {
   const { selectedCategoryId, setSelectedCategoryId, split } = useSplitControl();
   const { categories } = useCategoryControl();
-  const themeColor = split?.category?.color ?? "#ef4444";
+  const themeColor = split?.category?.color ?? "#6B7280";
 
   const allCategories = [{ id: null, name: "None", color: themeColor }, ...(categories ?? [])];
 

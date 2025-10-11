@@ -49,11 +49,14 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
   const currentColor = useMemo(() => {
     if (watchCategoryId === "new" && watchNewCategoryColor) {
       return watchNewCategoryColor;
+    } else if (watchCategoryId === "") {
+      // No category selected - return gray
+      return "#6B7280"; // or undefined to use default gray theme
     } else if (watchCategoryId) {
       const selectedCategory = categories.find((c) => c.id === watchCategoryId);
       return selectedCategory?.color;
     }
-    return splitToEdit.category?.color;
+    return splitToEdit.category?.color || "#6B7280";
   }, [watchCategoryId, watchNewCategoryColor, categories, splitToEdit.category?.color]);
 
   const originalTheme = useThemeColor(currentSplit?.category?.color);
