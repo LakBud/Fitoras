@@ -8,9 +8,9 @@ import useBreakpoint from "../../hooks/ui/useBreakpoint";
 import NavigateBackButton from "../../components/common/NavigateBackButton";
 import { useExerciseStore } from "@/stores/exercises/useExerciseStore";
 import { type Exercises } from "@/types/exercise";
-import ExerciseImageSlider from "@/components/exercise/ExerciseImageSlider";
-import InfoCard from "@/components/exercise/InfoCards";
-import MuscleCard from "@/components/exercise/MuscleCards";
+import ExerciseImageSlider from "@/components/exercise/detail/ExerciseImageSlider";
+import InfoCard from "@/components/exercise/detail/InfoCards";
+import MuscleCard from "@/components/exercise/detail/MuscleCards";
 
 const ExerciseDetailPage = () => {
   const { id } = useParams<{ id: string }>();

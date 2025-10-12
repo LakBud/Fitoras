@@ -1,11 +1,15 @@
-import { FiSearch, FiRefreshCw, FiX, FiInbox } from "react-icons/fi";
+import { useMemo } from "react";
+import { FiSearch, FiRefreshCw, FiX, FiLayers } from "react-icons/fi";
 import useBreakpoint from "../../hooks/ui/useBreakpoint";
 import { useSplitFilterStore } from "../../stores/splits/useSplitFilterStore";
 import { useCurrentCategories } from "../../stores/splits/useCurrentCategories";
+import { Input } from "../ui/input";
+import { Label } from "@radix-ui/react-label";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../ui/select";
+import { Button } from "../ui/button";
 
 const SplitFilter = () => {
   const { isDesktop, isMobile } = useBreakpoint();
-
   const { name, categoryId, setName, setCategoryId, resetFilters } = useSplitFilterStore();
   const categories = useCurrentCategories((state) => state.categories);
 
@@ -14,9 +18,9 @@ const SplitFilter = () => {
     else setCategoryId(value);
   };
 
-  const filterOptions = [["categoryId", categories.map((c) => c.name)]] as const;
+  const filterOptions = useMemo(() => [["categoryId", categories.map((c) => c.name), <FiLayers />] as const], [categories]);
 
-  // --- Desktop layout ---
+  // --- Desktop ---
   if (isDesktop) {
     return (
       <div
@@ -26,60 +30,66 @@ const SplitFilter = () => {
       >
         {/* Search */}
         <div className="relative w-full md:w-64 flex-1">
-          <label htmlFor="split-search" className="sr-only">
+          <Label htmlFor="split-search" className="sr-only">
             Search splits
-          </label>
-          <input
-            type="text"
+          </Label>
+          <Input
+            type="search"
             id="split-search"
             name="search"
-            placeholder="Search Splits..."
+            placeholder="Search splits..."
             value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="pl-10 pr-4 py-2 w-full border border-red-400 rounded-full bg-red-50/70 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 shadow-sm placeholder-gray-500 text-sm transition-all duration-200"
+            onChange={(e) => handleChange("name", e.target.value)}
+            className="pl-10 pr-4 py-2 w-full border border-red-400 rounded-full bg-red-50/80 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 shadow-sm placeholder-gray-600 text-sm transition-all duration-200"
           />
           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-red-600 text-lg" aria-hidden="true" />
         </div>
 
         {/* Filters */}
-        <div className="flex overflow-x-auto gap-4 py-1 flex-1" aria-label="Category filter">
-          {filterOptions.map(([key, options]) => (
+        <div className="flex overflow-x-auto gap-4 py-1 flex-1" aria-label="Split category filter">
+          {filterOptions.map(([key, options, icon]) => (
             <div key={key} className="relative flex-shrink-0 w-36 md:w-40">
-              <label htmlFor="split-category" className="sr-only">
-                Filter by category
-              </label>
-              <select
-                id="split-category"
-                name="categoryId"
-                value={categoryId}
-                onChange={(e) => handleChange("categoryId", e.target.value)}
-                className="pl-10 pr-3 py-2 w-full border border-red-400 rounded-full bg-red-50/70 shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 text-sm transition-all duration-200"
-              >
-                <option value="">Category</option>
-                {options.map((opt) => (
-                  <option key={opt} value={categories.find((c) => c.name === opt)?.id}>
-                    {opt}
-                  </option>
-                ))}
-              </select>
-              <FiInbox className="absolute left-3 top-1/2 -translate-y-1/2 text-red-600 text-lg" aria-hidden="true" />
+              <Label htmlFor={`filter-${key}`} className="sr-only">
+                Filter by {key}
+              </Label>
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-red-600 text-lg" aria-hidden="true">
+                {icon}
+              </div>
+
+              <Select value={categoryId} onValueChange={(value) => handleChange("categoryId", value)}>
+                <SelectTrigger
+                  id={`filter-${key}`}
+                  name={key}
+                  className="pl-10 pr-3 py-2 w-full border border-red-400 rounded-full bg-red-50/80 shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 text-sm transition-all duration-200 hover:bg-red-100"
+                >
+                  <SelectValue placeholder="Category" />
+                </SelectTrigger>
+
+                <SelectContent className="bg-white rounded-lg shadow-md border border-red-200 mt-1">
+                  {options.map((opt) => (
+                    <SelectItem key={opt} value={opt} className="px-3 py-2 text-red-700 text-sm hover:bg-red-50 rounded-md">
+                      {opt}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           ))}
         </div>
 
         {/* Reset */}
-        <button
+        <Button
           onClick={resetFilters}
           aria-label="Reset filters"
           className="ml-auto bg-red-700 text-white font-semibold px-5 py-2 rounded-full shadow hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-500 text-sm transition-all duration-200"
         >
           Reset
-        </button>
+        </Button>
       </div>
     );
   }
 
-  // --- Mobile layout ---
+  // --- Mobile ---
   if (isMobile) {
     return (
       <div
@@ -88,27 +98,28 @@ const SplitFilter = () => {
         className="sticky top-[60px] z-50 bg-white/95 backdrop-blur-lg flex overflow-x-auto gap-3 items-center px-3 py-2 border-b border-red-300 shadow-sm"
       >
         {/* Reset */}
-        <button
+        <Button
           onClick={resetFilters}
           aria-label="Reset all filters"
           className="p-2 rounded-full bg-red-700 shadow-sm flex items-center justify-center text-white transition-all duration-200 hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-500"
         >
           <FiRefreshCw className="text-lg" aria-hidden="true" />
-        </button>
+        </Button>
 
         {/* Search */}
         <div className="relative flex-1 min-w-[140px]">
-          <label htmlFor="split-search" className="sr-only">
+          <Label htmlFor="split-search" className="sr-only">
             Search splits
-          </label>
-          <input
+          </Label>
+          <Input
             type="search"
             id="split-search"
             name="search"
             placeholder="Search"
             value={name}
             onChange={(e) => handleChange("name", e.target.value)}
-            className="pl-10 pr-10 py-2 w-full border border-red-400 rounded-full bg-red-50/70 text-gray-800 placeholder-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 shadow-sm transition-all duration-200"
+            className="pl-10 pr-10 py-2 w-full border border-red-400 rounded-full bg-red-50/80 text-gray-800 placeholder-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 shadow-sm transition-all duration-200
+            [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-cancel-button]:hidden [&::-moz-search-clear-button]:hidden [&::-ms-clear]:hidden"
           />
           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-red-600 text-lg" aria-hidden="true" />
           {name && (
@@ -124,26 +135,24 @@ const SplitFilter = () => {
         </div>
 
         {/* Filters */}
-        <div className="flex-shrink-0 flex gap-2" aria-label="Category filter">
-          {filterOptions.map(([key, options]) => (
-            <div key={key}>
-              <label htmlFor="split-category" className="sr-only">
-                Filter by category
-              </label>
-              <select
-                id="split-category"
-                name="categoryId"
-                value={categoryId}
-                onChange={(e) => handleChange("categoryId", e.target.value)}
-                className="px-3 py-2 rounded-full bg-red-50 shadow-sm text-red-700 text-sm transition-all duration-200 hover:bg-red-100 focus:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-500"
-              >
-                <option value="">Category</option>
-                {options.map((opt) => (
-                  <option key={opt} value={categories.find((c) => c.name === opt)?.id}>
-                    {opt}
-                  </option>
-                ))}
-              </select>
+        <div className="flex-shrink-0 flex gap-2" aria-label="Split category filter">
+          {filterOptions.map(([key, options, icon]) => (
+            <div key={key} className="relative w-32">
+              <div className="absolute left-2 top-1/2 -translate-y-1/2 text-red-600 text-lg" aria-hidden="true">
+                {icon}
+              </div>
+              <Select value={categoryId} onValueChange={(value) => handleChange("categoryId", value)}>
+                <SelectTrigger className="pl-8 pr-3 py-2 w-full border border-red-400 rounded-full bg-red-50 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200">
+                  <SelectValue placeholder="Category" />
+                </SelectTrigger>
+                <SelectContent className="bg-white rounded-lg shadow-md border border-red-200 mt-1">
+                  {options.map((opt) => (
+                    <SelectItem key={opt} value={opt} className="px-3 py-2 text-red-700 text-sm hover:bg-red-50 rounded-md">
+                      {opt}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           ))}
         </div>

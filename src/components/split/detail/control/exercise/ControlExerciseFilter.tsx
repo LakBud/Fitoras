@@ -4,6 +4,8 @@ import { useFilterStore } from "../../../../../stores/exercises/useFilterStore";
 import { useExerciseStore } from "../../../../../stores/exercises/useExerciseStore";
 import { useSplitControl } from "../../../../../hooks/control/useSplitControl";
 import { useThemeColor } from "../../../../../hooks/ui/useThemeColor";
+import { Input } from "../../../../ui/input";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../../../../ui/select";
 
 export const ControlExerciseFilter = () => {
   const { exercises } = useExerciseStore();
@@ -17,7 +19,6 @@ export const ControlExerciseFilter = () => {
   }, [exercises, setAllExercises]);
 
   const handleChange = useCallback((key: keyof typeof filters, value: string) => setFilters({ [key]: value }), [setFilters]);
-
   const isString = (val: unknown): val is string => typeof val === "string";
 
   const filterOptions: [keyof typeof filters, string[], JSX.Element][] = useMemo(
@@ -37,7 +38,7 @@ export const ControlExerciseFilter = () => {
   );
 
   const inputBaseClasses =
-    "pl-10 pr-10 py-2 w-full border rounded-full shadow-sm focus:outline-none focus:ring-2 transition-all duration-200";
+    "pl-10 pr-10 py-2 w-full border rounded-full shadow-sm focus:outline-none focus:ring-2 transition-all duration-200 text-sm";
 
   return (
     <div
@@ -56,12 +57,12 @@ export const ControlExerciseFilter = () => {
 
       {/* Search */}
       <div className="relative flex-1 min-w-[140px]">
-        <input
-          type="text"
+        <Input
+          type="search"
           placeholder="Search"
           value={filters.name}
           onChange={(e) => handleChange("name", e.target.value)}
-          className={`${inputBaseClasses} text-sm`}
+          className={`${inputBaseClasses}`}
           style={{ borderColor: theme.translucentStrong, color: theme.dark, backgroundColor: "#fff" }}
         />
         <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: theme.primary }} />
@@ -78,26 +79,26 @@ export const ControlExerciseFilter = () => {
       </div>
 
       {/* Filters */}
-      {filterOptions.map(([key, options]) => (
-        <div key={key} className="flex-shrink-0">
-          <select
-            title={key}
-            value={filters[key]}
-            onChange={(e) => handleChange(key, e.target.value)}
-            className="px-3 py-2 rounded-full shadow-sm text-sm hover:scale-105 transition-transform duration-200"
-            style={{
-              backgroundColor: "#fff",
-              borderColor: theme.translucentStrong,
-              color: theme.dark,
-            }}
-          >
-            <option value="">{key.charAt(0).toUpperCase() + key.slice(1)}</option>
-            {options.map((opt) => (
-              <option key={opt} value={opt}>
-                {opt.charAt(0).toUpperCase() + opt.slice(1)}
-              </option>
-            ))}
-          </select>
+      {filterOptions.map(([key, options, icon]) => (
+        <div key={key} className="relative flex-shrink-0 w-32">
+          <div className="absolute left-2 top-1/2 -translate-y-1/2 text-red-600 text-lg" aria-hidden="true">
+            {icon}
+          </div>
+          <Select value={filters[key]} onValueChange={(value) => handleChange(key, value)}>
+            <SelectTrigger
+              className="pl-8 pr-3 py-2 w-full border border-red-400 rounded-full bg-white shadow-sm focus:outline-none focus:ring-2 transition-all duration-200 text-sm"
+              style={{ borderColor: theme.translucentStrong, color: theme.dark }}
+            >
+              <SelectValue placeholder={key.charAt(0).toUpperCase() + key.slice(1)} />
+            </SelectTrigger>
+            <SelectContent className="bg-white rounded-lg shadow-md border border-red-200 mt-1">
+              {options.map((opt) => (
+                <SelectItem key={opt} value={opt} className="px-3 py-2 text-red-700 text-sm hover:bg-red-50 rounded-md">
+                  {opt.charAt(0).toUpperCase() + opt.slice(1)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       ))}
     </div>
