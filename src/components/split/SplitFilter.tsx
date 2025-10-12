@@ -18,7 +18,7 @@ const SplitFilter = () => {
     else setCategoryId(value === "__all__" ? "" : value);
   };
 
-  const filterOptions = useMemo(() => [["category", categories.map((c) => c.name), <FiLayers />] as const], [categories]);
+  const filterOptions = useMemo(() => [["category", categories, <FiLayers />] as const], [categories]);
 
   // --- Desktop ---
   if (isDesktop) {
@@ -65,10 +65,10 @@ const SplitFilter = () => {
                   <SelectValue placeholder={key.charAt(0).toUpperCase() + key.slice(1)} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="__all__">{key.charAt(0).toUpperCase() + key.slice(1)}</SelectItem>
+                  <SelectItem value="__all__">Categories</SelectItem>
                   {options.map((opt) => (
-                    <SelectItem key={opt} value={opt}>
-                      {opt.charAt(0).toUpperCase() + opt.slice(1)}
+                    <SelectItem key={opt.id} value={opt.id}>
+                      {opt.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -146,10 +146,10 @@ const SplitFilter = () => {
                   <SelectValue placeholder={key.charAt(0).toUpperCase() + key.slice(1)} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="__all__">{key.charAt(0).toUpperCase() + key.slice(1)}</SelectItem>
+                  <SelectItem value="__all__">Categories</SelectItem>
                   {options.map((opt) => (
-                    <SelectItem key={opt} value={opt}>
-                      {opt.charAt(0).toUpperCase() + opt.slice(1)}
+                    <SelectItem key={opt.id} value={opt.id}>
+                      {opt.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
