@@ -6,6 +6,7 @@ import { useSplitControl } from "../../../../../hooks/control/useSplitControl";
 import { useThemeColor } from "../../../../../hooks/ui/useThemeColor";
 import { Input } from "../../../../ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../../../../ui/select";
+import { Button } from "../../../../ui/button";
 
 export const ControlExerciseFilter = () => {
   const { exercises } = useExerciseStore();
@@ -18,7 +19,11 @@ export const ControlExerciseFilter = () => {
     if (exercises.length) setAllExercises(exercises);
   }, [exercises, setAllExercises]);
 
-  const handleChange = useCallback((key: keyof typeof filters, value: string) => setFilters({ [key]: value }), [setFilters]);
+  const handleChange = useCallback(
+    (key: keyof typeof filters, value: string) => setFilters({ [key]: value === "__all__" ? "" : value }),
+    [setFilters]
+  );
+
   const isString = (val: unknown): val is string => typeof val === "string";
 
   const filterOptions: [keyof typeof filters, string[], JSX.Element][] = useMemo(
@@ -46,14 +51,14 @@ export const ControlExerciseFilter = () => {
       style={{ backgroundColor: theme.lighter, borderColor: theme.translucentStrong }}
     >
       {/* Reset */}
-      <button
+      <Button
         onClick={resetFilters}
-        title="Reset filters"
+        aria-label="Reset filters"
         className="p-2 rounded-full shadow-sm flex items-center justify-center hover:scale-110 transition-transform duration-200"
         style={{ backgroundColor: theme.primary, color: theme.textOnPrimary }}
       >
         <FiRefreshCw className="text-lg" />
-      </button>
+      </Button>
 
       {/* Search */}
       <div className="relative flex-1 min-w-[140px]">
@@ -62,38 +67,42 @@ export const ControlExerciseFilter = () => {
           placeholder="Search"
           value={filters.name}
           onChange={(e) => handleChange("name", e.target.value)}
-          className={`${inputBaseClasses}`}
+          className={inputBaseClasses}
           style={{ borderColor: theme.translucentStrong, color: theme.dark, backgroundColor: "#fff" }}
         />
         <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: theme.primary }} />
         {filters.name && (
-          <button
+          <Button
             type="button"
             onClick={() => handleChange("name", "")}
             className="absolute right-3 top-1/2 -translate-y-1/2 hover:text-red-500 transition-colors duration-200"
             style={{ color: theme.dark }}
           >
             <FiX className="text-lg" />
-          </button>
+          </Button>
         )}
       </div>
 
       {/* Filters */}
       {filterOptions.map(([key, options, icon]) => (
         <div key={key} className="relative flex-shrink-0 w-32">
-          <div className="absolute left-2 top-1/2 -translate-y-1/2 text-red-600 text-lg" aria-hidden="true">
+          <div className="absolute left-2 top-1/2 -translate-y-1/2  text-lg" aria-hidden="true" style={{ color: theme.primary }}>
             {icon}
           </div>
-          <Select value={filters[key]} onValueChange={(value) => handleChange(key, value)}>
+          <Select value={filters[key] || "__all__"} onValueChange={(value) => handleChange(key, value)}>
             <SelectTrigger
-              className="pl-8 pr-3 py-2 w-full border border-red-400 rounded-full bg-white shadow-sm focus:outline-none focus:ring-2 transition-all duration-200 text-sm"
+              className="pl-8 pr-3 py-2 w-full border rounded-full bg-white shadow-sm focus:outline-none focus:ring-2 transition-all duration-200 text-sm"
               style={{ borderColor: theme.translucentStrong, color: theme.dark }}
             >
               <SelectValue placeholder={key.charAt(0).toUpperCase() + key.slice(1)} />
             </SelectTrigger>
-            <SelectContent className="bg-white rounded-lg shadow-md border border-red-200 mt-1">
+
+            <SelectContent>
+              <SelectItem value="__all__" style={{ color: theme.primary }}>
+                {key.charAt(0).toUpperCase() + key.slice(1)}
+              </SelectItem>
               {options.map((opt) => (
-                <SelectItem key={opt} value={opt} className="px-3 py-2 text-red-700 text-sm hover:bg-red-50 rounded-md">
+                <SelectItem key={opt} value={opt} style={{ color: theme.primary }}>
                   {opt.charAt(0).toUpperCase() + opt.slice(1)}
                 </SelectItem>
               ))}

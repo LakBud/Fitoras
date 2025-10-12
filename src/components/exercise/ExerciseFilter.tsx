@@ -17,9 +17,10 @@ const ExerciseFilter = () => {
     if (exercises.length) setAllExercises(exercises);
   }, [exercises, setAllExercises]);
 
+  // Map "__all__" to empty string internally
   const handleChange = useCallback(
     (key: keyof typeof filters, value: string) => {
-      setFilters({ [key]: value });
+      setFilters({ [key]: value === "__all__" ? "" : value });
     },
     [setFilters]
   );
@@ -78,7 +79,7 @@ const ExerciseFilter = () => {
                 {icon}
               </div>
 
-              <Select value={filters[key]} onValueChange={(value) => handleChange(key, value)}>
+              <Select value={filters[key] || "__all__"} onValueChange={(value) => handleChange(key, value)}>
                 <SelectTrigger
                   id={`filter-${key}`}
                   name={key}
@@ -87,6 +88,8 @@ const ExerciseFilter = () => {
                   <SelectValue placeholder={key.charAt(0).toUpperCase() + key.slice(1)} />
                 </SelectTrigger>
                 <SelectContent>
+                  {/* Default: category name */}
+                  <SelectItem value="__all__">{key.charAt(0).toUpperCase() + key.slice(1)}</SelectItem>
                   {options.map((opt) => (
                     <SelectItem key={opt} value={opt}>
                       {opt.charAt(0).toUpperCase() + opt.slice(1)}
@@ -164,11 +167,12 @@ const ExerciseFilter = () => {
               <div className="absolute left-2 top-1/2 -translate-y-1/2 text-red-600 text-lg" aria-hidden="true">
                 {icon}
               </div>
-              <Select value={filters[key]} onValueChange={(value) => handleChange(key, value)}>
+              <Select value={filters[key] || "__all__"} onValueChange={(value) => handleChange(key, value)}>
                 <SelectTrigger className="pl-8 pr-3 py-2 w-full border border-red-400 rounded-full bg-red-50 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200">
                   <SelectValue placeholder={key.charAt(0).toUpperCase() + key.slice(1)} />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="__all__">{key.charAt(0).toUpperCase() + key.slice(1)}</SelectItem>
                   {options.map((opt) => (
                     <SelectItem key={opt} value={opt}>
                       {opt.charAt(0).toUpperCase() + opt.slice(1)}

@@ -13,12 +13,12 @@ const SplitFilter = () => {
   const { name, categoryId, setName, setCategoryId, resetFilters } = useSplitFilterStore();
   const categories = useCurrentCategories((state) => state.categories);
 
-  const handleChange = (key: "name" | "categoryId", value: string) => {
+  const handleChange = (key: "name" | "category", value: string) => {
     if (key === "name") setName(value);
-    else setCategoryId(value);
+    else setCategoryId(value === "__all__" ? "" : value);
   };
 
-  const filterOptions = useMemo(() => [["categoryId", categories.map((c) => c.name), <FiLayers />] as const], [categories]);
+  const filterOptions = useMemo(() => [["category", categories.map((c) => c.name), <FiLayers />] as const], [categories]);
 
   // --- Desktop ---
   if (isDesktop) {
@@ -56,19 +56,19 @@ const SplitFilter = () => {
                 {icon}
               </div>
 
-              <Select value={categoryId} onValueChange={(value) => handleChange("categoryId", value)}>
+              <Select value={categoryId || "__all__"} onValueChange={(value) => handleChange("category", value)}>
                 <SelectTrigger
                   id={`filter-${key}`}
                   name={key}
                   className="pl-10 pr-3 py-2 w-full border border-red-400 rounded-full bg-red-50/80 shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 text-sm transition-all duration-200 hover:bg-red-100"
                 >
-                  <SelectValue placeholder="Category" />
+                  <SelectValue placeholder={key.charAt(0).toUpperCase() + key.slice(1)} />
                 </SelectTrigger>
-
-                <SelectContent className="bg-white rounded-lg shadow-md border border-red-200 mt-1">
+                <SelectContent>
+                  <SelectItem value="__all__">{key.charAt(0).toUpperCase() + key.slice(1)}</SelectItem>
                   {options.map((opt) => (
-                    <SelectItem key={opt} value={opt} className="px-3 py-2 text-red-700 text-sm hover:bg-red-50 rounded-md">
-                      {opt}
+                    <SelectItem key={opt} value={opt}>
+                      {opt.charAt(0).toUpperCase() + opt.slice(1)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -141,14 +141,15 @@ const SplitFilter = () => {
               <div className="absolute left-2 top-1/2 -translate-y-1/2 text-red-600 text-lg" aria-hidden="true">
                 {icon}
               </div>
-              <Select value={categoryId} onValueChange={(value) => handleChange("categoryId", value)}>
+              <Select value={categoryId || "__all__"} onValueChange={(value) => handleChange("category", value)}>
                 <SelectTrigger className="pl-8 pr-3 py-2 w-full border border-red-400 rounded-full bg-red-50 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200">
-                  <SelectValue placeholder="Category" />
+                  <SelectValue placeholder={key.charAt(0).toUpperCase() + key.slice(1)} />
                 </SelectTrigger>
-                <SelectContent className="bg-white rounded-lg shadow-md border border-red-200 mt-1">
+                <SelectContent>
+                  <SelectItem value="__all__">{key.charAt(0).toUpperCase() + key.slice(1)}</SelectItem>
                   {options.map((opt) => (
-                    <SelectItem key={opt} value={opt} className="px-3 py-2 text-red-700 text-sm hover:bg-red-50 rounded-md">
-                      {opt}
+                    <SelectItem key={opt} value={opt}>
+                      {opt.charAt(0).toUpperCase() + opt.slice(1)}
                     </SelectItem>
                   ))}
                 </SelectContent>
