@@ -42,9 +42,6 @@ export const ControlExerciseFilter = () => {
     [exercises]
   );
 
-  const inputBaseClasses =
-    "pl-10 pr-10 py-2 w-full border rounded-full shadow-sm focus:outline-none focus:ring-2 transition-all duration-200 text-sm";
-
   return (
     <div
       className="top-[60px] mb-5 z-50 flex overflow-x-auto gap-3 items-center px-3 py-2 border-b shadow-sm transition-all duration-300"
@@ -67,19 +64,19 @@ export const ControlExerciseFilter = () => {
           placeholder="Search"
           value={filters.name}
           onChange={(e) => handleChange("name", e.target.value)}
-          className={inputBaseClasses}
+          className="pl-10 pr-10 py-2 w-full border rounded-full shadow-sm focus:outline-none focus:ring-2 transition-all duration-200 text-sm  [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-cancel-button]:hidden [&::-moz-search-clear-button]:hidden [&::-ms-clear]:hidden"
           style={{ borderColor: theme.translucentStrong, color: theme.dark, backgroundColor: "#fff" }}
         />
         <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: theme.primary }} />
         {filters.name && (
-          <Button
+          <button
             type="button"
             onClick={() => handleChange("name", "")}
             className="absolute right-3 top-1/2 -translate-y-1/2 hover:text-red-500 transition-colors duration-200"
             style={{ color: theme.dark }}
           >
             <FiX className="text-lg" />
-          </Button>
+          </button>
         )}
       </div>
 
