@@ -138,7 +138,7 @@ const SplitControlPage = () => {
             <Layers className="w-4 h-5" style={{ color: theme.primary }} />
           </div>
           <h3 className="font-bold text-sm sm:text-base" style={{ color: theme.dark }}>
-            Categories
+            Exercise Categories
           </h3>
         </div>
         <div className="overflow-x-auto -mx-2 px-3 sm:-mx-5 sm:px-5 pb-2 scrollbar-thin">

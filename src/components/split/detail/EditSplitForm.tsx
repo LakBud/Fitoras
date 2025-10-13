@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import CategoryDeleteButton from "./CategoryDeleteButton";
 import { useCurrentSplitStore } from "@/stores/splits/useCurrentSplitStore";
+import { Label } from "@radix-ui/react-label";
+import { Input } from "@/components/ui/input";
 
 interface EditSplitFormProps {
   splitToEdit: {
@@ -30,9 +32,12 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
   const updateSplit = useSplitsStore((state) => state.updateSplit);
   const categories = useCurrentCategories((state: UseCurrentCategoriesType) => state.categories);
   const addCategory = useCurrentCategories((state: UseCurrentCategoriesType) => state.addCategory);
+  const updateCategory = useCurrentCategories((state: UseCurrentCategoriesType) => state.updateCategory);
   const { currentSplit } = useCurrentSplitStore();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [editingCategoryColor, setEditingCategoryColor] = useState<string>("");
+  const [originalCategoryColor, setOriginalCategoryColor] = useState<string>("");
 
   const {
     register,
@@ -47,17 +52,12 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
 
   // Dynamically determine the color based on current form selection
   const currentColor = useMemo(() => {
-    if (watchCategoryId === "new" && watchNewCategoryColor) {
-      return watchNewCategoryColor;
-    } else if (watchCategoryId === "") {
-      // No category selected - return gray
-      return "#6B7280"; // or undefined to use default gray theme
-    } else if (watchCategoryId) {
-      const selectedCategory = categories.find((c) => c.id === watchCategoryId);
-      return selectedCategory?.color;
-    }
-    return splitToEdit.category?.color || "#6B7280";
-  }, [watchCategoryId, watchNewCategoryColor, categories, splitToEdit.category?.color]);
+    if (watchCategoryId === "new") return watchNewCategoryColor || "#6B7280";
+    if (!watchCategoryId) return "#6B7280";
+    return (
+      editingCategoryColor || categories.find((c) => c.id === watchCategoryId)?.color || splitToEdit.category?.color || "#6B7280"
+    );
+  }, [watchCategoryId, watchNewCategoryColor, categories, splitToEdit.category?.color, editingCategoryColor]);
 
   const originalTheme = useThemeColor(currentSplit?.category?.color);
   const theme = useThemeColor(currentColor);
@@ -68,19 +68,57 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
     setValue("categoryId", splitToEdit.category?.id || "");
   }, [splitToEdit, setValue]);
 
+  // Update editingCategoryColor when category changes
+  useEffect(() => {
+    if (watchCategoryId && watchCategoryId !== "new") {
+      const selectedCategory = categories.find((c) => c.id === watchCategoryId);
+      if (selectedCategory) {
+        setEditingCategoryColor(selectedCategory.color);
+        setOriginalCategoryColor(selectedCategory.color);
+      }
+    }
+  }, [watchCategoryId, categories]);
+
+  const handleCategoryColorChange = (newColor: string) => {
+    setEditingCategoryColor(newColor);
+  };
+
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    let category: Category | undefined;
+    let category: Category | null | undefined;
 
     if (watchCategoryId === "new" && data.newCategoryName && data.newCategoryColor) {
       category = addCategory({ name: data.newCategoryName, color: data.newCategoryColor });
     } else if (data.categoryId) {
       category = categories.find((c) => c.id === data.categoryId);
-    }
 
+      // If the category color was changed, update it
+      if (category && editingCategoryColor !== originalCategoryColor) {
+        updateCategory(category.id, { color: editingCategoryColor });
+
+        // Update all splits that use this category
+        const splits = useSplitsStore.getState().splits;
+        const updateSplitFn = useSplitsStore.getState().updateSplit;
+
+        if (!category) return;
+
+        splits.forEach((split) => {
+          if (!category) return;
+          const cat = split.category;
+          if (cat && cat.id === category.id) {
+            updateSplitFn(split.id, {
+              category: { ...cat, color: editingCategoryColor },
+            });
+          }
+        });
+
+        // Update the category object to reflect the new color
+        category = { ...category, color: editingCategoryColor };
+      }
+    }
     updateSplit(splitToEdit.id, {
       name: data.name.trim(),
       description: data.description?.trim() || undefined,
-      category,
+      ...(category && { category }),
     });
 
     reset();
@@ -90,6 +128,8 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
   const handleCategoryDeleted = () => {
     // Reset form selection to None if the selected category is deleted
     setValue("categoryId", "");
+    setEditingCategoryColor("");
+    setOriginalCategoryColor("");
   };
 
   return (
@@ -113,9 +153,9 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Name */}
             <div className="flex flex-col space-y-1">
-              <label className="text-sm font-semibold break-words" style={{ color: theme.darker }}>
+              <Label className="text-sm font-semibold break-words" style={{ color: theme.darker }}>
                 Split Name
-              </label>
+              </Label>
               <input
                 {...register("name", { required: true })}
                 placeholder="e.g. Push/Pull/Legs"
@@ -127,9 +167,9 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
 
             {/* Description */}
             <div className="flex flex-col space-y-1">
-              <label className="text-sm font-semibold break-words" style={{ color: theme.darker }}>
+              <Label className="text-sm font-semibold break-words" style={{ color: theme.darker }}>
                 Description <span className="text-gray-400">(Optional)</span>
-              </label>
+              </Label>
               <textarea
                 {...register("description")}
                 placeholder="Optional description..."
@@ -141,9 +181,9 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
 
             {/* Category */}
             <div className="flex flex-col space-y-2">
-              <label className="text-sm font-semibold break-words" style={{ color: theme.darker }}>
+              <Label className="text-sm font-semibold break-words" style={{ color: theme.darker }}>
                 Category <span className="text-gray-400">(Optional)</span>
-              </label>
+              </Label>
 
               <select
                 {...register("categoryId")}
@@ -159,6 +199,50 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
                 <option value="new">+ Add New</option>
               </select>
 
+              {/* Existing Category - Editable Color */}
+              {watchCategoryId && watchCategoryId !== "new" && watchCategoryId !== "" && (
+                <div
+                  className="mt-3 flex flex-col gap-2 p-4 rounded-xl border"
+                  style={{ borderColor: theme.translucentStrong, backgroundColor: theme.translucent }}
+                >
+                  <span className="text-sm font-semibold" style={{ color: theme.darker }}>
+                    Category Color
+                  </span>
+                  <p className="text-xs" style={{ color: theme.dark }}>
+                    Changes apply to all splits using this category
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-14 h-14 rounded-xl border shadow-sm flex-shrink-0"
+                      style={{
+                        backgroundColor: editingCategoryColor || "#6B7280",
+                        borderColor: theme.translucentStrong,
+                      }}
+                    />
+                    <Input
+                      type="color"
+                      value={editingCategoryColor}
+                      onChange={(e) => handleCategoryColorChange(e.target.value)}
+                      className="appearance-none w-18 h-14 rounded-xl border cursor-pointer transition-transform transform hover:scale-110 focus:scale-110"
+                      style={{ borderColor: theme.translucentStrong }}
+                    />
+                    <span className="text-sm font-mono" style={{ color: theme.dark }}>
+                      {editingCategoryColor}
+                    </span>
+                  </div>
+
+                  {/* Delete Selected Category */}
+                  {watchCategoryId && watchCategoryId !== "new" && (
+                    <CategoryDeleteButton
+                      category={categories.find((c) => c.id === watchCategoryId)}
+                      onDeleted={handleCategoryDeleted}
+                      editingColor={editingCategoryColor}
+                    />
+                  )}
+                </div>
+              )}
+
+              {/* New Category */}
               {watchCategoryId === "new" && (
                 <div className="mt-2 flex flex-col sm:flex-row gap-3">
                   <input
@@ -174,14 +258,6 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
                     className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl cursor-pointer"
                   />
                 </div>
-              )}
-
-              {/* Delete Selected Category */}
-              {watchCategoryId && watchCategoryId !== "new" && (
-                <CategoryDeleteButton
-                  category={categories.find((c) => c.id === watchCategoryId)}
-                  onDeleted={handleCategoryDeleted}
-                />
               )}
             </div>
 

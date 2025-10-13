@@ -1,4 +1,3 @@
-// hooks/useInitializeStores.ts
 import { useEffect } from "react";
 import { useExerciseStore } from "@/stores/exercises/useExerciseStore";
 import { useSplitsStore } from "@/stores/splits/useSplitStore";

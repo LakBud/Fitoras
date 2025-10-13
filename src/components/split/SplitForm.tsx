@@ -5,6 +5,8 @@ import { useSplitsStore } from "../../stores/splits/useSplitStore";
 import { useCurrentCategories, type UseCurrentCategoriesType, type Category } from "../../stores/splits/useCurrentCategories";
 import type { Weekday, WorkoutDay } from "../../types/splits";
 import { useEffect } from "react";
+import { Label } from "@radix-ui/react-label";
+import { Button } from "../ui/button";
 
 const allWeekdays: Weekday[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
@@ -91,23 +93,23 @@ const SplitForm = ({ onClose }: SplitFormProps) => {
       transition={{ type: "spring", stiffness: 250, damping: 25 }}
     >
       {/* Close Button */}
-      <button
+      <Button
         type="button"
         onClick={onClose}
-        className="absolute top-3 right-3 text-2xl font-bold text-rose-400 hover:text-rose-600 transition sm:top-4 sm:right-4"
+        className="absolute top-3 right-3 text-2xl font-bold text-rose-400 hover:text-rose-600 transition sm:top-4 sm:right-4 bg-white"
         aria-label="Close form"
       >
         &times;
-      </button>
+      </Button>
 
       {/* Heading */}
       <h2 className="text-3xl sm:text-3xl font-extrabold text-center pt-2 pb-1 text-rose-500">Create New Split</h2>
 
       {/* Split Name */}
       <div className="space-y-1">
-        <label htmlFor="name" className="block text-sm font-semibold text-rose-600">
+        <Label htmlFor="name" className="block text-sm font-semibold text-rose-600">
           Split Name
-        </label>
+        </Label>
         <input
           id="name"
           type="text"
@@ -124,9 +126,9 @@ const SplitForm = ({ onClose }: SplitFormProps) => {
 
       {/* Description */}
       <div className="space-y-1">
-        <label htmlFor="description" className="block text-sm font-semibold text-rose-600">
+        <Label htmlFor="description" className="block text-sm font-semibold text-rose-600">
           Description <span className="text-gray-400">(Optional)</span>
-        </label>
+        </Label>
         <textarea
           id="description"
           {...register("description")}
@@ -206,12 +208,12 @@ const SplitForm = ({ onClose }: SplitFormProps) => {
       </div>
 
       {/* Submit Button */}
-      <button
+      <Button
         type="submit"
-        className="w-full py-3 font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all text-base sm:text-lg bg-gradient-to-r from-rose-500 to-rose-600 text-white mt-2"
+        className="w-full py-6 font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all text-base sm:text-lg bg-gradient-to-r from-rose-500 to-rose-600 text-white mt-2"
       >
-        Create Split
-      </button>
+        Create
+      </Button>
     </motion.form>
   );
 };

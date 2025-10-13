@@ -19,9 +19,10 @@ import type { Category } from "@/stores/splits/useCurrentCategories";
 interface CategoryDeleteButtonProps {
   category: Category | undefined;
   onDeleted?: () => void;
+  editingColor?: string; // <-- add this
 }
 
-const CategoryDeleteButton = ({ category, onDeleted }: CategoryDeleteButtonProps) => {
+const CategoryDeleteButton = ({ category, onDeleted, editingColor }: CategoryDeleteButtonProps) => {
   if (!category) return null;
 
   const removeCategory = useCurrentCategories((state) => state.removeCategory);
@@ -48,7 +49,14 @@ const CategoryDeleteButton = ({ category, onDeleted }: CategoryDeleteButtonProps
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive" className="flex items-center gap-2" style={{ backgroundColor: theme.darker }}>
+        <Button
+          variant="destructive"
+          className="flex items-center gap-2"
+          style={{
+            backgroundColor: editingColor || category.color || "#6B7280",
+            borderColor: theme.translucentStrong,
+          }}
+        >
           <BsTrash className="text-lg" /> Delete
         </Button>
       </AlertDialogTrigger>
