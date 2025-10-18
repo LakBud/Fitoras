@@ -3,7 +3,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { FiMove } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import type { Category } from "@/stores/splits/useCurrentCategories";
+import type { Category } from "@/stores/splitControl/useCurrentCategories";
 
 interface SplitItemProps {
   id: string;
