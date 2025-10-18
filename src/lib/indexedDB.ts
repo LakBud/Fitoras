@@ -1,4 +1,3 @@
-// lib/indexedDB.ts
 const DB_NAME = "fitorasDB";
 const DB_VERSION = 2; // Increment version to trigger upgrade
 

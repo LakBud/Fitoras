@@ -4,14 +4,15 @@ import DesktopCategorySection from "./DesktopCategorySection";
 import { useState } from "react";
 import type { Split, SplitExercise, WorkoutCategory, WorkoutDay } from "@/types/splits";
 import type { Theme } from "@/types/theme";
+import type { Exercises } from "@/types/exercise";
 
 interface DesktopSplitTableProps {
   currentSplit: Split;
-  allExercises: SplitExercise[];
+  getExerciseById: (id: string) => Exercises | undefined;
   theme: Theme;
 }
 
-const DesktopSplitTable = ({ currentSplit, allExercises, theme }: DesktopSplitTableProps) => {
+const DesktopSplitTable = ({ currentSplit, getExerciseById, theme }: DesktopSplitTableProps) => {
   const [collapsedCategories, setCollapsedCategories] = useState<Record<string, boolean>>({});
 
   const toggleCategory = (dayId: string, categoryId: string) => {
@@ -23,8 +24,6 @@ const DesktopSplitTable = ({ currentSplit, allExercises, theme }: DesktopSplitTa
     const key = `${dayId}-${categoryId}`;
     return collapsedCategories[key] ?? false;
   };
-
-  const getExerciseById = (id: string) => allExercises.find((ex) => ex.id === id);
 
   return (
     <div className="w-full overflow-x-auto">

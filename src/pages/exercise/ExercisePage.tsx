@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { ExerciseList } from "../../components/exercise/list/ExerciseList";
+import { ExerciseList } from "../../components/exercise/ExerciseList";
 import { useExerciseStore } from "../../stores/exercises/useExerciseStore";
 import { useExerciseFilterStore } from "../../stores/exercises/useExerciseFilterStore";
 import { useScrollStore } from "../../stores/exercises/useExerciseScrollState";

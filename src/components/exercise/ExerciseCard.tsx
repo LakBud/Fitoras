@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import type { Exercises } from "../../../types/exercise";
+import type { Exercises } from "@/types/exercise";
 
 interface ExerciseCardProps {
   exercise: Exercises;

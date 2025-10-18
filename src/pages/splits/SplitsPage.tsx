@@ -5,6 +5,8 @@ import ScrollTopButton from "../../components/common/ScrollTopButton";
 import useBreakpoint from "../../hooks/ui/useBreakpoint";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { PlusCircleIcon } from "lucide-react";
+import { motion } from "framer-motion";
 
 const SplitsPage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -58,14 +60,19 @@ const SplitsPage = () => {
           <Button
             onClick={() => setIsModalOpen(true)}
             aria-label="Add new split"
-            className={[
-              "relative flex items-center justify-center",
-              "rounded-2xl w-14 h-14 sm:w-16 sm:h-16",
-              "bg-red-600 text-white text-3xl font-bold",
-              "shadow-lg hover:shadow-xl hover:bg-red-500 transition-all",
-            ].join(" ")}
+            className="relative flex items-center justify-center
+             rounded-2xl w-14 h-14 sm:w-16 sm:h-16
+             bg-red-600 text-white font-bold
+             shadow-lg hover:shadow-xl hover:bg-red-700 transition-all"
           >
-            +
+            <motion.div
+              initial={{ scale: 1.45 }}
+              whileHover={{ scale: 1.25 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
+              <PlusCircleIcon className="w-8 h-8 sm:w-10 sm:h-10" />
+            </motion.div>
           </Button>
         </div>
 

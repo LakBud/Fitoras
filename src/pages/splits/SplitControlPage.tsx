@@ -8,10 +8,10 @@ import useBreakpoint from "../../hooks/ui/useBreakpoint";
 import { Layers, ListChecks, Filter, Calendar } from "lucide-react";
 
 import NavigateBackButton from "../../components/common/NavigateBackButton";
-import ControlDayTabs from "@/components/splitControl/category/ControlDayTabs";
-import ControlCategoryTab from "@/components/splitControl/category/ControlCategoryTab";
-import ControlSelectedExercises from "@/components/splitControl/exercise/ControlSelectedExercises";
-import ControlExerciseList from "@/components/splitControl/exercise/ControlExerciseList";
+import ControlDayTabs from "@/components/splitControl/category/tabs/ControlDayTabs";
+import ControlCategoryTab from "@/components/splitControl/category/tabs/ControlCategoryTab";
+import ControlSelectedExercises from "@/components/splitControl/exercise/lists/ControlSelectedExerciseList";
+import ControlExerciseList from "@/components/splitControl/exercise/lists/ControlExerciseList";
 import ControlExerciseFilter from "@/components/filters/splitDetail/ControlExerciseFilter";
 import { useCategoryControl } from "../../hooks/splitControl/useCategoryControl";
 import CollapsiblePanel from "@/components/ui/collapsiblePanel";

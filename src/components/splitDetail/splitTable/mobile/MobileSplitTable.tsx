@@ -6,18 +6,17 @@ import MobileCategoryExercise from "./MobileCategoryExercise";
 
 import type { Split, SplitExercise, WorkoutCategory, WorkoutDay } from "@/types/splits";
 import type { useThemeColor } from "@/hooks/ui/useThemeColor";
+import type { Exercises } from "@/types/exercise";
 
 interface MobileSplitTableProps {
   currentSplit: Split;
-  allExercises: SplitExercise[];
+  getExerciseById: (id: string) => Exercises | undefined;
   theme: ReturnType<typeof useThemeColor>;
 }
 
 // ---------------- Component ----------------
-const MobileSplitTable = ({ currentSplit, allExercises, theme }: MobileSplitTableProps) => {
+const MobileSplitTable = ({ currentSplit, getExerciseById, theme }: MobileSplitTableProps) => {
   const [expandedDays, setExpandedDays] = useState<string[]>(() => currentSplit.days.map((day) => day.day) || []);
-
-  const getExerciseById = (id: string) => allExercises.find((ex) => ex.id === id);
 
   const toggleDay = (day: string) => {
     setExpandedDays((prev) => (prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]));

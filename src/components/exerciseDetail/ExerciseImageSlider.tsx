@@ -1,7 +1,7 @@
 import { memo, useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useImageSlider } from "@/hooks/exercise/useImageSlider";
-import { slideVariants, getSliderMaxHeight, sliderTransitionConfig } from "@/lib/sliderHelpers";
+import { slideVariants, getSliderMaxHeight, sliderTransitionConfig } from "@/lib/exerciseDetail/sliderHelpers";
 interface ImageSliderProps {
   images: string[];
   exerciseName: string;

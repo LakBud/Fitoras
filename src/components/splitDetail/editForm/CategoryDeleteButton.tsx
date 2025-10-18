@@ -28,7 +28,6 @@ const CategoryDeleteButton = ({ category, onDeleted, editingColor }: CategoryDel
   const removeCategory = useCurrentCategories((state) => state.removeCategory);
   const { splits, updateSplit } = useSplitsStore();
 
-  // This will react to category.color changes
   const theme = useThemeColor(category.color ?? "#888");
 
   const handleDelete = () => {

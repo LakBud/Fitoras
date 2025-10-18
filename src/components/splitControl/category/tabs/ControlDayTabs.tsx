@@ -11,9 +11,7 @@ const ControlDayTabs = () => {
   return (
     <div className="w-full">
       <div
-        className={`
-          flex gap-3 relative overflow-x-auto pb-2 scroll-pl-2 snap-x
-        `}
+        className="flex gap-3 relative overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide"
         style={{ WebkitOverflowScrolling: "touch" }}
       >
         <LayoutGroup>
@@ -24,24 +22,24 @@ const ControlDayTabs = () => {
               <motion.button
                 key={dayObj.day}
                 layout
-                onClick={() => {
+                onClick={(e) => {
                   setSelectedDay?.(dayObj.day);
                   setSelectedCategoryId?.(null);
+                  // Auto-center into view for better UX on mobile
+                  e.currentTarget.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
                 }}
+                whileTap={{ scale: 0.95, opacity: 0.9 }}
+                animate={{
+                  color: isActive ? "#ffffff" : "rgba(255,255,255,0.7)",
+                  backgroundColor: isActive ? theme.primary : theme.translucentStrong,
+                }}
+                transition={{ duration: 0.18 }}
                 className={`
                   relative flex-shrink-0 rounded-full font-semibold whitespace-nowrap
-                  px-5 py-2 snap-start
-                  transition-all duration-200
-                  ${isActive ? "text-white" : "text-gray-100 hover:text-white"}
+                  px-6 py-3 snap-start
+                  backdrop-blur-md
+                  transition-all
                 `}
-                style={{
-                  backgroundColor: isActive ? theme.primary : theme.translucentStrong,
-                  backdropFilter: "blur(8px)",
-                }}
-                whileTap={{ scale: 0.97 }}
-                whileHover={{
-                  backgroundColor: isActive ? theme.primary : theme.translucentStrong,
-                }}
               >
                 {dayObj.day}
 

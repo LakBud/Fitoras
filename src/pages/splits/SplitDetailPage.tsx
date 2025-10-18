@@ -8,7 +8,7 @@ import NavigateBackButton from "../../components/common/NavigateBackButton";
 import { BsFillGearFill } from "react-icons/bs";
 import { useThemeColor } from "../../hooks/ui/useThemeColor";
 import SplitDeleteButton from "@/components/splitDetail/SplitDeleteButton";
-import EditSplitForm from "@/components/splitDetail/EditSplitForm";
+import EditSplitForm from "@/components/splitDetail/editForm/EditSplitForm";
 import { Button } from "@/components/ui/button";
 
 const SplitDetailPage = () => {

@@ -44,7 +44,7 @@ export const SplitForm = ({ onClose }: Props) => {
         <Textarea
           {...register("description")}
           placeholder="Optional description..."
-          className="w-full rounded-xl border border-rose-300 focus:ring-rose-200 focus:border-rose-500 text-base min-h-[80px] max-h-40 resize-y break-all"
+          className="w-full rounded-xl border border-rose-300 focus:ring-rose-200 focus:border-rose-500 text-base min-h-[120px] max-h-40 resize-y break-all"
         />
       </div>
 

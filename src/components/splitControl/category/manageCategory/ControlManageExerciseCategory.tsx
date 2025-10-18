@@ -9,6 +9,7 @@ import CategoryRow from "./CategoryRow";
 import CategoryList from "./CategoryList";
 import CategoryEditForm from "./CategoryEditForm";
 import { type Theme } from "@/types/theme";
+import { Plus } from "lucide-react";
 
 const ControlAddCategory = () => {
   const {
@@ -48,7 +49,7 @@ const ControlAddCategory = () => {
         className="px-4 py-2 font-medium text-sm rounded-t-lg transition-all whitespace-nowrap border-b-2 border-transparent hover:border-b-2 hover:border-gray-300"
         style={{ color: theme.dark }}
       >
-        + Add
+        <Plus />
       </motion.button>
 
       <AnimatePresence>
