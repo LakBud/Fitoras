@@ -1,24 +1,25 @@
-import ExerciseFilter from "@/components/filter/exercise/ExerciseFilter";
-import SplitFilter from "@/components/filter/split/SplitFilter";
-import { GiPowerLightning, GiWeightLiftingUp } from "react-icons/gi";
+import ExerciseFilter from "@/components/filters/exercise/ExerciseFilter";
+import SplitFilter from "@/components/filters/split/SplitFilter";
+import { GiPowerLightning } from "react-icons/gi";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useScrollDirection } from "@/hooks/ui/useScrollDirection";
-import { FiHome } from "react-icons/fi";
-import { BsCalendar2Check, BsSignpostSplit } from "react-icons/bs";
 
-const DesktopNavBar = () => {
+type Link = {
+  to: string;
+  label: string;
+  icon: React.ReactNode;
+};
+
+type DesktopNavBarProps = {
+  links: Link[];
+};
+
+const DesktopNavBar = ({ links }: DesktopNavBarProps) => {
   const location = useLocation();
   const isExercisePage = location.pathname === "/exercise";
   const isSplitPage = location.pathname === "/splits";
   const scrollUp = useScrollDirection();
-
-  const links = [
-    { to: "/", label: "Home", icon: <FiHome size={22} aria-hidden="true" /> },
-    { to: "/splits", label: "Splits", icon: <BsSignpostSplit size={22} aria-hidden="true" /> },
-    { to: "/calendar", label: "Calendar", icon: <BsCalendar2Check size={22} aria-hidden="true" /> },
-    { to: "/exercise", label: "Exercises", icon: <GiWeightLiftingUp size={22} aria-hidden="true" /> },
-  ];
 
   return (
     <div>

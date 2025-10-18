@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
 import { Button } from "../../ui/button";
-import { Label } from "@radix-ui/react-label";
+import { Label } from "@/components/ui/label";
 import { SplitCategorySelect } from "./SplitCategorySelect";
 import { useSplitForm } from "@/hooks/split/useSplitForm";
+import { Input } from "@/components/ui/input";
 
 interface Props {
   onClose: () => void;
@@ -18,6 +19,7 @@ export const SplitForm = ({ onClose }: Props) => {
   return (
     <motion.form
       onSubmit={onSubmit}
+      onClick={(e) => e.stopPropagation()}
       className="relative flex flex-col max-h-[90vh] w-full max-w-md mx-auto overflow-y-auto px-4 sm:px-6 py-6 space-y-6 bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-rose-200"
       initial={{ y: 40, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
@@ -37,11 +39,11 @@ export const SplitForm = ({ onClose }: Props) => {
         <Label htmlFor="name" className="block text-sm font-semibold text-rose-600">
           Split Name
         </Label>
-        <input
+        <Input
           id="name"
           {...register("name", { required: true })}
           placeholder="e.g. Push/Pull/Legs"
-          className={`mt-1 w-full px-4 py-3 rounded-xl shadow-sm focus:outline-none transition text-base text-gray-800 ${
+          className={`mt-1 w-full px-4 py-6 rounded-xl shadow-sm focus:outline-none transition text-3xl text-gray-800 ${
             errors.name
               ? "border-red-600 ring-red-200 border focus:ring-2"
               : "border border-rose-300 focus:ring-2 focus:ring-rose-200 focus:border-rose-500"

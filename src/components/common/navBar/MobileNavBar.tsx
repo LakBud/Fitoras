@@ -1,24 +1,24 @@
 import { useScrollDirection } from "@/hooks/ui/useScrollDirection";
-import { BsCalendar2Check, BsSignpostSplit } from "react-icons/bs";
-import { FiHome } from "react-icons/fi";
-import { GiWeightLiftingUp } from "react-icons/gi";
 import { NavLink, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import ExerciseFilter from "@/components/filter/exercise/ExerciseFilter";
-import SplitFilter from "@/components/filter/split/SplitFilter";
+import ExerciseFilter from "@/components/filters/exercise/ExerciseFilter";
+import SplitFilter from "@/components/filters/split/SplitFilter";
 
-const MobileNavBar = () => {
+type Link = {
+  to: string;
+  label: string;
+  icon: React.ReactNode;
+};
+
+type MobileNavBarProps = {
+  links: Link[];
+};
+
+const MobileNavBar = ({ links }: MobileNavBarProps) => {
   const location = useLocation();
   const isExercisePage = location.pathname === "/exercise";
   const isSplitPage = location.pathname === "/splits";
   const scrollUp = useScrollDirection();
-
-  const links = [
-    { to: "/", label: "Home", icon: <FiHome size={22} aria-hidden="true" /> },
-    { to: "/splits", label: "Splits", icon: <BsSignpostSplit size={22} aria-hidden="true" /> },
-    { to: "/calendar", label: "Calendar", icon: <BsCalendar2Check size={22} aria-hidden="true" /> },
-    { to: "/exercise", label: "Exercises", icon: <GiWeightLiftingUp size={22} aria-hidden="true" /> },
-  ];
 
   return (
     <div>
@@ -33,7 +33,12 @@ const MobileNavBar = () => {
         </motion.div>
       )}
       {isSplitPage && (
-        <motion.div className="sticky top-0 z-50">
+        <motion.div
+          className="fixed top-0 left-0 right-0 z-50"
+          initial={{ y: 0 }}
+          animate={{ y: scrollUp ? 0 : "-100%" }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+        >
           <SplitFilter />
         </motion.div>
       )}

@@ -5,7 +5,7 @@ import { useCalendarStore } from "@/stores/useCalendarStore";
 
 export function useDashboardStats() {
   const splits = useSplitsStore((state) => state.splits);
-  const { completedExercises } = useCalendarStore();
+  const completedExercises = useCalendarStore((s) => s.completedExercises);
 
   return useMemo(() => {
     const totalSplits = splits.length;

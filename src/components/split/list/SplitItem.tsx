@@ -30,7 +30,7 @@ const SplitItem = ({ id, name, description, index, category }: SplitItemProps) =
       animate={{ opacity: 1, y: 0 }}
       whileDrag={{ scale: 1.03 }}
       className="
-    w-full max-w-[80vw] sm:max-w-[350px] md:max-w-[1000px] 
+    w-full max-w-[80vw]  md:max-w-[1000px] 
     mx-auto
     rounded-2xl border border-rose-200 bg-white
     flex flex-row overflow-hidden select-none transition-all

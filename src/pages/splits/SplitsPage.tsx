@@ -30,7 +30,7 @@ const SplitsPage = () => {
         className="relative bg-gradient-to-b from-red-50 via-rose-50 to-rose-100 min-h-screen py-5 pb-20 px-4 sm:px-6 lg:px-12 overflow-auto"
       >
         {/* Page Header */}
-        <header className="flex flex-col items-center mb-8 pt-10 text-center">
+        <header className={`flex flex-col items-center mb-8 text-center ${isDesktop ? "mt-40" : "mt-20"}`}>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-red-700 tracking-tight">Splits</h1>
           <p className="mt-3 text-gray-700 text-sm sm:text-base md:text-lg max-w-2xl leading-relaxed">
             Manage and view your workout splits to keep your fitness journey structured and motivating. Drag your prioritized
@@ -46,18 +46,28 @@ const SplitsPage = () => {
         </main>
 
         {/* Add Split Button */}
-        <Button
-          onClick={() => setIsModalOpen(true)}
-          className={`
-          fixed
-          ${isDesktop ? "bottom-5 right-5 z-50" : ""}
-          ${isMobile ? "bottom-23 right-4 z-50" : ""}
-          bg-red-600 text-white text-2xl p-6 rounded-2xl shadow-xl hover:bg-red-500
-        `}
-          title="Add new split"
+        <div
+          className={["fixed z-50", isDesktop && "bottom-6 right-6", isMobile && "bottom-24 right-5"].filter(Boolean).join(" ")}
         >
-          +
-        </Button>
+          {/* Glow */}
+          <div
+            className="absolute inset-0 rounded-2xl blur-xl opacity-60 animate-pulse
+                  bg-gradient-to-r from-rose-400 via-red-500 to-pink-500"
+          />
+          {/* Actual button */}
+          <Button
+            onClick={() => setIsModalOpen(true)}
+            aria-label="Add new split"
+            className={[
+              "relative flex items-center justify-center",
+              "rounded-2xl w-14 h-14 sm:w-16 sm:h-16",
+              "bg-red-600 text-white text-3xl font-bold",
+              "shadow-lg hover:shadow-xl hover:bg-red-500 transition-all",
+            ].join(" ")}
+          >
+            +
+          </Button>
+        </div>
 
         {/* Modal Overlay */}
         <AnimatePresence>

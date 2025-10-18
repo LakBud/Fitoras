@@ -1,21 +1,17 @@
 import { GiPowerLightning } from "react-icons/gi";
 import { motion } from "framer-motion";
-
-import { useMemo, useEffect } from "react";
-import { useSplitsStore } from "@/stores/split/useSplitStore";
-import { useCalendarStore } from "@/stores/useCalendarStore";
 import { useExerciseStore } from "@/stores/exercises/useExerciseStore";
-import { formatDateKey } from "@/lib/calendar";
 import StatCards from "@/components/home/StatCards";
 import FeatureCards from "@/components/home/FeatureCards";
 import CTAButtons from "@/components/home/CTAButtons";
 import useBreakpoint from "@/hooks/ui/useBreakpoint";
+import { useDashboardStats } from "@/hooks/useDashboardStats";
+import { useEffect } from "react";
 
 const HomePage = () => {
-  const splits = useSplitsStore((state) => state.splits);
-  const { completedExercises } = useCalendarStore();
   const { exercises, fetchExercises } = useExerciseStore();
   const { isMobile } = useBreakpoint();
+  const { currentStreak } = useDashboardStats();
 
   // Fetch exercises on first mount if not loaded
   useEffect(() => {
@@ -24,46 +20,10 @@ const HomePage = () => {
     }
   }, [exercises.length, fetchExercises]);
 
-  // Compute dashboard stats
-  const stats = useMemo(() => {
-    const totalSplits = splits.length;
-
-    // --- Current streak ---
-    let currentStreak = 0;
-    const today = new Date();
-    const checkDate = new Date(today);
-    while (true) {
-      const dateKey = formatDateKey(checkDate);
-      const dayExercises = completedExercises[dateKey];
-      if (dayExercises !== undefined) {
-        currentStreak++;
-        checkDate.setDate(checkDate.getDate() - 1);
-      } else break;
-    }
-
-    // --- Workouts this week ---
-    const now = new Date();
-    const dayOfWeek = now.getDay();
-    const monday = new Date(now);
-    monday.setDate(now.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
-    monday.setHours(0, 0, 0, 0);
-
-    let workoutsThisWeek = 0;
-    for (let i = 0; i < 7; i++) {
-      const date = new Date(monday);
-      date.setDate(monday.getDate() + i);
-      const dateKey = formatDateKey(date);
-      if (completedExercises[dateKey] !== undefined) workoutsThisWeek++;
-    }
-
-    // --- Total workouts ---
-    const totalWorkouts = Object.keys(completedExercises).length;
-
-    return { totalSplits, currentStreak, workoutsThisWeek, totalWorkouts };
-  }, [splits, completedExercises]);
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-rose-100 to-rose-200 flex flex-col">
+    <div
+      className={`min-h-screen bg-gradient-to-br from-rose-50 via-rose-100 to-rose-200 flex flex-col ${isMobile ? "" : "mt-15"}`}
+    >
       {/* Decorative Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <motion.div
@@ -107,8 +67,8 @@ const HomePage = () => {
             transition={{ delay: 0.2 }}
             className="text-red-700 text-lg sm:text-xl font-semibold max-w-3xl mx-auto leading-relaxed"
           >
-            {stats.currentStreak > 0
-              ? `You're on a ${stats.currentStreak}-day streak! Keep it up!`
+            {currentStreak > 0
+              ? `You're on a ${currentStreak}-day streak! Keep it up!`
               : "Ready to crush your fitness goals? Let's get started!"}
           </motion.p>
         </motion.header>
