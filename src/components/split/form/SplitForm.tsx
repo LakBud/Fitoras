@@ -1,9 +1,10 @@
-import { motion } from "framer-motion";
-import { Button } from "../../ui/button";
+import { Button } from "@/components/ui/button";
+import { DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { SplitCategorySelect } from "./SplitCategorySelect";
 import { useSplitForm } from "@/hooks/split/useSplitForm";
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 interface Props {
   onClose: () => void;
@@ -17,61 +18,50 @@ export const SplitForm = ({ onClose }: Props) => {
   } = form;
 
   return (
-    <motion.form
-      onSubmit={onSubmit}
-      onClick={(e) => e.stopPropagation()}
-      className="relative flex flex-col max-h-[90vh] w-full max-w-md mx-auto overflow-y-auto px-4 sm:px-6 py-6 space-y-6 bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-rose-200"
-      initial={{ y: 40, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      exit={{ y: 40, opacity: 0 }}
-      transition={{ type: "spring", stiffness: 250, damping: 25 }}
-    >
-      <Button
-        type="button"
-        onClick={onClose}
-        className="absolute top-3 right-3 text-2xl font-bold text-rose-400 hover:text-rose-600 bg-white"
-      >
-        &times;
-      </Button>
-      <h2 className="text-3xl font-extrabold text-center pt-2 pb-1 text-rose-500">Create New Split</h2>
+    <form onSubmit={onSubmit} className="relative space-y-6">
+      <DialogHeader className="pb-2">
+        <DialogTitle className="text-2xl sm:text-3xl font-extrabold text-rose-500 text-center">Create New Split</DialogTitle>
+      </DialogHeader>
 
-      <div className="space-y-1">
-        <Label htmlFor="name" className="block text-sm font-semibold text-rose-600">
-          Split Name
-        </Label>
+      {/* Name */}
+      <div className="flex flex-col space-y-1">
+        <Label className="text-sm font-semibold text-rose-600">Split Name</Label>
         <Input
-          id="name"
-          {...register("name", { required: true })}
+          {...register("name", { required: "This field is required" })}
           placeholder="e.g. Push/Pull/Legs"
-          className={`mt-1 w-full px-4 py-6 rounded-xl shadow-sm focus:outline-none transition text-3xl text-gray-800 ${
-            errors.name
-              ? "border-red-600 ring-red-200 border focus:ring-2"
-              : "border border-rose-300 focus:ring-2 focus:ring-rose-200 focus:border-rose-500"
+          className={`px-4 py-4 text-lg rounded-xl ${
+            errors.name ? "border-red-600 focus:ring-red-200" : "border-rose-300 focus:ring-rose-200 focus:border-rose-500"
           }`}
         />
+        {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
       </div>
 
-      <div className="space-y-1">
-        <Label htmlFor="description" className="block text-sm font-semibold text-rose-600">
+      <div className="flex flex-col space-y-1">
+        <Label className="text-sm font-semibold text-rose-600">
           Description <span className="text-gray-400">(Optional)</span>
         </Label>
-        <textarea
-          id="description"
+
+        <Textarea
           {...register("description")}
-          rows={3}
-          className="mt-1 w-full px-4 py-3 rounded-xl shadow-sm focus:outline-none transition resize-none text-base text-gray-800 border border-rose-300 focus:ring-2 focus:ring-rose-200 focus:border-rose-500"
           placeholder="Optional description..."
+          className="w-full rounded-xl border border-rose-300 focus:ring-rose-200 focus:border-rose-500 text-base min-h-[80px] max-h-40 resize-y break-all"
         />
       </div>
 
-      <SplitCategorySelect register={register} watchCategoryId={watchCategoryId} categories={categories} />
+      {/* Category & new category fields */}
+      <SplitCategorySelect control={form.control} register={register} watchCategoryId={watchCategoryId} categories={categories} />
 
-      <Button
-        type="submit"
-        className="w-full py-6 font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all text-base sm:text-lg bg-gradient-to-r from-rose-500 to-rose-600 text-white mt-2"
-      >
+      {/* New category validation */}
+      {watchCategoryId === "new" && (
+        <div className="space-y-1 -mt-3">
+          {errors.newCategoryName && <p className="text-xs text-red-500">Category name is required</p>}
+          {errors.newCategoryColor && <p className="text-xs text-red-500">Color is required</p>}
+        </div>
+      )}
+
+      <Button type="submit" className="w-full py-6 font-semibold rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-lg">
         Create
       </Button>
-    </motion.form>
+    </form>
   );
 };

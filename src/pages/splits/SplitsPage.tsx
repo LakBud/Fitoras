@@ -2,9 +2,9 @@ import { useLayoutEffect, useRef, useState } from "react";
 import SplitList from "../../components/split/list/SplitList";
 import { SplitForm } from "@/components/split/form/SplitForm";
 import ScrollTopButton from "../../components/common/ScrollTopButton";
-import { motion, AnimatePresence } from "framer-motion";
 import useBreakpoint from "../../hooks/ui/useBreakpoint";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 const SplitsPage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -70,19 +70,11 @@ const SplitsPage = () => {
         </div>
 
         {/* Modal Overlay */}
-        <AnimatePresence>
-          {isModalOpen && (
-            <motion.div
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsModalOpen(false)}
-            >
-              <SplitForm onClose={() => setIsModalOpen(false)} />
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <DialogContent className="sm:max-w-lg w-full rounded-3xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
+            <SplitForm onClose={() => setIsModalOpen(false)} />
+          </DialogContent>
+        </Dialog>
 
         <ScrollTopButton className="bottom-26 right-3" />
       </div>

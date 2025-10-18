@@ -55,7 +55,7 @@ const SplitDetailPage = () => {
         }}
       >
         {/* Header */}
-        <header className="flex flex-col items-center text-center pt-20 mb-12 mr-10 px-4 justify-center">
+        <header className="w-full flex flex-col items-center justify-center text-center pt-20 mb-12 px-4">
           {/* ================== Title ================== */}
           <motion.h1
             initial={{ opacity: 0, y: -20 }}

@@ -65,7 +65,7 @@ export const ControlExerciseFilter = () => {
       {/* ---------- GROUP 2: Filter Selects ---------- */}
       <div className="flex flex-wrap gap-3">
         {options.map(({ key, values, icon: Icon }) => (
-          <div key={key} className="relative w-40">
+          <div key={key} className="relative w-35">
             <div className="absolute left-2 top-1/2 -translate-y-1/2 text-sm" style={{ color: theme.primary }}>
               <Icon />
             </div>
