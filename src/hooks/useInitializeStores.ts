@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useExerciseStore } from "@/stores/exercises/useExerciseStore";
-import { useSplitsStore } from "@/stores/splits/useSplitStore";
+import { useSplitsStore } from "@/stores/split/useSplitStore";
 import { useCalendarStore } from "@/stores/useCalendarStore";
 import { useThemeStore } from "@/stores/useThemeStore";
 

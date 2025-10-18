@@ -2,7 +2,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useThemeColor } from "../../hooks/ui/useThemeColor";
 import useBreakpoint from "../../hooks/ui/useBreakpoint";
-import { useCurrentSplitStore } from "@/stores/splits/useCurrentSplitStore";
+import { useCurrentSplitStore } from "@/stores/split/useCurrentSplitStore";
 
 type CalendarHeaderProps = {
   currentDate: Date;

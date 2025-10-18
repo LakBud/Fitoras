@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { useThemeColor } from "../../hooks/ui/useThemeColor";
 import useBreakpoint from "../../hooks/ui/useBreakpoint";
-import { useCurrentSplitStore } from "@/stores/splits/useCurrentSplitStore";
+import { useCurrentSplitStore } from "@/stores/split/useCurrentSplitStore";
 
 type Exercise = { id: string; name: string; sets?: number; reps?: number };
 

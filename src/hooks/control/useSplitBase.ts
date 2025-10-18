@@ -1,16 +1,16 @@
 import { useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
-import { useSplitsStore } from "../../stores/splits/useSplitStore";
-import { useFilterStore } from "../../stores/exercises/useFilterStore";
-import { useSplitControlStore } from "../../stores/splits/useSplitControlStore";
-import type { WorkoutDay } from "../../types/splits";
+import { useExerciseFilterStore } from "../../stores/exercises/useExerciseFilterStore";
+import { useSplitControlStore } from "@/stores/splitControl/useSplitControlStore";
+import { useSplitsStore } from "@/stores/split/useSplitStore";
 import { useExerciseStore } from "@/stores/exercises/useExerciseStore";
+import type { WorkoutDay } from "@/types/splits";
 
 export function useSplitBase() {
   const { id } = useParams<{ id: string }>();
   const { exercises, loading } = useExerciseStore();
   const { splits, updateSplit } = useSplitsStore();
-  const { filteredExercises, setAllExercises } = useFilterStore();
+  const { filteredExercises, setAllExercises } = useExerciseFilterStore();
   const { splitId, setSplitId, selectedDay, setSelectedDay } = useSplitControlStore();
 
   const split = useMemo(() => splits.find((s) => s.id === id), [splits, id]);

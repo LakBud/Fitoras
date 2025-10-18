@@ -1,5 +1,5 @@
 import { useState, useRef, useLayoutEffect } from "react";
-import { useSplitsStore } from "../stores/splits/useSplitStore";
+import { useSplitsStore } from "@/stores/split/useSplitStore";
 import { useCalendarStore } from "@/stores/useCalendarStore";
 import type { Weekday } from "../types/splits";
 import { WEEKDAYS, getMonthMetadata, getExercisesForDateFromSplit, formatDateKey, isSameDay } from "../lib/calendar";
@@ -8,7 +8,7 @@ import CalendarGrid from "../components/calendar/CalendarGrid";
 import ScrollTopButton from "../components/common/ScrollTopButton";
 import useBreakpoint from "../hooks/ui/useBreakpoint";
 import { useThemeColor } from "../hooks/ui/useThemeColor";
-import { useCurrentSplitStore } from "@/stores/splits/useCurrentSplitStore";
+import { useCurrentSplitStore } from "@/stores/split/useCurrentSplitStore";
 import CalendarChecklist from "@/components/calendar/CalendarChecklist";
 import { FiInfo } from "react-icons/fi";
 

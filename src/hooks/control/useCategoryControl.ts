@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
-import { useSplitControlStore } from "../../stores/splits/useSplitControlStore";
+import { useSplitControlStore } from "@/stores/splitControl/useSplitControlStore";
 import type { WorkoutCategory } from "../../types/splits";
-import { useSplitBase } from "./useSplitBase";
+import { useSplitBase } from "../splitControl/useSplitBase";
 
 export function useCategoryControl() {
   const { split, updateSplit, selectedDay } = useSplitBase();

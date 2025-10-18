@@ -1,6 +1,7 @@
-import React, { memo, useCallback, useEffect, useState } from "react";
+import { memo, useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-
+import { useImageSlider } from "@/hooks/exercise/useImageSlider";
+import { slideVariants, getSliderMaxHeight, sliderTransitionConfig } from "@/lib/sliderHelpers";
 interface ImageSliderProps {
   images: string[];
   exerciseName: string;
@@ -9,77 +10,19 @@ interface ImageSliderProps {
 }
 
 const ExerciseImageSlider = memo<ImageSliderProps>(({ images, exerciseName, isDesktop, isMobile }) => {
-  const [currentImage, setCurrentImage] = useState(0);
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = useState<number | null>(null);
-  const [direction, setDirection] = useState(0);
+  const { currentImage, direction, nextImage, prevImage, goToImage, currentImageSrc, touchHandlers } = useImageSlider({
+    imagesCount: images.length,
+    images,
+  });
 
-  // Preload adjacent images for smoother transitions
-  useEffect(() => {
-    if (images.length > 1) {
-      const nextIdx = (currentImage + 1) % images.length;
-      const prevIdx = (currentImage - 1 + images.length) % images.length;
-
-      [nextIdx, prevIdx].forEach((idx) => {
-        const img = new Image();
-        img.src = `/data/exercises/${images[idx]}`;
-      });
-    }
-  }, [currentImage, images]);
-
-  const nextImage = useCallback(() => {
-    setDirection(1);
-    setCurrentImage((prev) => (prev + 1) % images.length);
-  }, [images.length]);
-
-  const prevImage = useCallback(() => {
-    setDirection(-1);
-    setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
-  }, [images.length]);
-
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    setTouchStart(e.targetTouches[0].clientX);
-  }, []);
-
-  const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  }, []);
-
-  const handleTouchEnd = useCallback(() => {
-    if (touchStart === null || touchEnd === null) return;
-    const diff = touchStart - touchEnd;
-    const minSwipeDistance = 50;
-
-    if (Math.abs(diff) > minSwipeDistance) {
-      if (diff > 0) nextImage();
-      else prevImage();
-    }
-
-    setTouchStart(null);
-    setTouchEnd(null);
-  }, [touchStart, touchEnd, nextImage, prevImage]);
-
-  const slideVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? "100%" : "-100%",
-      opacity: 0,
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-    },
-    exit: (direction: number) => ({
-      x: direction > 0 ? "-100%" : "100%",
-      opacity: 0,
-    }),
-  };
+  const hasMultipleImages = images.length > 1;
+  const showDots = hasMultipleImages && images.length <= 8;
+  const maxHeight = useMemo(() => getSliderMaxHeight(isDesktop, isMobile), [isDesktop, isMobile]);
 
   if (!images.length) {
     return (
       <div className="flex items-center justify-center w-full h-60 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl mx-4">
-        <div className="text-center">
-          <p className="text-gray-400 font-medium">No Image Available</p>
-        </div>
+        <p className="text-gray-400 font-medium">No Image Available</p>
       </div>
     );
   }
@@ -90,40 +33,29 @@ const ExerciseImageSlider = memo<ImageSliderProps>(({ images, exerciseName, isDe
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
       className="relative w-full mb-8 flex justify-center px-4"
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
+      {...touchHandlers}
     >
       <div className="relative w-full max-w-6xl bg-rose-200 rounded-b-2xl">
-        <div
-          className="relative overflow-hidden rounded-b-2xl"
-          style={{
-            maxHeight: isDesktop ? "80vh" : isMobile ? "50vh" : "60vh",
-          }}
-        >
+        <div className="relative overflow-hidden rounded-b-2xl" style={{ maxHeight }}>
           <AnimatePresence initial={false} custom={direction} mode="popLayout">
             <motion.img
               key={currentImage}
-              src={`/data/exercises/${images[currentImage]}`}
-              alt={exerciseName}
+              src={currentImageSrc}
+              alt={`${exerciseName} - Image ${currentImage + 1}`}
               className="w-full h-full object-contain"
-              style={{
-                maxHeight: isDesktop ? "80vh" : isMobile ? "50vh" : "60vh",
-              }}
+              style={{ maxHeight }}
               custom={direction}
               variants={slideVariants}
               initial="enter"
               animate="center"
               exit="exit"
-              transition={{
-                x: { type: "spring", stiffness: 300, damping: 30 },
-                opacity: { duration: 0.2 },
-              }}
+              transition={sliderTransitionConfig}
+              loading="eager"
             />
           </AnimatePresence>
 
           {/* Image Counter */}
-          {images.length > 1 && (
+          {hasMultipleImages && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -133,48 +65,26 @@ const ExerciseImageSlider = memo<ImageSliderProps>(({ images, exerciseName, isDe
             </motion.div>
           )}
 
-          {/* Navigation Arrows - Always inside image container */}
-          {images.length > 1 && (
+          {/* Navigation Arrows */}
+          {hasMultipleImages && (
             <>
-              <motion.button
-                onClick={prevImage}
-                whileHover={{ scale: 1.1, x: -4 }}
-                whileTap={{ scale: 0.95 }}
-                className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/95 backdrop-blur-sm text-rose-600 rounded-full p-3 sm:p-4 shadow-xl hover:bg-white hover:shadow-2xl transition-all z-20"
-                aria-label="Previous image"
-              >
-                <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
-                </svg>
-              </motion.button>
-              <motion.button
-                onClick={nextImage}
-                whileHover={{ scale: 1.1, x: 4 }}
-                whileTap={{ scale: 0.95 }}
-                className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/95 backdrop-blur-sm text-rose-600 rounded-full p-3 sm:p-4 shadow-xl hover:bg-white hover:shadow-2xl transition-all z-20"
-                aria-label="Next image"
-              >
-                <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
-                </svg>
-              </motion.button>
+              <NavigationButton onClick={prevImage} direction="left" label="Previous image" />
+              <NavigationButton onClick={nextImage} direction="right" label="Next image" />
             </>
           )}
 
           {/* Image Dots */}
-          {images.length > 1 && images.length <= 8 && (
+          {showDots && (
             <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex gap-2 z-20">
               {images.map((_, idx) => (
                 <button
                   key={idx}
-                  onClick={() => {
-                    setDirection(idx > currentImage ? 1 : -1);
-                    setCurrentImage(idx);
-                  }}
+                  onClick={() => goToImage(idx)}
                   className={`transition-all rounded-full ${
                     idx === currentImage ? "w-8 bg-white" : "w-2 bg-white/50 hover:bg-white/80"
                   } h-2`}
                   aria-label={`Go to image ${idx + 1}`}
+                  aria-current={idx === currentImage}
                 />
               ))}
             </div>
@@ -184,5 +94,32 @@ const ExerciseImageSlider = memo<ImageSliderProps>(({ images, exerciseName, isDe
     </motion.div>
   );
 });
+
+const NavigationButton = memo<{
+  onClick: () => void;
+  direction: "left" | "right";
+  label: string;
+}>(({ onClick, direction, label }) => {
+  const isLeft = direction === "left";
+
+  return (
+    <motion.button
+      onClick={onClick}
+      whileHover={{ scale: 1.1, x: isLeft ? -4 : 4 }}
+      whileTap={{ scale: 0.95 }}
+      className={`absolute ${
+        isLeft ? "left-2 sm:left-4" : "right-2 sm:right-4"
+      } top-1/2 -translate-y-1/2 bg-white/95 backdrop-blur-sm text-rose-600 rounded-full p-3 sm:p-4 shadow-xl hover:bg-white hover:shadow-2xl transition-all z-20`}
+      aria-label={label}
+    >
+      <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d={isLeft ? "M15 19l-7-7 7-7" : "M9 5l7 7-7 7"} />
+      </svg>
+    </motion.button>
+  );
+});
+
+NavigationButton.displayName = "NavigationButton";
+ExerciseImageSlider.displayName = "ExerciseImageSlider";
 
 export default ExerciseImageSlider;

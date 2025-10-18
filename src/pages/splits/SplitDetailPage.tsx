@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useSplitsStore } from "../../stores/splits/useSplitStore";
-import { useCurrentSplitStore } from "../../stores/splits/useCurrentSplitStore";
-import SplitTable from "@/components/split/detail/splitTable/SplitTable";
+import { useSplitsStore } from "@/stores/split/useSplitStore";
+import { useCurrentSplitStore } from "@/stores/split/useCurrentSplitStore";
+import SplitTable from "@/components/splitDetail/splitTable/SplitTable";
 import NavigateBackButton from "../../components/common/NavigateBackButton";
 import { BsFillGearFill } from "react-icons/bs";
 import { useThemeColor } from "../../hooks/ui/useThemeColor";
-import SplitDeleteButton from "../../components/split/detail/SplitDeleteButton";
-import EditSplitForm from "../../components/split/detail/EditSplitForm";
+import SplitDeleteButton from "@/components/splitDetail/SplitDeleteButton";
+import EditSplitForm from "@/components/splitDetail/EditSplitForm";
 import { Button } from "@/components/ui/button";
 
 const SplitDetailPage = () => {

@@ -1,10 +1,10 @@
 import { useLayoutEffect, useRef, useState } from "react";
-import SplitList from "../../components/split/SplitList";
-import SplitForm from "../../components/split/SplitForm";
+import SplitList from "../../components/split/list/SplitList";
+import { SplitForm } from "@/components/split/form/SplitForm";
 import ScrollTopButton from "../../components/common/ScrollTopButton";
-import { FiPlus } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import useBreakpoint from "../../hooks/ui/useBreakpoint";
+import { Button } from "@/components/ui/button";
 
 const SplitsPage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -46,21 +46,18 @@ const SplitsPage = () => {
         </main>
 
         {/* Add Split Button */}
-        <motion.button
+        <Button
           onClick={() => setIsModalOpen(true)}
           className={`
           fixed
           ${isDesktop ? "bottom-5 right-5 z-50" : ""}
           ${isMobile ? "bottom-23 right-4 z-50" : ""}
-          bg-red-600 text-white p-5 rounded-full shadow-xl
+          bg-red-600 text-white text-2xl p-6 rounded-2xl shadow-xl hover:bg-red-500
         `}
-          whileHover={isDesktop ? { scale: 1.1, boxShadow: "0 15px 25px rgba(0,0,0,0.3)" } : undefined}
-          whileTap={{ scale: 0.95 }}
-          transition={{ type: "spring", stiffness: 400, damping: 20 }}
           title="Add new split"
         >
-          <FiPlus size={28} />
-        </motion.button>
+          +
+        </Button>
 
         {/* Modal Overlay */}
         <AnimatePresence>

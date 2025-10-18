@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import useBreakpoint from "../../hooks/ui/useBreakpoint";
+import { RiArrowUpLine } from "react-icons/ri";
 
 interface ScrollTopButtonProps {
   className?: string;
@@ -45,11 +46,11 @@ const ScrollTopButton = ({ className }: ScrollTopButtonProps) => {
           exit={{ opacity: 0, y: 10 }}
           transition={{ duration: 0.3 }}
           onClick={scrollToTop}
-          className={`fixed bottom-6 right-4 z-50 bg-rose-600 hover:bg-rose-700 text-white p-3 rounded-2xl shadow-xl hover:shadow-2xl transition-all ${
+          className={`fixed bottom-6 right-4 z-50 flex items-center gap-1 px-3 py-3  bg-rose-600 hover:bg-rose-700 text-white p-2 rounded-2xl shadow-xl hover:shadow-2xl transition-all ${
             className ?? ""
           }`}
         >
-          ↑ Top
+          <RiArrowUpLine className="m-1 text-xl" />
         </motion.button>
       )}
     </AnimatePresence>

@@ -1,19 +1,19 @@
 import { motion, type Variants } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useCurrentSplitStore } from "../../stores/splits/useCurrentSplitStore";
-import { useSplitsStore } from "../../stores/splits/useSplitStore";
+import { useCurrentSplitStore } from "@/stores/split/useCurrentSplitStore";
+import { useSplitsStore } from "@/stores/split/useSplitStore";
 import { useThemeColor } from "../../hooks/ui/useThemeColor";
 import useBreakpoint from "../../hooks/ui/useBreakpoint";
 import { Layers, ListChecks, Filter, Calendar } from "lucide-react";
 
 import NavigateBackButton from "../../components/common/NavigateBackButton";
-import ControlDayTabs from "../../components/split/detail/control/category/ControlDayTabs";
-import ControlCategoryTab from "../../components/split/detail/control/category/ControlCategoryTab";
-import ControlSelectedExercises from "../../components/split/detail/control/exercise/ControlSelectedExercises";
-import ControlExerciseList from "../../components/split/detail/control/exercise/ControlExerciseList";
-import ControlExerciseFilter from "../../components/split/detail/control/exercise/ControlExerciseFilter";
-import { useCategoryControl } from "../../hooks/control/useCategoryControl";
+import ControlDayTabs from "@/components/splitControl/category/ControlDayTabs";
+import ControlCategoryTab from "@/components/splitControl/category/ControlCategoryTab";
+import ControlSelectedExercises from "@/components/splitControl/exercise/ControlSelectedExercises";
+import ControlExerciseList from "@/components/splitControl/exercise/ControlExerciseList";
+import ControlExerciseFilter from "@/components/filter/splitDetail/ControlExerciseFilter";
+import { useCategoryControl } from "../../hooks/splitControl/useCategoryControl";
 import CollapsiblePanel from "@/components/ui/collapsiblePanel";
 
 const SplitControlPage = () => {

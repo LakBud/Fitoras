@@ -5,7 +5,7 @@ import { useCalendarStore } from "@/stores/useCalendarStore";
 import type { Exercises } from "@/types/exercise";
 import { FiInfo } from "react-icons/fi";
 import { useThemeColor } from "@/hooks/ui/useThemeColor";
-import { useCurrentSplitStore } from "@/stores/splits/useCurrentSplitStore";
+import { useCurrentSplitStore } from "@/stores/split/useCurrentSplitStore";
 import { Link } from "react-router-dom";
 import useBreakpoint from "@/hooks/ui/useBreakpoint";
 

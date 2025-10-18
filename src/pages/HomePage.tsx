@@ -2,7 +2,7 @@ import { GiPowerLightning } from "react-icons/gi";
 import { motion } from "framer-motion";
 
 import { useMemo, useEffect } from "react";
-import { useSplitsStore } from "@/stores/splits/useSplitStore";
+import { useSplitsStore } from "@/stores/split/useSplitStore";
 import { useCalendarStore } from "@/stores/useCalendarStore";
 import { useExerciseStore } from "@/stores/exercises/useExerciseStore";
 import { formatDateKey } from "@/lib/calendar";

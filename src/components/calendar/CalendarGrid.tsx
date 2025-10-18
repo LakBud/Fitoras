@@ -3,7 +3,7 @@ import CalendarDayCell from "./CalendarDayCell";
 import { motion } from "framer-motion";
 import { useThemeColor } from "../../hooks/ui/useThemeColor";
 import useBreakpoint from "../../hooks/ui/useBreakpoint";
-import { useCurrentSplitStore } from "@/stores/splits/useCurrentSplitStore";
+import { useCurrentSplitStore } from "@/stores/split/useCurrentSplitStore";
 import { useState } from "react";
 
 type Exercise = { id: string; name: string };
