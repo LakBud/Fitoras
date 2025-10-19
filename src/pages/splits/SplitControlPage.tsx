@@ -1,6 +1,6 @@
-import { motion, type Variants } from "framer-motion";
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { type Variants, motion } from "framer-motion";
 import { useCurrentSplitStore } from "@/stores/split/useCurrentSplitStore";
 import { useSplitsStore } from "@/stores/split/useSplitStore";
 import { useThemeColor } from "../../hooks/ui/useThemeColor";
@@ -16,6 +16,7 @@ import ControlExerciseFilter from "@/components/filters/splitDetail/ControlExerc
 import { useCategoryControl } from "../../hooks/splitControl/useCategoryControl";
 import CollapsiblePanel from "@/components/ui/collapsiblePanel";
 import ControlExerciseCategory from "@/components/splitControl/categories/manageCategory/ControlExerciseCategoryForm";
+import { useCollapsedPanels } from "@/hooks/ui/useCollapsedPanels";
 
 const SplitControlPage = () => {
   const currentSplit = useCurrentSplitStore((s) => s.currentSplit);
@@ -26,8 +27,13 @@ const SplitControlPage = () => {
 
   const theme = useThemeColor(currentSplit?.category?.color);
   const { isMobile } = useBreakpoint();
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isSelectedCollapsed, setIsSelectedCollapsed] = useState(false);
+
+  const { collapsed, toggle } = useCollapsedPanels({
+    days: false,
+    categories: false,
+    selected: false,
+    library: false,
+  });
 
   const selectedCategoryName = categories?.find((cat) => cat.id === selectedCategoryId)?.name || selectedCategoryId;
   const selectedCategory = categories.find((cat) => cat.id === selectedCategoryId);
@@ -37,18 +43,13 @@ const SplitControlPage = () => {
     if (split) setCurrentSplit(split);
   }, [id, splits, setCurrentSplit]);
 
-  // ================= FRAMER MOTION VARIANTS =================
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
+      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
     },
   };
-
   const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
@@ -61,95 +62,42 @@ const SplitControlPage = () => {
         background: `linear-gradient(135deg, ${theme.gradientStart} 0%, ${theme.gradientEnd} 100%)`,
       }}
     >
-      {/* ================= HEADER ================= */}
-      <motion.header
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className={`backdrop-blur-md rounded-xl sm:rounded-2xl shadow-lg border border-white/10 mb-4 sm:mb-6 overflow-hidden ${
-          isMobile ? "px-3 py-3" : "px-6 py-4"
-        }`}
-        style={{
-          backgroundColor: theme.translucentStrong,
-          boxShadow: `0 8px 32px ${theme.primary}20`,
-        }}
-      >
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex-1 min-w-0">
-            {/* Status Badge */}
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.3 }}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold mb-2"
-              style={{
-                backgroundColor: `${theme.primary}20`,
-                color: theme.primary,
-                border: `1px solid ${theme.primary}40`,
-              }}
-            >
-              <div className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
-              <span className="hidden sm:inline">CONTROL PANEL</span>
-              <span className="sm:hidden">PANEL</span>
-            </motion.div>
-
-            {/* Title */}
-            <h1
-              className="font-black tracking-tight truncate"
-              style={{
-                fontSize: isMobile ? "clamp(1.25rem, 5vw, 1.75rem)" : "clamp(1.75rem, 3vw, 2.5rem)",
-                color: theme.dark,
-                textShadow: `0 2px 20px ${theme.primary}30`,
-              }}
-            >
-              {currentSplit ? (
-                <span className="flex items-baseline gap-2 flex-wrap">
-                  <span style={{ color: theme.primary }}>{currentSplit.name}</span>
-                  {!isMobile && <span className="text-base sm:text-lg font-medium opacity-60">Configuration</span>}
-                </span>
-              ) : (
-                <span className="animate-pulse">Loading...</span>
-              )}
-            </h1>
-          </div>
-        </div>
-      </motion.header>
-
-      {/* ================= MAIN ================= */}
+      {/* HEADER */}
       <motion.main variants={containerVariants} initial="hidden" animate="visible" className="space-y-4 sm:space-y-5">
-        {/* ---- Day Tabs ---- */}
+        {/* Days */}
         <motion.div variants={itemVariants}>
-          <div className="flex items-center gap-2 mb-3 sm:mb-4">
-            <div className="p-2 rounded-lg" style={{ backgroundColor: `${theme.primary}20` }}>
-              <Calendar className="w-4 h-4" style={{ color: theme.primary }} />
+          <CollapsiblePanel
+            title="Days"
+            icon={<Calendar className="w-4 h-4" />}
+            theme={theme}
+            isCollapsed={collapsed.days}
+            onToggle={() => toggle("days")}
+            isMobile={isMobile}
+          >
+            <div className="overflow-x-auto -mx-3 px-3 sm:-mx-5 sm:px-5 pb-2 scrollbar-thin">
+              <ControlDayTabs />
             </div>
-            <h3 className="font-bold text-sm sm:text-base" style={{ color: theme.dark }}>
-              Days
-            </h3>
-          </div>
-          <div className="overflow-x-auto -mx-3 px-3 sm:-mx-5 sm:px-5 pb-2 scrollbar-thin">
-            <ControlDayTabs />
-          </div>
+          </CollapsiblePanel>
         </motion.div>
 
-        {/* ---- Categories Section ---- */}
-
-        <div className="flex items-center gap-2 mb-3 sm:mb-4 overflow-hidden">
-          <div className="p-2 rounded-lg" style={{ backgroundColor: `${theme.primary}20` }}>
-            <Layers className="w-4 h-5" style={{ color: theme.primary }} />
+        {/* Categories */}
+        <CollapsiblePanel
+          title="Exercise Categories"
+          icon={<Layers className="w-4 h-4" />}
+          theme={theme}
+          isCollapsed={collapsed.categories}
+          onToggle={() => toggle("categories")}
+          isMobile={isMobile}
+        >
+          <div className="overflow-x-auto -mx-2 px-3 sm:-mx-5 sm:px-5 pb-3 scrollbar-thin">
+            <div className="flex items-start gap-3 flex-nowrap">
+              <ControlCategoryTab />
+              <ControlExerciseCategory />
+            </div>
           </div>
-          <h3 className="font-bold text-sm sm:text-base" style={{ color: theme.dark }}>
-            Exercise Categories
-          </h3>
-        </div>
-        <div className="overflow-x-auto -mx-2 px-3 sm:-mx-5 sm:px-5 pb-3 scrollbar-thin">
-          <div className="flex items-start gap-3 flex-nowrap">
-            <ControlCategoryTab />
-            <ControlExerciseCategory />
-          </div>
-        </div>
+        </CollapsiblePanel>
 
-        {/* ---- Selected Exercises Panel ---- */}
+        {/* Selected Exercises */}
         <motion.div variants={itemVariants}>
           <CollapsiblePanel
             title={
@@ -163,22 +111,22 @@ const SplitControlPage = () => {
             }
             icon={<ListChecks className="w-4 h-4" />}
             theme={theme}
-            isCollapsed={isSelectedCollapsed}
-            onToggle={() => setIsSelectedCollapsed(!isSelectedCollapsed)}
+            isCollapsed={collapsed.selected}
+            onToggle={() => toggle("selected")}
             isMobile={isMobile}
           >
             <ControlSelectedExercises />
           </CollapsiblePanel>
         </motion.div>
 
-        {/* ---- Exercise Library Panel ---- */}
+        {/* Exercise Library */}
         <motion.div variants={itemVariants}>
           <CollapsiblePanel
             title="Exercise Library"
             icon={<Filter className="w-4 h-4" />}
             theme={theme}
-            isCollapsed={isCollapsed}
-            onToggle={() => setIsCollapsed(!isCollapsed)}
+            isCollapsed={collapsed.library}
+            onToggle={() => toggle("library")}
             isMobile={isMobile}
           >
             <div className="space-y-4">
@@ -189,16 +137,12 @@ const SplitControlPage = () => {
         </motion.div>
       </motion.main>
 
-      {/* ========== MOBILE GRADIENT OVERLAY ========= */}
       {isMobile && (
         <div
           className="fixed bottom-0 left-0 w-full pointer-events-none h-24"
-          style={{
-            background: `linear-gradient(to top, ${theme.gradientEnd}, transparent)`,
-          }}
+          style={{ background: `linear-gradient(to top, ${theme.gradientEnd}, transparent)` }}
         />
       )}
-
       <NavigateBackButton />
     </div>
   );

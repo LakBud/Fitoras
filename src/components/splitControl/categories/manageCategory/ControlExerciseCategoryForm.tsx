@@ -7,7 +7,7 @@ import { useThemeColor } from "@/hooks/ui/useThemeColor";
 import { Plus } from "lucide-react";
 import CategoryRow from "./CategoryRow";
 import CategoryList from "./CategoryList";
-import CategoryEditForm from "./CategoryEditForm";
+import CategoryEditForm from "./edit/CategoryEditForm";
 import { Button } from "@/components/ui/button";
 
 const ControlExerciseCategory = () => {
