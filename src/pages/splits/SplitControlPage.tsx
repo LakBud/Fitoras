@@ -15,6 +15,7 @@ import ControlExerciseList from "@/components/splitControl/exercise/lists/Contro
 import ControlExerciseFilter from "@/components/filters/splitDetail/ControlExerciseFilter";
 import { useCategoryControl } from "../../hooks/splitControl/useCategoryControl";
 import CollapsiblePanel from "@/components/ui/collapsiblePanel";
+import ControlExerciseCategory from "@/components/splitControl/categories/manageCategory/ControlExerciseCategoryForm";
 
 const SplitControlPage = () => {
   const currentSplit = useCurrentSplitStore((s) => s.currentSplit);
@@ -141,8 +142,11 @@ const SplitControlPage = () => {
             Exercise Categories
           </h3>
         </div>
-        <div className="overflow-x-auto -mx-2 px-3 sm:-mx-5 sm:px-5 pb-2 scrollbar-thin">
-          <ControlCategoryTab />
+        <div className="overflow-x-auto -mx-2 px-3 sm:-mx-5 sm:px-5 pb-3 scrollbar-thin">
+          <div className="flex items-start gap-3 flex-nowrap">
+            <ControlCategoryTab />
+            <ControlExerciseCategory />
+          </div>
         </div>
 
         {/* ---- Selected Exercises Panel ---- */}

@@ -1,44 +1,11 @@
-import { useEffect, useRef } from "react";
 import { ExerciseList } from "../../components/exercise/ExerciseList";
-import { useExerciseStore } from "../../stores/exercises/useExerciseStore";
-import { useExerciseFilterStore } from "../../stores/exercises/useExerciseFilterStore";
-import { useScrollStore } from "../../stores/exercises/useExerciseScrollState";
 import ScrollTopButton from "../../components/common/ScrollTopButton";
 import useBreakpoint from "@/hooks/ui/useBreakpoint";
+import { useExercisePageLifecycle } from "@/hooks/exercise/useExercisePageLifecycle";
 
 const ExercisePage = () => {
-  const { exercises, fetchExercises, loading } = useExerciseStore();
-  const { setAllExercises } = useExerciseFilterStore();
-  const { scrollY, setScrollY } = useScrollStore();
-  const containerRef = useRef<HTMLDivElement>(null);
+  const { containerRef, handleScroll } = useExercisePageLifecycle();
   const { isDesktop } = useBreakpoint();
-
-  // Fetch exercises only if empty
-  useEffect(() => {
-    if (exercises.length === 0) fetchExercises();
-  }, [exercises, fetchExercises]);
-
-  // Initialize exercises in the filter store
-  useEffect(() => {
-    if (!loading && exercises.length > 0) {
-      setAllExercises(exercises); // <-- automatically applies filters
-    }
-  }, [exercises, loading, setAllExercises]);
-
-  // Restore scroll on mount
-  useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.scrollTo({ top: scrollY, behavior: "auto" });
-    }
-  }, [scrollY]);
-
-  // Track scroll
-  const handleScroll = () => {
-    if (containerRef.current) {
-      setScrollY(containerRef.current.scrollTop);
-    }
-  };
-
   return (
     <div
       ref={containerRef}

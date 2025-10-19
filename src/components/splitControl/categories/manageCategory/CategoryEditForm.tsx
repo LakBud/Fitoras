@@ -3,6 +3,8 @@ import type { Theme } from "@/types/theme";
 import type { WorkoutCategory } from "@/types/splits";
 import DeleteExerciseCategoryButton from "./DeleteExerciseCategoryButton";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 interface CategoryEditProps {
   theme: Theme;
@@ -32,10 +34,10 @@ const CategoryEditForm = ({ theme, category, onDelete, onCancel, onSave }: Categ
     <div className="flex flex-col gap-6">
       {/* Name Input */}
       <div className="flex flex-col">
-        <label htmlFor="category-name" className="text-sm font-semibold mb-1" style={{ color: theme.dark }}>
+        <Label htmlFor="category-name" className="text-sm font-semibold mb-1" style={{ color: theme.dark }}>
           Category Name
-        </label>
-        <input
+        </Label>
+        <Input
           id="category-name"
           type="text"
           value={name}
@@ -48,14 +50,14 @@ const CategoryEditForm = ({ theme, category, onDelete, onCancel, onSave }: Categ
 
       {/* Color Picker */}
       <div className="flex flex-col items-center">
-        <label className="text-sm font-semibold mb-1" style={{ color: theme.dark }}>
+        <Label className="text-sm font-semibold mb-1" style={{ color: theme.dark }}>
           Category Color
-        </label>
+        </Label>
         <div
           className="w-12 h-12 rounded-full shadow-inner cursor-pointer border"
           style={{ backgroundColor: color, borderColor }}
         >
-          <input
+          <Input
             type="color"
             value={color}
             onChange={(e) => setColor(e.target.value)}

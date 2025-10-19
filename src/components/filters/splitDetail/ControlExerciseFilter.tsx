@@ -78,7 +78,12 @@ export const ControlExerciseFilter = () => {
                 <SelectValue placeholder={key.charAt(0).toUpperCase() + key.slice(1)} />
               </SelectTrigger>
 
-              <SelectContent>
+              <SelectContent
+                className="z-[9999] max-h-[50vh] overflow-y-auto rounded-xl border bg-white shadow-xl"
+                position="popper"
+                sideOffset={8}
+                align="start"
+              >
                 <SelectItem value="__all__">All {key}</SelectItem>
                 {values.map((v) => (
                   <SelectItem key={v} value={v}>

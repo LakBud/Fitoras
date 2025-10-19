@@ -60,7 +60,12 @@ const DesktopExerciseFilter = () => {
                 <SelectValue placeholder={key.charAt(0).toUpperCase() + key.slice(1)} />
               </SelectTrigger>
 
-              <SelectContent className="rounded-xl border-red-200 shadow-xl">
+              <SelectContent
+                className="z-[9999] max-h-[60vh] overflow-y-auto rounded-xl border bg-white shadow-xl"
+                position="popper"
+                sideOffset={8}
+                align="start"
+              >
                 <SelectItem
                   value="__all__"
                   className="font-semibold text-gray-600 focus:bg-red-50 focus:text-red-700 border-b border-gray-100"

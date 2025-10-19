@@ -1,7 +1,6 @@
 import { Tabs, TabsList } from "@/components/ui/tabs";
 import { useCategoryControl } from "@/hooks/splitControl/useCategoryControl";
 import { useSplitControl } from "@/hooks/splitControl/useSplitControl";
-import ControlAddCategory from "../manageCategory/ControlManageExerciseCategory";
 import { getCategoryOptions } from "@/lib/getCategoryOptions";
 import { CategoryTabTrigger } from "./CategoryTabTrigger";
 
@@ -23,8 +22,6 @@ const ControlCategoryTab = () => {
             fallbackColor={themeColor}
           />
         ))}
-
-        <ControlAddCategory />
       </TabsList>
     </Tabs>
   );

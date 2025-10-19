@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import { readableColor } from "polished";
-import type { Theme } from "@/types/theme";
+import { ChevronRight } from "lucide-react";
 import type { WorkoutCategory } from "@/types/splits";
+import type { Theme } from "@/types/theme";
 
 interface Props {
   theme: Theme;
@@ -9,27 +9,44 @@ interface Props {
   onEdit: (cat: WorkoutCategory) => void;
 }
 
-const CategoryList = ({ categories, onEdit }: Props) => {
-  const categoryList: WorkoutCategory[] = categories ?? [];
+const CategoryList = ({ categories, onEdit, theme }: Props) => {
+  const list = categories ?? [];
 
   return (
-    <div className="flex flex-col gap-2 w-full">
-      {categoryList.length > 0 && <p className="text-sm font-semibold text-gray-700 px-2">Categories:</p>}
+    <div className="flex flex-col gap-3 w-full p-4 rounded-xl" style={{ background: theme.lighter }}>
+      {list.length > 0 && (
+        <p className="text-sm font-semibold" style={{ color: theme.dark }}>
+          Categories
+        </p>
+      )}
+
       <ul className="flex flex-col gap-2 max-h-64 sm:max-h-80 overflow-y-auto pr-1">
-        {categoryList.length === 0 && <li className="text-gray-400 text-center py-4 italic">No categories yet.</li>}
-        {categoryList.map((cat) => {
-          const textColor = readableColor(cat.color ?? "#ccc");
+        {list.length === 0 && <li className="text-gray-400 text-center py-4 italic">No categories yet.</li>}
+
+        {list.map((cat) => {
+          const base = cat.color ?? "#ccc";
+
           return (
             <motion.li
               key={cat.id}
               layout
-              whileHover={{ scale: 1.03 }}
-              className="flex justify-between items-center rounded-xl px-4 py-3 shadow-sm cursor-pointer transition-transform duration-200 hover:shadow-md"
-              style={{ backgroundColor: cat.color ?? "#ccc", color: textColor }}
+              whileHover={{ scale: 1.02 }}
+              className="
+                flex items-center justify-between rounded-lg px-4 py-3
+                cursor-pointer bg-white border transition-all duration-200 hover:shadow-sm
+              "
+              style={{ borderColor: base }}
               onClick={() => onEdit(cat)}
               title={cat.name}
             >
-              <span className="flex-1 font-medium truncate">{cat.name}</span>
+              <div className="flex items-center gap-3 flex-1 min-w-0">
+                {/* color dot */}
+                <div className="w-3.5 h-3.5 rounded-full shrink-0" style={{ background: base }} />
+                <span className="font-medium truncate" style={{ color: theme.dark }}>
+                  {cat.name}
+                </span>
+              </div>
+              <ChevronRight size={18} style={{ color: theme.dark }} />
             </motion.li>
           );
         })}

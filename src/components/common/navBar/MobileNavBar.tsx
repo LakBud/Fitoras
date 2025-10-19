@@ -1,4 +1,3 @@
-import { useScrollDirection } from "@/hooks/ui/useScrollDirection";
 import { NavLink, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import ExerciseFilter from "@/components/filters/exercise/ExerciseFilter";
@@ -18,37 +17,25 @@ const MobileNavBar = ({ links }: MobileNavBarProps) => {
   const location = useLocation();
   const isExercisePage = location.pathname === "/exercise";
   const isSplitPage = location.pathname === "/splits";
-  const scrollUp = useScrollDirection();
 
   return (
-    <div>
-      {isExercisePage && (
-        <motion.div
-          className="fixed top-0 left-0 right-0 z-50"
-          initial={{ y: 0 }}
-          animate={{ y: scrollUp ? 0 : "-100%" }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-        >
-          <ExerciseFilter />
-        </motion.div>
-      )}
-      {isSplitPage && (
-        <motion.div
-          className="fixed top-0 left-0 right-0 z-50"
-          initial={{ y: 0 }}
-          animate={{ y: scrollUp ? 0 : "-100%" }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-        >
-          <SplitFilter />
-        </motion.div>
+    <>
+      {(isExercisePage || isSplitPage) && (
+        <div className="fixed top-0 left-0 right-0 z-50">
+          {isExercisePage && <ExerciseFilter />}
+          {isSplitPage && <SplitFilter />}
+        </div>
       )}
 
       <motion.nav
         role="navigation"
         aria-label="Bottom navigation"
         initial={false}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl shadow-t-lg z-50 border-t border-gray-200"
+        className="
+          fixed bottom-0 left-0 right-0
+          bg-white/95 backdrop-blur-xl shadow-t-lg z-20 border-t border-gray-200
+          pb-[calc(env(safe-area-inset-bottom)+0.5rem)]
+        "
       >
         <ul className="flex justify-around items-center py-2">
           {links.map(({ to, icon, label }) => (
@@ -58,7 +45,8 @@ const MobileNavBar = ({ links }: MobileNavBarProps) => {
                 aria-label={label}
                 className={({ isActive }) =>
                   [
-                    "flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-md text-xs font-semibold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+                    "flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-md text-xs font-semibold transition-all",
+                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
                     isActive ? "text-red-600" : "text-gray-700 hover:text-red-600",
                   ].join(" ")
                 }
@@ -70,7 +58,7 @@ const MobileNavBar = ({ links }: MobileNavBarProps) => {
           ))}
         </ul>
       </motion.nav>
-    </div>
+    </>
   );
 };
 

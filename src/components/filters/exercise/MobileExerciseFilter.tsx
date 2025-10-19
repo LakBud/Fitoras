@@ -88,7 +88,7 @@ const MobileExerciseFilter = () => {
                 </SelectTrigger>
 
                 <SelectContent
-                  className="min-w-[180px] overflow-hidden rounded-xl border border-red-200 bg-white shadow-xl z-[100] animate-in fade-in-0 zoom-in-95 duration-200"
+                  className="z-[9999] max-h-[60vh] overflow-y-auto rounded-xl border bg-white shadow-xl"
                   position="popper"
                   sideOffset={8}
                   align="start"
