@@ -18,7 +18,7 @@ A modern, privacy-focused fitness web application for managing workout routines,
 ### Prerequisites
 
 - Node.js (v18 or higher recommended)
-- npm or yarn
+- pnpm
 
 ### Installation
 
@@ -32,50 +32,62 @@ cd fitora
 2. Install dependencies:
 
 ```bash
-npm install
+pnpm install
 ```
 
 3. Start the development server:
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 4. Open your browser and navigate to `http://localhost:5173`
 
 ## 📦 Available Scripts
 
-- `npm run dev` - Start the development server
-- `npm run build` - Build the production bundle
-- `npm run preview` - Preview the production build locally
-- `npm run lint` - Run ESLint to check code quality
+- `pnpm run dev` - Start the development server
+- `pnpm run build` - Build the production bundle
+- `pnpm run preview` - Preview the production build locally
+- `pnpm run lint` - Run ESLint to check code quality
 
 ## 🏗️ Project Structure
 
 ```
 fitora/
+├── .github/
+│   └── dependabot.yml             # Automated dependency updates
+├── node_modules/                  # Installed dependencies
 ├── public/
-│   └── data/
-│       ├── allExercises.json      # Exercise database
-│       └── exercises/             # Exercise-specific data
+│   ├── data/                      # Static data assets
+│   ├── favicon.png
+│   ├── preview.jpg
+│   ├── robots.txt
+│   └── sitemap.xml
 ├── src/
 │   ├── components/
-│   │   ├── calendar/              # Calendar view components
-│   │   ├── common/                # Shared components (NavBar, etc.)
-│   │   ├── exercise/              # Exercise browsing components
-│   │   ├── split/                 # Workout split management
-│   │   └── ui/                    # Reusable UI components
-│   ├── hooks/
-│   │   ├── control/               # Business logic hooks
-│   │   └── ui/                    # UI-related hooks
-│   ├── lib/                       # Utility functions
-│   ├── pages/                     # Page components
-│   ├── routes/                    # Routing configuration
-│   ├── stores/                    # Zustand state management
-│   └── types/                     # TypeScript type definitions
+│   │   ├── calendar/              # Calendar related UI
+│   │   ├── common/                # Shared/general components
+│   │   ├── exercise/              # Exercise browsing/listing
+│   │   ├── exerciseDetail/        # Exercise detail views
+│   │   ├── filters/               # Filter UI and logic
+│   │   ├── home/                  # Home dashboard components
+│   │   ├── split/                 # Workout split main components
+│   │   ├── splitControl/          # Split control logic/UI
+│   │   ├── splitDetail/           # Split details views
+│   │   └── ui/                    # Reusable UI primitives (buttons, modals, etc.)
+│   ├── hooks/                     # Custom hooks
+│   ├── lib/                       # Utils/helpers
+│   ├── pages/                     # Higher-level routed page components
+│   ├── routes/                    # Route definitions
+│   ├── stores/                    # Zustand stores
+│   ├── types/                     # Global TypeScript types
+│   ├── App.tsx
+│   ├── index.css
+│   ├── main.tsx
+│   └── vite-env.d.ts
 ├── package.json
-├── vite.config.ts
 └── tsconfig.json
+
 ```
 
 ## 🛠️ Tech Stack
@@ -103,16 +115,14 @@ fitora/
 - **Lucide React** - Icon library
 - **React Icons** - Additional icons
 
-### Form & Validation
+### Form 
 
 - **React Hook Form** - Form management
-- **Zod** - Schema validation
-- **@hookform/resolvers** - Form validation integration
+
 
 ### Drag & Drop
 
 - **@dnd-kit** - Modern drag-and-drop toolkit
-- **react-movable** - Alternative drag-and-drop solution
 
 ### Utilities
 
@@ -121,7 +131,6 @@ fitora/
 - **tailwind-merge** - Merge Tailwind classes
 - **axios** - HTTP client
 - **uuid** - Unique ID generation
-- **sift** - MongoDB-like query language for filtering
 
 ## 📱 Pages & Routes
 
@@ -181,7 +190,7 @@ The project is configured for deployment on Vercel (see `vercel.json`). To deplo
 1. Install Vercel CLI:
 
 ```bash
-npm i -g vercel
+pnpm i -g vercel
 ```
 
 2. Deploy:
@@ -198,13 +207,13 @@ Alternatively, connect your GitHub repository to Vercel for automatic deployment
 
 ## 📄 License
 
-This project is private and proprietary.
+This project is open source
 
 ## 🤝 Contributing
 
 Contributions are welcome! Please ensure:
 
-- Code passes linting (`npm run lint`)
+- Code passes linting (`pnpm run lint`)
 - TypeScript types are properly defined
 - Components follow existing patterns
 - UI is responsive and accessible
