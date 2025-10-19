@@ -57,7 +57,7 @@ const SplitControlPage = () => {
 
   return (
     <div
-      className={`min-h-screen relative ${isMobile ? "px-3 overflow-hidden pt-3 pb-24" : "px-4 sm:px-6 lg:px-8 pt-4 pb-8"}`}
+      className={`min-h-screen relative ${isMobile ? "px-3 overflow-hidden pt-3 pb-24" : "px-4 sm:px-6 lg:px-8 pt-22 pb-8"}`}
       style={{
         background: `linear-gradient(135deg, ${theme.gradientStart} 0%, ${theme.gradientEnd} 100%)`,
       }}

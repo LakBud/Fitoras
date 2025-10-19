@@ -47,7 +47,11 @@ const ControlExerciseCategory = () => {
       }}
     >
       <DialogTrigger asChild>
-        <Button className="w-[120px] justify-center bg-gray-100 gap-2 font-medium" variant="outline">
+        <Button
+          className="w-[120px] justify-center bg-gray-100 gap-2 font-medium"
+          variant="outline"
+          style={{ color: theme.dark }}
+        >
           <Plus size={18} /> Add More
         </Button>
       </DialogTrigger>

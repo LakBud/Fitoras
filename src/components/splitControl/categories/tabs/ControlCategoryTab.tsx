@@ -3,10 +3,16 @@ import { useCategoryControl } from "@/hooks/splitControl/useCategoryControl";
 import { useSplitControl } from "@/hooks/splitControl/useSplitControl";
 import { getCategoryOptions } from "@/lib/getCategoryOptions";
 import { CategoryTabTrigger } from "./CategoryTabTrigger";
+import { useEffect } from "react";
 
 const ControlCategoryTab = () => {
   const { selectedCategoryId, setSelectedCategoryId, split } = useSplitControl();
   const { categories } = useCategoryControl();
+  useEffect(() => {
+    return () => {
+      setSelectedCategoryId?.(null);
+    };
+  }, []);
   const themeColor = split?.category?.color ?? "#6B7280";
 
   const allCategories = getCategoryOptions(categories, themeColor);
