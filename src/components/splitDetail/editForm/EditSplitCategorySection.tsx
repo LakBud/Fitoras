@@ -2,6 +2,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import CategoryDeleteButton from "./CategoryDeleteButton";
 import type { Category } from "@/stores/splitControl/useCurrentCategories";
+import { Controller } from "react-hook-form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Props {
   categories: Category[];
@@ -23,26 +25,43 @@ export function EditSplitCategorySection({
   handleCategoryColorChange,
   handleCategoryDeleted,
   register,
-}: Props) {
+  control,
+}: Props & { control: any }) {
   return (
     <div className="flex flex-col space-y-2">
       <Label className="text-sm font-semibold break-words" style={{ color: theme.darker }}>
         Category <span className="text-gray-400">(Optional)</span>
       </Label>
 
-      <select
-        {...register("categoryId")}
-        className="w-full px-3 py-3 rounded-xl border focus:outline-none text-base"
-        style={{ borderColor: theme.translucentStrong, color: theme.dark }}
-      >
-        <option value="">None</option>
-        {categories.map((c) => (
-          <option key={c.id} value={c.id}>
-            {c.name}
-          </option>
-        ))}
-        <option value="new">+ Add New</option>
-      </select>
+      <Controller
+        name="categoryId"
+        control={control}
+        render={({ field }) => (
+          <Select value={field.value ?? ""} onValueChange={(v) => field.onChange(v === "none" ? "" : v)}>
+            <SelectTrigger
+              className="w-full h-11 rounded-xl border text-base"
+              style={{ borderColor: theme.translucentStrong, color: theme.dark }}
+            >
+              <SelectValue placeholder="Select a category" />
+            </SelectTrigger>
+
+            <SelectContent className="rounded-xl shadow-lg border">
+              <SelectItem value="none">None</SelectItem>
+
+              {categories.map((c) => (
+                <SelectItem key={c.id} value={c.id}>
+                  <div className="flex items-center gap-2">
+                    <span className="w-3 h-3 rounded-full border" style={{ backgroundColor: c.color }} />
+                    {c.name}
+                  </div>
+                </SelectItem>
+              ))}
+
+              <SelectItem value="new">+ Add New</SelectItem>
+            </SelectContent>
+          </Select>
+        )}
+      />
 
       {watchCategoryId && watchCategoryId !== "new" && watchCategoryId !== "" && (
         <div

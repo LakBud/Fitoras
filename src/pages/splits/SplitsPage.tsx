@@ -78,7 +78,7 @@ const SplitsPage = () => {
 
         {/* Modal Overlay */}
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-          <DialogContent className="sm:max-w-lg w-full rounded-3xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
+          <DialogContent className="sm:max-w-lg w-full rounded-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
             <SplitForm onClose={() => setIsModalOpen(false)} />
           </DialogContent>
         </Dialog>

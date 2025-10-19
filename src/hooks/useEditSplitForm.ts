@@ -33,7 +33,7 @@ export function useEditSplitForm({ splitToEdit }: UseEditSplitFormArgs) {
   const [editingCategoryColor, setEditingCategoryColor] = useState("");
   const [originalCategoryColor, setOriginalCategoryColor] = useState("");
 
-  const { register, handleSubmit, watch, setValue, reset, formState } = useForm<FormValues>();
+  const { register, handleSubmit, watch, setValue, reset, formState, control } = useForm<FormValues>();
   const watchCategoryId = watch("categoryId");
   const watchNewCategoryColor = watch("newCategoryColor");
 
@@ -114,5 +114,6 @@ export function useEditSplitForm({ splitToEdit }: UseEditSplitFormArgs) {
     theme,
     originalTheme,
     categories,
+    control,
   };
 }

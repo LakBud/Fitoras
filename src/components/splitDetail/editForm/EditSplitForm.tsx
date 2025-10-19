@@ -33,6 +33,7 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
     categories,
     theme,
     originalTheme,
+    control,
   } = useEditSplitForm({ splitToEdit });
 
   return (
@@ -83,6 +84,7 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
             </div>
 
             <EditSplitCategorySection
+              control={control}
               categories={categories}
               errors={errors}
               theme={theme}

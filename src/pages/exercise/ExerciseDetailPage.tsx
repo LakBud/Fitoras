@@ -6,11 +6,11 @@ import useBreakpoint from "../../hooks/ui/useBreakpoint";
 import NavigateBackButton from "../../components/common/NavigateBackButton";
 import { useExerciseStore } from "@/stores/exercises/useExerciseStore";
 import { type Exercises } from "@/types/exercise";
-import ExerciseImageSlider from "@/components/exerciseDetail/ExerciseImageSlider";
-import { ExerciseTabs } from "@/components/exerciseDetail/ExerciseTabs";
+import ExerciseImageSlider from "@/components/exerciseDetail/details/ExerciseImageSlider";
+import { ExerciseTabs } from "@/components/exerciseDetail/cards/ExerciseTabs";
 import { buildInfoItems, buildMuscleItems } from "@/lib/exerciseDetail/exerciseItems";
-import { ExerciseInstructions } from "@/components/exerciseDetail/ExerciseInstructions";
-import { ExerciseHeader } from "@/components/exerciseDetail/ExerciseHeader";
+import { ExerciseInstructions } from "@/components/exerciseDetail/details/ExerciseInstructions";
+import { ExerciseHeader } from "@/components/exerciseDetail/details/ExerciseHeader";
 import { parseInstructions } from "@/lib/exerciseDetail/parseInstructions";
 
 const ExerciseDetailPage = () => {
