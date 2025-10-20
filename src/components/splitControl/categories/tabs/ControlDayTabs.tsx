@@ -1,9 +1,9 @@
 import { motion, LayoutGroup } from "framer-motion";
 import { useThemeColor } from "@/hooks/ui/useThemeColor";
-import { useSplitControl } from "@/hooks/splitControl/useSplitControl";
+import { useSplitController } from "@/hooks/splitControl/useSplitController";
 
 const ControlDayTabs = () => {
-  const { split, selectedDay, setSelectedDay, setSelectedCategoryId } = useSplitControl();
+  const { split, selectedDay, setSelectedDay, setSelectedCategoryId } = useSplitController();
   const theme = useThemeColor(split?.category?.color);
 
   if (!split?.days?.length) return null;

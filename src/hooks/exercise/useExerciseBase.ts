@@ -1,11 +1,11 @@
 import type { Exercises } from "../../types/exercise";
 import type { SplitExercise } from "../../types/splits";
 import { useSplitBase } from "../splitControl/useSplitBase";
-import { useCategoryControl } from "../splitControl/useCategoryControl";
+import { useCategoryBase } from "../splitControl/useCategoryBase";
 
-export function useExerciseControl() {
+export function useExerciseBase() {
   const { split, updateSplit, selectedDay, currentDay } = useSplitBase();
-  const { selectedCategoryId } = useCategoryControl();
+  const { selectedCategoryId } = useCategoryBase();
 
   const handleAddExercise = (exercise: Exercises) => {
     if (!split || !selectedDay) return;

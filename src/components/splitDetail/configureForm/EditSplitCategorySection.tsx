@@ -4,11 +4,12 @@ import CategoryDeleteButton from "./CategoryDeleteButton";
 import type { Category } from "@/stores/split/useCurrentCategories";
 import { Controller } from "react-hook-form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import type { Theme } from "@/types/theme";
 
 interface Props {
   categories: Category[];
   errors: any;
-  theme: any;
+  theme: Theme;
   watchCategoryId: string | undefined;
   editingCategoryColor: string;
   handleCategoryColorChange: (c: string) => void;
@@ -27,6 +28,9 @@ export function EditSplitCategorySection({
   register,
   control,
 }: Props & { control: any }) {
+  const isNone = watchCategoryId === "" || watchCategoryId === "none";
+  const displayColor = isNone ? "#6B7280" : editingCategoryColor;
+
   return (
     <div className="flex flex-col space-y-2">
       <Label className="text-sm font-semibold break-words" style={{ color: theme.darker }}>
@@ -42,12 +46,11 @@ export function EditSplitCategorySection({
               className="w-full h-11 rounded-xl border text-base"
               style={{ borderColor: theme.translucentStrong, color: theme.dark }}
             >
-              <SelectValue placeholder="Select a category" />
+              <SelectValue placeholder="None" />
             </SelectTrigger>
 
             <SelectContent className="rounded-xl shadow-lg border">
               <SelectItem value="none">None</SelectItem>
-
               {categories.map((c) => (
                 <SelectItem key={c.id} value={c.id}>
                   <div className="flex items-center gap-2">
@@ -56,14 +59,14 @@ export function EditSplitCategorySection({
                   </div>
                 </SelectItem>
               ))}
-
               <SelectItem value="new">+ Add New</SelectItem>
             </SelectContent>
           </Select>
         )}
       />
 
-      {watchCategoryId && watchCategoryId !== "new" && watchCategoryId !== "" && (
+      {/* NOTE: removed the `watchCategoryId !== ""` guard */}
+      {watchCategoryId !== "new" && (
         <div
           className="mt-3 flex flex-col gap-2 p-4 rounded-xl border"
           style={{ borderColor: theme.translucentStrong, backgroundColor: theme.translucent }}
@@ -74,31 +77,37 @@ export function EditSplitCategorySection({
           <p className="text-xs" style={{ color: theme.dark }}>
             Changes apply to all splits using this category
           </p>
+
           <div className="flex items-center gap-3">
             <div
               className="w-14 h-14 rounded-xl border shadow-sm flex-shrink-0"
               style={{
-                backgroundColor: editingCategoryColor || "#6B7280",
+                backgroundColor: displayColor, // <-- gray when None
                 borderColor: theme.translucentStrong,
               }}
             />
+
             <Input
               type="color"
-              value={editingCategoryColor}
+              value={displayColor}
+              disabled={isNone} // <-- disable when None
               onChange={(e) => handleCategoryColorChange(e.target.value)}
-              className="appearance-none w-18 h-14 rounded-xl border cursor-pointer transition-transform transform hover:scale-110 focus:scale-110"
+              className="appearance-none w-18 h-14 rounded-xl border cursor-pointer transition-transform transform hover:scale-110 focus:scale-110 disabled:cursor-not-allowed"
               style={{ borderColor: theme.translucentStrong }}
             />
+
             <span className="text-sm font-mono" style={{ color: theme.dark }}>
-              {editingCategoryColor}
+              {displayColor}
             </span>
           </div>
 
-          <CategoryDeleteButton
-            category={categories.find((c) => c.id === watchCategoryId)}
-            onDeleted={handleCategoryDeleted}
-            editingColor={editingCategoryColor}
-          />
+          {!isNone && (
+            <CategoryDeleteButton
+              category={categories.find((c) => c.id === watchCategoryId)}
+              onDeleted={handleCategoryDeleted}
+              editingColor={editingCategoryColor}
+            />
+          )}
         </div>
       )}
 

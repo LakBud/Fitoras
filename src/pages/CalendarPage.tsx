@@ -6,7 +6,6 @@ import CalendarGrid from "../components/calendar/CalendarGrid";
 import ScrollTopButton from "../components/common/ScrollTopButton";
 import useBreakpoint from "../hooks/ui/useBreakpoint";
 import { useThemeColor } from "../hooks/ui/useThemeColor";
-import { useCurrentSplitStore } from "@/stores/split/useCurrentSplitStore";
 import CalendarChecklist from "@/components/calendar/CalendarChecklist";
 import { FiInfo } from "react-icons/fi";
 import { useCalendarLogic } from "@/hooks/useCalendarLogic";
@@ -16,21 +15,6 @@ const CalendarPage = () => {
   const [scrollY, setScrollY] = useState(0);
   const splits = useSplitsStore((state) => state.splits);
   const { isExerciseCompleted } = useCalendarStore();
-  const { isDesktop, isMobile } = useBreakpoint();
-  const { currentSplit } = useCurrentSplitStore();
-  const theme = useThemeColor(currentSplit?.category?.color, undefined);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.scrollTo({ top: scrollY, behavior: "auto" });
-    }
-  }, []);
-
-  const handleScroll = () => {
-    if (containerRef.current) setScrollY(containerRef.current.scrollTop);
-  };
-
   const {
     currentDate,
     topSplit,
@@ -42,6 +26,19 @@ const CalendarPage = () => {
     getCompletionPercentage,
     isFullyCompleted,
   } = useCalendarLogic({ splits, isExerciseCompleted });
+  const { isDesktop, isMobile } = useBreakpoint();
+  const theme = useThemeColor(topSplit?.category?.color);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTo({ top: scrollY, behavior: "auto" });
+    }
+  }, []);
+
+  const handleScroll = () => {
+    if (containerRef.current) setScrollY(containerRef.current.scrollTop);
+  };
 
   if (!topSplit) {
     return (

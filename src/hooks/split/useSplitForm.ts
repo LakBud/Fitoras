@@ -54,6 +54,28 @@ export const useSplitForm = (
       category = categories.find((c) => c.id === data.categoryId);
     }
 
+    // -----------------------------
+    // EDIT MODE — splitToEdit exists
+    // -----------------------------
+    if (splitToEdit) {
+      useSplitsStore.getState().updateSplit(splitToEdit.id, {
+        name: data.name.trim(),
+        description: data.description?.trim() || undefined,
+        category: category ?? undefined, // <-- THIS CLEARS CATEGORY
+      });
+
+      if (category?.id) {
+        localStorage.setItem(LAST_CATEGORY_KEY, category.id);
+      }
+
+      reset();
+      onClose();
+      return;
+    }
+
+    // -----------------------------
+    // CREATE MODE — new split
+    // -----------------------------
     const newSplit = {
       id: uuidv4(),
       name: data.name.trim(),

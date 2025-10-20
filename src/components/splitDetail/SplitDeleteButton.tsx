@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { BsTrash } from "react-icons/bs";
-import { useCurrentSplitStore } from "@/stores/split/useCurrentSplitStore";
-import { useThemeColor } from "@/hooks/ui/useThemeColor";
 import { useSplitsStore } from "@/stores/split/useSplitStore";
+import { useThemeColor } from "@/hooks/ui/useThemeColor";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -11,29 +10,29 @@ import {
   AlertDialogTitle,
   AlertDialogFooter,
 } from "@/components/ui/alert-dialog";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const SplitDeleteButton = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { currentSplit, clearCurrentSplit, setCurrentSplit } = useCurrentSplitStore();
   const removeSplit = useSplitsStore((state) => state.removeSplit);
-  const theme = useThemeColor(currentSplit?.category?.color);
+
+  const { id } = useParams();
+  const split = useSplitsStore((state) => state.splits.find((s) => s.id === id));
+
+  const theme = useThemeColor(split?.category?.color);
   const navigate = useNavigate();
 
   const handleDelete = () => {
-    if (!currentSplit) return;
-    removeSplit(currentSplit.id);
-    clearCurrentSplit();
-    setCurrentSplit(null);
+    if (!split) return;
+    removeSplit(split.id);
     setIsOpen(false);
     navigate("/splits");
   };
 
-  if (!currentSplit) return null; // nothing to delete
+  if (!split) return null;
 
   return (
     <>
-      {/* Delete Button */}
       <Button
         variant="destructive"
         className="flex items-center gap-2"
@@ -43,26 +42,17 @@ const SplitDeleteButton = () => {
         <BsTrash className="text-lg" /> Delete
       </Button>
 
-      {/* Dialog */}
       <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
         <AlertDialogContent
           className="sm:max-w-md w-full rounded-3xl p-6 sm:p-8"
           style={{ backgroundColor: theme.lighter, color: theme.textOnPrimary }}
         >
           <AlertDialogHeader>
-            <AlertDialogTitle
-              className="text-2xl sm:text-3xl font-extrabold break-words"
-              style={{ color: theme.primary }}
-              title={`Delete ${currentSplit.name}?`}
-            >
-              {`Delete ${currentSplit.name}?`}
+            <AlertDialogTitle className="text-2xl sm:text-3xl font-extrabold break-words" style={{ color: theme.primary }}>
+              {`Delete ${split.name}?`}
             </AlertDialogTitle>
             <p className="text-gray-700 text-sm sm:text-base mt-2 break-words">
-              Are you sure you want to delete{" "}
-              <span className="font-semibold break-words" title={currentSplit.name}>
-                {currentSplit.name}
-              </span>
-              ? This action cannot be undone.
+              Are you sure you want to delete <span className="font-semibold">{split.name}</span>? This action cannot be undone.
             </p>
           </AlertDialogHeader>
 
@@ -75,7 +65,6 @@ const SplitDeleteButton = () => {
             >
               Cancel
             </Button>
-
             <Button
               variant="destructive"
               className="flex-1 sm:flex-none flex items-center justify-center gap-2"

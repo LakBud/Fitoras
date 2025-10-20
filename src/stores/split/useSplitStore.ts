@@ -41,7 +41,19 @@ export const useSplitsStore = create<SplitsState>((set, get) => ({
   },
 
   updateSplit: (id, updatedFields) => {
-    const updated = get().splits.map((s) => (s.id === id ? { ...s, ...updatedFields } : s));
+    const updated = get().splits.map((s) => {
+      if (s.id !== id) return s;
+
+      const next = { ...s, ...updatedFields };
+
+      // If caller explicitly intends to clear the category
+      if ("category" in updatedFields && updatedFields.category === undefined) {
+        delete next.category; // remove key entirely
+      }
+
+      return next;
+    });
+
     set({ splits: updated });
     saveToDB(STORE_NAME, KEY, updated);
   },

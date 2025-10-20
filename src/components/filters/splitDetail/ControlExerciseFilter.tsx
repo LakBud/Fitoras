@@ -1,5 +1,5 @@
 import { FiSearch, FiRefreshCw, FiX } from "react-icons/fi";
-import { useSplitControl } from "@/hooks/splitControl/useSplitControl";
+import { useSplitController } from "@/hooks/splitControl/useSplitController";
 import { useThemeColor } from "@/hooks/ui/useThemeColor";
 import { useExerciseFilterOptions } from "@/hooks/exercise/useExerciseFilterOptions";
 import { useExerciseControlFilter } from "@/stores/splitControl/useExerciseControlFilter";
@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const ControlExerciseFilter = () => {
-  const { split } = useSplitControl();
+  const { split } = useSplitController();
   const { filters, setFilters, resetFilters } = useExerciseControlFilter();
 
   const theme = useThemeColor(split?.category?.color);

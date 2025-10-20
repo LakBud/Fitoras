@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
 import { useExerciseStore } from "@/stores/exercises/useExerciseStore";
-import { useExerciseControl } from "@/hooks/exercise/useExerciseControl";
 import { useExerciseControlFilter } from "@/stores/splitControl/useExerciseControlFilter";
-import { useSplitControl } from "@/hooks/splitControl/useSplitControl";
+import { useSplitController } from "@/hooks/splitControl/useSplitController";
 import useBreakpoint from "@/hooks/ui/useBreakpoint";
 import type { Exercises } from "@/types/exercise";
 
 export function useControlExercises() {
   const { exercises: allExercises, loading, fetchExercises } = useExerciseStore();
-  const { handleAddExercise, displayedExercises } = useExerciseControl();
   const { filteredExercises, setAllExercises } = useExerciseControlFilter();
-  const { split } = useSplitControl();
+  const { split, handleAddExercise, displayedExercises } = useSplitController();
   const { isMobile, isDesktop } = useBreakpoint();
 
   const pageSize = isMobile ? 8 : 12;

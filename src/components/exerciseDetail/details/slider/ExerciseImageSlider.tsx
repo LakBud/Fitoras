@@ -37,7 +37,7 @@ const ExerciseImageSlider = memo<ImageSliderProps>(({ images, exerciseName, isDe
       className="relative w-full mb-8 flex justify-center px-4"
       {...touchHandlers}
     >
-      <div className="relative w-full max-w-7xl bg-rose-200 rounded-b-2xl">
+      <div className="relative w-full max-w-6xl bg-rose-200 rounded-b-2xl">
         <div className="relative overflow-hidden rounded-b-2xl" style={{ maxHeight }}>
           <AnimatePresence initial={false} custom={direction} mode="popLayout">
             <motion.img

@@ -1,24 +1,23 @@
-import { useCurrentSplitStore } from "@/stores/split/useCurrentSplitStore";
 import useBreakpoint from "@/hooks/ui/useBreakpoint";
 import { useThemeColor } from "@/hooks/ui/useThemeColor";
 import MobileSplitTable from "./mobile/MobileSplitTable";
 import DesktopSplitTable from "./desktop/DesktopSplitTable";
 import { useExerciseStore } from "@/stores/exercises/useExerciseStore";
+import type { Split } from "@/types/splits";
 
-const SplitTable = () => {
-  const currentSplit = useCurrentSplitStore((state) => state.currentSplit);
+const SplitTable = ({ split }: { split: Split }) => {
   const { exercises: allExercises, loading } = useExerciseStore();
   const { isDesktop } = useBreakpoint();
-  const theme = useThemeColor(currentSplit?.category?.color);
+  const theme = useThemeColor(split?.category?.color);
   const getExerciseById = (id: string) => allExercises.find((ex) => ex.id === id);
 
-  if (!currentSplit) return null;
-  if (loading) return <div className="flex items-center justify-center py-12 text-gray-500">Loading exercises...</div>;
+  if (!split) return null;
+  if (loading) return <div className="flex ...">Loading...</div>;
 
   return isDesktop ? (
-    <DesktopSplitTable currentSplit={currentSplit} getExerciseById={getExerciseById} theme={theme} />
+    <DesktopSplitTable currentSplit={split} getExerciseById={getExerciseById} theme={theme} />
   ) : (
-    <MobileSplitTable currentSplit={currentSplit} getExerciseById={getExerciseById} theme={theme} />
+    <MobileSplitTable currentSplit={split} getExerciseById={getExerciseById} theme={theme} />
   );
 };
 

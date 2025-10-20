@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { useThemeColor } from "../../hooks/ui/useThemeColor";
 import useBreakpoint from "../../hooks/ui/useBreakpoint";
-import { useCurrentSplitStore } from "@/stores/split/useCurrentSplitStore";
+import { useSplitsStore } from "@/stores/split/useSplitStore";
 
 type Exercise = { id: string; name: string; sets?: number; reps?: number };
 
@@ -25,8 +25,8 @@ const CalendarDayCell = ({
   onSelectDate,
   isSelected = false,
 }: CalendarDayCellProps) => {
-  const { currentSplit } = useCurrentSplitStore();
-  const theme = useThemeColor(currentSplit?.category?.color);
+  const firstSplit = useSplitsStore((state) => state.splits[0]);
+  const theme = useThemeColor(firstSplit?.category?.color);
   const { isMobile } = useBreakpoint();
 
   if (!date) {

@@ -1,15 +1,11 @@
-import { useCategoryControl } from "@/hooks/splitControl/useCategoryControl";
-import { useExerciseControl } from "@/hooks/exercise/useExerciseControl";
-import { useSplitControl } from "@/hooks/splitControl/useSplitControl";
+import { useSplitController } from "@/hooks/splitControl/useSplitController";
 import { useThemeColor } from "@/hooks/ui/useThemeColor";
 import useBreakpoint from "@/hooks/ui/useBreakpoint";
 import { FiInfo } from "react-icons/fi";
 import { ControlSelectedExerciseCard } from "../cards/ControlSelectedExerciseCard";
 
 const ControlSelectedExerciseList = () => {
-  const { selectedCategoryId } = useCategoryControl();
-  const { displayedExercises, handleChangeSetsReps, handleRemoveExercise } = useExerciseControl();
-  const { split } = useSplitControl();
+  const { split, selectedCategoryId, displayedExercises, handleChangeSetsReps, handleRemoveExercise } = useSplitController();
   const { isMobile } = useBreakpoint();
 
   const theme = useThemeColor(split?.category?.color);

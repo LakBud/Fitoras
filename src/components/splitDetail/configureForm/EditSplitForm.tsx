@@ -3,7 +3,7 @@ import { BsPersonFillGear } from "react-icons/bs";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { useEditSplitForm } from "@/hooks/useEditSplitForm";
+import { useEditSplitForm } from "@/hooks/split/useEditSplitForm";
 import type { Category } from "@/stores/split/useCurrentCategories";
 import { EditSplitCategorySection } from "./EditSplitCategorySection";
 import { Input } from "@/components/ui/input";
@@ -95,7 +95,12 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
               register={register}
             />
 
-            <Button type="submit" className="w-full" style={{ backgroundColor: theme.primary, color: theme.textOnPrimary }}>
+            <Button
+              type="submit"
+              className="w-full"
+              onClick={() => setIsOpen(false)}
+              style={{ backgroundColor: theme.primary, color: theme.textOnPrimary }}
+            >
               Save Changes
             </Button>
           </form>

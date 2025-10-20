@@ -3,7 +3,7 @@ import { useSplitControlStore } from "@/stores/splitControl/useSplitControlStore
 import type { WorkoutCategory } from "../../types/splits";
 import { useSplitBase } from "./useSplitBase";
 
-export function useCategoryControl() {
+export function useCategoryBase() {
   const { split, updateSplit, selectedDay } = useSplitBase();
   const {
     selectedCategoryId,

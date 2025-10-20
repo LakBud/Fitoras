@@ -1,13 +1,13 @@
 import { Tabs, TabsList } from "@/components/ui/tabs";
-import { useCategoryControl } from "@/hooks/splitControl/useCategoryControl";
-import { useSplitControl } from "@/hooks/splitControl/useSplitControl";
+import { useCategoryBase } from "@/hooks/splitControl/useCategoryBase";
+import { useSplitController } from "@/hooks/splitControl/useSplitController";
 import { getCategoryOptions } from "@/lib/getCategoryOptions";
 import { CategoryTabTrigger } from "./CategoryTabTrigger";
 import { useEffect } from "react";
 
 const ControlCategoryTab = () => {
-  const { selectedCategoryId, setSelectedCategoryId, split } = useSplitControl();
-  const { categories } = useCategoryControl();
+  const { selectedCategoryId, setSelectedCategoryId, split } = useSplitController();
+  const { categories } = useCategoryBase();
   useEffect(() => {
     return () => {
       setSelectedCategoryId?.(null);

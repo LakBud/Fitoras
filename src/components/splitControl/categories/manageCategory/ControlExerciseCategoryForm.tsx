@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useSplitControl } from "@/hooks/splitControl/useSplitControl";
+import { useSplitController } from "@/hooks/splitControl/useSplitController";
 import type { WorkoutCategory } from "@/types/splits";
 import { useThemeColor } from "@/hooks/ui/useThemeColor";
 import { Plus } from "lucide-react";
@@ -20,7 +20,7 @@ const ControlExerciseCategory = () => {
     newCategoryColor,
     setNewCategoryColor,
     updateCategory,
-  } = useSplitControl();
+  } = useSplitController();
 
   const theme = useThemeColor();
   const [open, setOpen] = useState(false);

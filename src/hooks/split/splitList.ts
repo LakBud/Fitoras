@@ -1,6 +1,6 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useSplitsStore } from "@/stores/split/useSplitStore";
-import { useCurrentSplitStore } from "@/stores/split/useCurrentSplitStore";
+
 import { useSplitFilterStore } from "@/stores/split/useSplitFilterStore";
 import {
   useSensor,
@@ -15,7 +15,7 @@ import { arrayMove } from "@dnd-kit/sortable";
 export function useSplitList() {
   const splits = useSplitsStore((s) => s.splits);
   const setSplits = useSplitsStore((s) => s.setSplits);
-  const { setCurrentSplit } = useCurrentSplitStore();
+
   const { name: filterName, categoryId: filterCategoryId } = useSplitFilterStore();
 
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
@@ -47,10 +47,6 @@ export function useSplitList() {
   };
 
   const activeSplit = useMemo(() => filteredSplits.find((s) => s.id === activeId), [activeId, filteredSplits]);
-
-  useEffect(() => {
-    if (activeSplit) setCurrentSplit(activeSplit);
-  }, [activeSplit, setCurrentSplit]);
 
   return {
     splits,

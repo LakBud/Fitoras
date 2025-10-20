@@ -5,9 +5,9 @@ import { useCalendarStore } from "@/stores/useCalendarStore";
 import type { Exercises } from "@/types/exercise";
 import { FiInfo } from "react-icons/fi";
 import { useThemeColor } from "@/hooks/ui/useThemeColor";
-import { useCurrentSplitStore } from "@/stores/split/useCurrentSplitStore";
 import { Link } from "react-router-dom";
 import useBreakpoint from "@/hooks/ui/useBreakpoint";
+import { useSplitsStore } from "@/stores/split/useSplitStore";
 
 interface CalendarChecklistProps {
   selectedDate: Date;
@@ -26,8 +26,11 @@ const CalendarChecklist = ({
   themeColor,
 }: CalendarChecklistProps) => {
   const { toggleExercise, isExerciseCompleted } = useCalendarStore();
-  const { currentSplit, splits } = useCurrentSplitStore();
-  const theme = useThemeColor(currentSplit?.category?.color || splits?.[0]?.category?.color);
+
+  // always use first split from store
+  const split = useSplitsStore((state) => state.splits[0]);
+  const theme = useThemeColor(split?.category?.color);
+
   const { isMobile } = useBreakpoint();
 
   const dateKey = formatDateKey(selectedDate);

@@ -1,7 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
 import { type Variants, motion } from "framer-motion";
-import { useCurrentSplitStore } from "@/stores/split/useCurrentSplitStore";
 import { useSplitsStore } from "@/stores/split/useSplitStore";
 import { useThemeColor } from "../../hooks/ui/useThemeColor";
 import useBreakpoint from "../../hooks/ui/useBreakpoint";
@@ -13,19 +11,19 @@ import ControlCategoryTab from "@/components/splitControl/categories/tabs/Contro
 import ControlSelectedExercises from "@/components/splitControl/exercise/lists/ControlSelectedExerciseList";
 import ControlExerciseList from "@/components/splitControl/exercise/lists/ControlExerciseList";
 import ControlExerciseFilter from "@/components/filters/splitDetail/ControlExerciseFilter";
-import { useCategoryControl } from "../../hooks/splitControl/useCategoryControl";
+import { useCategoryBase } from "../../hooks/splitControl/useCategoryBase";
 import CollapsiblePanel from "@/components/ui/collapsiblePanel";
 import ControlExerciseCategory from "@/components/splitControl/categories/manageCategory/ControlExerciseCategoryForm";
 import { useCollapsedPanels } from "@/hooks/ui/useCollapsedPanels";
 
 const SplitControlPage = () => {
-  const currentSplit = useCurrentSplitStore((s) => s.currentSplit);
-  const setCurrentSplit = useCurrentSplitStore((s) => s.setCurrentSplit);
   const splits = useSplitsStore((s) => s.splits);
   const { id } = useParams<{ id: string }>();
-  const { categories, selectedCategoryId } = useCategoryControl();
+  const split = splits.find((s) => s.id === id);
 
-  const theme = useThemeColor(currentSplit?.category?.color);
+  const { categories, selectedCategoryId } = useCategoryBase();
+
+  const theme = useThemeColor(split?.category?.color);
   const { isMobile } = useBreakpoint();
 
   const { collapsed, toggle } = useCollapsedPanels({
@@ -37,11 +35,6 @@ const SplitControlPage = () => {
 
   const selectedCategoryName = categories?.find((cat) => cat.id === selectedCategoryId)?.name || selectedCategoryId;
   const selectedCategory = categories.find((cat) => cat.id === selectedCategoryId);
-
-  useEffect(() => {
-    const split = splits.find((s) => s.id === id);
-    if (split) setCurrentSplit(split);
-  }, [id, splits, setCurrentSplit]);
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
