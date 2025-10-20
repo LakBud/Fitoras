@@ -135,19 +135,6 @@ const DesktopSplitTable = ({ currentSplit, getExerciseById, theme }: DesktopSpli
                     toggleCategory={toggleCategory}
                   />
                 ))}
-
-                {/* Bottom gradient + arrow */}
-                <div className="absolute bottom-0 left-0 w-full h-12 pointer-events-none bg-gradient-to-t from-white to-transparent flex justify-center items-end">
-                  <svg
-                    className="w-6 h-6 animate-bounce text-gray-400 mb-1"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
               </div>
             </motion.div>
           ))}

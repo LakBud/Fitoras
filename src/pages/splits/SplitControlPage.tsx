@@ -10,7 +10,7 @@ import ControlDayTabs from "@/components/splitControl/categories/tabs/ControlDay
 import ControlCategoryTab from "@/components/splitControl/categories/tabs/ControlCategoryTab";
 import ControlSelectedExercises from "@/components/splitControl/exercise/lists/ControlSelectedExerciseList";
 import ControlExerciseList from "@/components/splitControl/exercise/lists/ControlExerciseList";
-import ControlExerciseFilter from "@/components/filters/splitDetail/ControlExerciseFilter";
+import ControlExerciseFilter from "@/components/filters/splitControl/ControlExerciseFilter";
 import { useCategoryBase } from "../../hooks/splitControl/useCategoryBase";
 import CollapsiblePanel from "@/components/ui/collapsiblePanel";
 import ControlExerciseCategory from "@/components/splitControl/categories/manageCategory/ControlExerciseCategoryForm";
