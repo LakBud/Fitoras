@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useSplitsStore } from "@/stores/split/useSplitStore";
-import { useCurrentCategories, type UseCurrentCategoriesType, type Category } from "@/stores/splitControl/useCurrentCategories";
+import { useCurrentCategories, type UseCurrentCategoriesType, type Category } from "@/stores/split/useCurrentCategories";
 import { useCurrentSplitStore } from "@/stores/split/useCurrentSplitStore";
 import { useThemeColor } from "@/hooks/ui/useThemeColor";
 

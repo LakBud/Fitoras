@@ -1,7 +1,7 @@
 import { FiLayers } from "react-icons/fi";
 import { useMemo } from "react";
 import { useSplitFilterStore } from "@/stores/split/useSplitFilterStore";
-import { useCurrentCategories } from "@/stores/splitControl/useCurrentCategories";
+import { useCurrentCategories } from "@/stores/split/useCurrentCategories";
 import MobileSplitFilter from "./MobileSplitFilter";
 import DesktopSplitFilter from "./DesktopSplitFilter";
 import useBreakpoint from "@/hooks/ui/useBreakpoint";

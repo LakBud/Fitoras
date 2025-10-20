@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import CategoryDeleteButton from "./CategoryDeleteButton";
-import type { Category } from "@/stores/splitControl/useCurrentCategories";
+import type { Category } from "@/stores/split/useCurrentCategories";
 import { Controller } from "react-hook-form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 

@@ -1,6 +1,6 @@
 import { TabsTrigger } from "@/components/ui/tabs";
 import { readableColor } from "polished";
-import type { Category } from "@/stores/splitControl/useCurrentCategories";
+import type { Category } from "@/stores/split/useCurrentCategories";
 
 interface Props {
   cat: Category | { id: null; name: string; color: string };

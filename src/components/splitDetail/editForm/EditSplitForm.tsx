@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { useEditSplitForm } from "@/hooks/useEditSplitForm";
-import type { Category } from "@/stores/splitControl/useCurrentCategories";
+import type { Category } from "@/stores/split/useCurrentCategories";
 import { EditSplitCategorySection } from "./EditSplitCategorySection";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";

@@ -6,7 +6,7 @@ import useBreakpoint from "../../hooks/ui/useBreakpoint";
 import NavigateBackButton from "../../components/common/NavigateBackButton";
 import { useExerciseStore } from "@/stores/exercises/useExerciseStore";
 import { type Exercises } from "@/types/exercise";
-import ExerciseImageSlider from "@/components/exerciseDetail/details/ExerciseImageSlider";
+import ExerciseImageSlider from "@/components/exerciseDetail/details/slider/ExerciseImageSlider";
 import { ExerciseTabs } from "@/components/exerciseDetail/cards/ExerciseTabs";
 import { buildInfoItems, buildMuscleItems } from "@/lib/exerciseDetail/exerciseItems";
 import { ExerciseInstructions } from "@/components/exerciseDetail/details/ExerciseInstructions";
@@ -85,10 +85,10 @@ const ExerciseDetailPage = () => {
       </div>
 
       {/* Navigation Buttons */}
-      <div className="fixed bottom-6 left-6 z-50">
+      <div className="fixed bottom-8 left-6 z-50">
         <NavigateBackButton />
       </div>
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-8 right-6 z-50">
         <ScrollTopButton />
       </div>
     </div>

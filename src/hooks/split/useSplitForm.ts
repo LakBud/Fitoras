@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import { useSplitsStore } from "@/stores/split/useSplitStore";
-import { useCurrentCategories, type Category } from "@/stores/splitControl/useCurrentCategories";
+import { useCurrentCategories, type Category } from "@/stores/split/useCurrentCategories";
 import type { WorkoutDay, Weekday } from "@/types/splits";
 
 const allWeekdays: Weekday[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];

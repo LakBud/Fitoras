@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { useCurrentCategories } from "../splitControl/useCurrentCategories";
+import { useCurrentCategories } from "./useCurrentCategories";
 
 interface SplitFilterState {
   name: string;

@@ -1,4 +1,3 @@
-// stores/splits/useSplitsStore.ts
 import { create } from "zustand";
 import { getFromDB, saveToDB } from "../../lib/indexedDB";
 import type { Split } from "../../types/splits";

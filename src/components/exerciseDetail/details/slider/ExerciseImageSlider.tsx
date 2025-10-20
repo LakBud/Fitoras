@@ -2,6 +2,8 @@ import { memo, useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useImageSlider } from "@/hooks/exercise/useImageSlider";
 import { slideVariants, getSliderMaxHeight, sliderTransitionConfig } from "@/lib/exerciseDetail/sliderHelpers";
+import SliderNavigationButton from "./SliderNavigationButton";
+
 interface ImageSliderProps {
   images: string[];
   exerciseName: string;
@@ -35,7 +37,7 @@ const ExerciseImageSlider = memo<ImageSliderProps>(({ images, exerciseName, isDe
       className="relative w-full mb-8 flex justify-center px-4"
       {...touchHandlers}
     >
-      <div className="relative w-full max-w-6xl bg-rose-200 rounded-b-2xl">
+      <div className="relative w-full max-w-7xl bg-rose-200 rounded-b-2xl">
         <div className="relative overflow-hidden rounded-b-2xl" style={{ maxHeight }}>
           <AnimatePresence initial={false} custom={direction} mode="popLayout">
             <motion.img
@@ -68,8 +70,8 @@ const ExerciseImageSlider = memo<ImageSliderProps>(({ images, exerciseName, isDe
           {/* Navigation Arrows */}
           {hasMultipleImages && (
             <>
-              <NavigationButton onClick={prevImage} direction="left" label="Previous image" />
-              <NavigationButton onClick={nextImage} direction="right" label="Next image" />
+              <SliderNavigationButton onClick={prevImage} direction="left" label="Previous image" />
+              <SliderNavigationButton onClick={nextImage} direction="right" label="Next image" />
             </>
           )}
 
@@ -95,31 +97,6 @@ const ExerciseImageSlider = memo<ImageSliderProps>(({ images, exerciseName, isDe
   );
 });
 
-const NavigationButton = memo<{
-  onClick: () => void;
-  direction: "left" | "right";
-  label: string;
-}>(({ onClick, direction, label }) => {
-  const isLeft = direction === "left";
-
-  return (
-    <motion.button
-      onClick={onClick}
-      whileHover={{ scale: 1.1, x: isLeft ? -4 : 4 }}
-      whileTap={{ scale: 0.95 }}
-      className={`absolute ${
-        isLeft ? "left-2 sm:left-4" : "right-2 sm:right-4"
-      } top-1/2 -translate-y-1/2 bg-white/95 backdrop-blur-sm text-rose-600 rounded-full p-3 sm:p-4 shadow-xl hover:bg-white hover:shadow-2xl transition-all z-20`}
-      aria-label={label}
-    >
-      <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d={isLeft ? "M15 19l-7-7 7-7" : "M9 5l7 7-7 7"} />
-      </svg>
-    </motion.button>
-  );
-});
-
-NavigationButton.displayName = "NavigationButton";
 ExerciseImageSlider.displayName = "ExerciseImageSlider";
 
 export default ExerciseImageSlider;

@@ -1,5 +1,5 @@
 import { BsTrash } from "react-icons/bs";
-import { useCurrentCategories } from "@/stores/splitControl/useCurrentCategories";
+import { useCurrentCategories } from "@/stores/split/useCurrentCategories";
 import { useSplitsStore } from "@/stores/split/useSplitStore";
 import { useThemeColor } from "@/hooks/ui/useThemeColor";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,7 @@ import {
   AlertDialogAction,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import type { Category } from "@/stores/splitControl/useCurrentCategories";
+import type { Category } from "@/stores/split/useCurrentCategories";
 
 interface CategoryDeleteButtonProps {
   category: Category | undefined;

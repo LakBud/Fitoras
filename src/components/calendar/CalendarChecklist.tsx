@@ -38,7 +38,7 @@ const CalendarChecklist = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="mt-4 sm:mt-6 bg-white rounded-xl sm:rounded-2xl shadow-sm border p-4 sm:p-6"
+      className="mt-4 mb-8 sm:mt-6 bg-white rounded-xl sm:rounded-2xl shadow-sm border p-4 sm:p-6"
       style={{ borderColor: themeColor }}
     >
       {/* Header */}

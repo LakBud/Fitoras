@@ -1,4 +1,3 @@
-// stores/exercises/useExerciseStore.ts
 import { create } from "zustand";
 import { getFromDB, saveToDB } from "../../lib/indexedDB";
 import { type Exercises } from "../../types/exercise";

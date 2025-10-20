@@ -49,7 +49,7 @@ const SplitsPage = () => {
 
         {/* Add Split Button */}
         <div
-          className={["fixed z-50", isDesktop && "bottom-6 right-6", isMobile && "bottom-24 right-5"].filter(Boolean).join(" ")}
+          className={["fixed z-50", isDesktop && "bottom-6 right-6", isMobile && "bottom-28 right-5"].filter(Boolean).join(" ")}
         >
           {/* Glow */}
           <div
@@ -60,10 +60,10 @@ const SplitsPage = () => {
           <Button
             onClick={() => setIsModalOpen(true)}
             aria-label="Add new split"
-            className="relative flex items-center justify-center
-             rounded-2xl w-14 h-14 sm:w-16 sm:h-16
+            className="flex items-center justify-center
+             rounded-xl w-14 h-14 sm:w-16 sm:h-16
              bg-red-600 text-white font-bold
-             shadow-lg hover:shadow-xl hover:bg-red-700 transition-all"
+             shadow-lg hover:shadow-xl  hover:bg-red-700 transition-all"
           >
             <motion.div
               initial={{ scale: 1.45 }}

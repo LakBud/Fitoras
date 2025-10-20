@@ -1,5 +1,5 @@
 import type { Exercises } from "./exercise";
-import { type Category } from "@/stores/splitControl/useCurrentCategories";
+import { type Category } from "@/stores/split/useCurrentCategories";
 
 export type Weekday = "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday";
 
