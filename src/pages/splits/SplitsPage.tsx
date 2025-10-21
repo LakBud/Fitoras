@@ -66,9 +66,9 @@ const SplitsPage = () => {
              shadow-lg hover:shadow-xl  hover:bg-red-700 transition-all"
           >
             <motion.div
-              initial={{ scale: 1.45 }}
-              whileHover={{ scale: 1.25 }}
-              whileTap={{ scale: 0.9 }}
+              initial={{ scale: 2.5 }}
+              whileHover={{ scale: 2 }}
+              whileTap={{ scale: 1.5 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
             >
               <PlusCircleIcon className="w-8 h-8 sm:w-10 sm:h-10" />

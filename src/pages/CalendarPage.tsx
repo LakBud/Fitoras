@@ -9,6 +9,8 @@ import { useThemeColor } from "../hooks/ui/useThemeColor";
 import CalendarChecklist from "@/components/calendar/CalendarChecklist";
 import { FiInfo } from "react-icons/fi";
 import { useCalendarLogic } from "@/hooks/useCalendarLogic";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const CalendarPage = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
@@ -29,6 +31,7 @@ const CalendarPage = () => {
   const { isDesktop, isMobile } = useBreakpoint();
   const theme = useThemeColor(topSplit?.category?.color);
   const containerRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useLayoutEffect(() => {
     if (containerRef.current) {
@@ -64,6 +67,10 @@ const CalendarPage = () => {
           <FiInfo className="w-8 h-8 text-rose-400 mb-3" aria-hidden="true" />
           <p className="text-base sm:text-lg text-gray-500 font-medium">No split available</p>
           <p className="text-sm text-gray-400 mt-1">Create a split first to see your workout calendar.</p>
+
+          <Button className="bg-red-500 mt-3 hover:bg-red-400" onClick={() => navigate("/splits")}>
+            Go to Split Page
+          </Button>
         </main>
       </div>
     );

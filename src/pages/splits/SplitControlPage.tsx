@@ -13,7 +13,7 @@ import ControlExerciseList from "@/components/splitControl/exercise/lists/Contro
 import ControlExerciseFilter from "@/components/filters/splitControl/ControlExerciseFilter";
 import { useCategoryBase } from "../../hooks/splitControl/useCategoryBase";
 import CollapsiblePanel from "@/components/ui/collapsiblePanel";
-import ControlExerciseCategory from "@/components/splitControl/categories/manageCategory/ControlExerciseCategoryForm";
+import ControlExerciseCategory from "@/components/splitControl/categories/form/ControlExerciseCategoryForm";
 import { useCollapsedPanels } from "@/hooks/ui/useCollapsedPanels";
 
 const SplitControlPage = () => {

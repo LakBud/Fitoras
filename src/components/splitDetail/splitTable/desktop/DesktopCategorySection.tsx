@@ -64,7 +64,7 @@ const DesktopCategorySection = ({
                   <motion.div
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    className="rounded-xl overflow-hidden border transition-all duration-200 group"
+                    className="rounded-xl overflow-hidden border transition-all duration-200 mt-3 group"
                     style={{
                       borderColor: catTheme.translucent,
                       backgroundColor: "white",

@@ -17,7 +17,7 @@ const SplitList = () => {
   const { splits, filteredSplits, activeSplit, sensors, handleDragStart, handleDragEnd } = useSplitList();
 
   if (splits.length === 0)
-    return <EmptyState message="No split has been created." message2="Click the + button to get started " />;
+    return <EmptyState message="No split has been created." message2="Click the + button on the corner to get started!" />;
   if (filteredSplits.length === 0)
     return <EmptyState message="No splits match your filters." message2="Maybe search something else?" />;
 
