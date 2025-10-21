@@ -5,19 +5,21 @@ import SplitItem from "./SplitItem";
 import { FiInfo } from "react-icons/fi";
 import { useSplitList } from "@/hooks/split/splitList";
 
-const EmptyState = ({ message }: { message: string }) => (
-  <div className="flex flex-col items-center justify-center text-center py-12 sm:py-16 px-4 rounded-2xl border border-dashed border-rose-200 bg-rose-50/50 shadow-inner">
+const EmptyState = ({ message, message2 }: { message: string; message2: string }) => (
+  <div className="flex flex-col items-center justify-center text-center py-25 sm:py-16 px-4 rounded-2xl border border-dashed border-rose-400  shadow-inner bg-white">
     <FiInfo className="w-8 h-8 text-rose-400 mb-3" />
     <p className="text-base sm:text-lg text-gray-500 font-medium">{message}</p>
-    <p className="text-sm text-gray-400 mt-1">Click the "+" icon to get started.</p>
+    <p className="text-sm text-gray-400 mt-1">{message2}</p>
   </div>
 );
 
 const SplitList = () => {
   const { splits, filteredSplits, activeSplit, sensors, handleDragStart, handleDragEnd } = useSplitList();
 
-  if (splits.length === 0) return <EmptyState message="No split has been created." />;
-  if (filteredSplits.length === 0) return <EmptyState message="No splits match your filters." />;
+  if (splits.length === 0)
+    return <EmptyState message="No split has been created." message2="Click the + button to get started " />;
+  if (filteredSplits.length === 0)
+    return <EmptyState message="No splits match your filters." message2="Maybe search something else?" />;
 
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>

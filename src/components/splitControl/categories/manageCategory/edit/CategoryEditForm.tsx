@@ -1,13 +1,13 @@
 import { useState } from "react";
-import type { Theme } from "@/types/theme";
 import type { WorkoutCategory } from "@/types/splits";
 import DeleteExerciseCategoryButton from "./DeleteExerciseCategoryButton";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import type { useThemeColor } from "@/hooks/ui/useThemeColor";
 
 interface CategoryEditProps {
-  theme: Theme;
+  theme: ReturnType<typeof useThemeColor>;
   category: WorkoutCategory;
   onDelete: (id: string) => void;
   onCancel: () => void;

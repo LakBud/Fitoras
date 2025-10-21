@@ -25,7 +25,6 @@ interface ThemeState {
 
 const STORE_NAME = "theme";
 const KEY = "theme_color";
-const DEFAULT_COLOR = "#be123c";
 
 const generateThemeColors = (primary: string): ThemeColors => {
   const textOnPrimary = readableColor(primary, "#000000", "#ffffff", false);
@@ -72,13 +71,14 @@ export const useThemeStore = create<ThemeState>((set, get) => ({
   getThemeColors: (baseColor?: string, fallbackColor?: string) => {
     const state = get();
 
-    // Priority: baseColor (current split) > persisted color > fallbackColor > default
-    const primary = baseColor !== undefined ? baseColor : state.currentColor || fallbackColor || DEFAULT_COLOR;
-
-    // Save to store if baseColor is provided and different from current
+    // If a baseColor is provided (e.g. split has category) → use it AND write it globally
     if (baseColor !== undefined && baseColor !== state.currentColor && state.initialized) {
       get().setThemeColor(baseColor);
     }
+
+    // Compute primary WITHOUT ever falling back to state.currentColor
+    // This prevents exercise category edits from leaking
+    const primary = baseColor ?? fallbackColor ?? "#6B7280"; // <- fixed safe grey fallback instead of global state
 
     return generateThemeColors(primary);
   },

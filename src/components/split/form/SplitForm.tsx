@@ -30,7 +30,9 @@ export const SplitForm = ({ onClose }: Props) => {
           {...register("name", { required: "This field is required" })}
           placeholder="e.g. Push/Pull/Legs"
           className={`px-4 py-4 text-lg rounded-xl ${
-            errors.name ? "border-red-600 focus:ring-red-200" : "border-rose-300 focus:ring-rose-200 focus:border-rose-500"
+            errors.name
+              ? "border-red-600 focus:ring-red-200"
+              : "border-rose-300 focus:ring-rose-200 focus:border-rose-500 text-base"
           }`}
         />
         {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}

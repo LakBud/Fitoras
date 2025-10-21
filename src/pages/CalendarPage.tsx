@@ -45,7 +45,7 @@ const CalendarPage = () => {
       <div
         ref={containerRef}
         onScroll={handleScroll}
-        className="relative bg-gradient-to-b from-red-50 via-rose-50 to-rose-100 min-h-screen py-10 px-4 sm:px-6 lg:px-12 overflow-auto"
+        className="relative bg-gradient-to-b from-red-50 via-rose-50 to-rose-100 min-h-screen py-20 px-4 sm:px-6 lg:px-12 overflow-auto"
       >
         {/* Page Header */}
         <header className="flex flex-col items-center mb-8 pt-10 text-center">
@@ -59,7 +59,7 @@ const CalendarPage = () => {
         <main
           role="status"
           aria-live="polite"
-          className="flex flex-col items-center justify-center text-center py-10 sm:py-16 px-6 sm:px-12 rounded-2xl border border-dashed border-rose-200 bg-rose-50/50 shadow-inner animate-fadeIn"
+          className="flex flex-col items-center justify-center text-center py-25 sm:py-16 px-10 rounded-2xl border border-dashed border-rose-400 shadow-inner bg-white"
         >
           <FiInfo className="w-8 h-8 text-rose-400 mb-3" aria-hidden="true" />
           <p className="text-base sm:text-lg text-gray-500 font-medium">No split available</p>

@@ -20,9 +20,11 @@ const ControlExerciseCategory = () => {
     newCategoryColor,
     setNewCategoryColor,
     updateCategory,
+    split,
   } = useSplitController();
 
-  const theme = useThemeColor();
+  const base = split?.category?.color ?? "#6B7280";
+  const theme = useThemeColor(base);
   const [open, setOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<WorkoutCategory | null>(null);
 
