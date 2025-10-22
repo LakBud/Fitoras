@@ -11,14 +11,23 @@ interface Props {
 }
 
 export const SplitForm = ({ onClose }: Props) => {
-  const { form, onSubmit, watchCategoryId, categories } = useSplitForm(onClose);
+  const { form, onSubmit: handleFormSubmit, watchCategoryId, categories } = useSplitForm(onClose);
+
   const {
     register,
-    formState: { errors },
+    handleSubmit,
+    formState: { errors, isValid },
+    control,
   } = form;
 
+  const onSubmit = (data: any) => {
+    handleFormSubmit(data);
+
+    onClose();
+  };
+
   return (
-    <form onSubmit={onSubmit} className="relative space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="relative space-y-6">
       <DialogHeader className="pb-2">
         <DialogTitle className="text-2xl sm:text-3xl font-extrabold text-rose-500 text-center">Create New Split</DialogTitle>
       </DialogHeader>
@@ -38,11 +47,11 @@ export const SplitForm = ({ onClose }: Props) => {
         {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
       </div>
 
+      {/* Description */}
       <div className="flex flex-col space-y-1">
         <Label className="text-sm font-semibold text-rose-600">
           Description <span className="text-gray-400">(Optional)</span>
         </Label>
-
         <Textarea
           {...register("description")}
           placeholder="Optional description..."
@@ -50,8 +59,8 @@ export const SplitForm = ({ onClose }: Props) => {
         />
       </div>
 
-      {/* Category & new category fields */}
-      <SplitCategorySelect control={form.control} register={register} watchCategoryId={watchCategoryId} categories={categories} />
+      {/* Category */}
+      <SplitCategorySelect control={control} register={register} watchCategoryId={watchCategoryId} categories={categories} />
 
       {/* New category validation */}
       {watchCategoryId === "new" && (
@@ -61,7 +70,17 @@ export const SplitForm = ({ onClose }: Props) => {
         </div>
       )}
 
-      <Button type="submit" className="w-full py-6 font-semibold rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-lg">
+      <Button
+        type="submit"
+        disabled={!isValid}
+        className="w-full py-6 font-semibold rounded-xl text-lg"
+        style={{
+          backgroundColor: !isValid ? "#fca5a5" : "#f43f5e",
+          opacity: !isValid ? 0.6 : 1,
+          cursor: !isValid ? "not-allowed" : "pointer",
+          color: "white",
+        }}
+      >
         Create
       </Button>
     </form>

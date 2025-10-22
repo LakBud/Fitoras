@@ -54,7 +54,8 @@ export const SplitCategorySelect = ({ control, register, watchCategoryId, catego
           <Label className="text-sm text-rose-600">Category Name</Label>
           <Input
             type="text"
-            {...register("newCategoryName", { required: true })}
+            {...register("newCategoryName", { required: true, maxLength: 20 })}
+            maxLength={20}
             placeholder="e.g. Bodybuilding, Powerlifting.."
             className="w-full rounded-xl h-11 border border-rose-300 focus:ring-rose-200 focus:border-rose-500"
           />

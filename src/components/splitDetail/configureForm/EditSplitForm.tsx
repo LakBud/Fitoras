@@ -24,17 +24,23 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
   const {
     register,
     handleSubmit,
-    onSubmit,
+    onSubmit: handleFormSubmit,
     watchCategoryId,
     editingCategoryColor,
     handleCategoryColorChange,
     handleCategoryDeleted,
-    formState: { errors },
+    formState: { errors, isValid },
     categories,
     theme,
     originalTheme,
     control,
   } = useEditSplitForm({ splitToEdit });
+
+  // wrap onSubmit to close dialog only if valid
+  const onSubmit = (data: any) => {
+    handleFormSubmit(data);
+    setIsOpen(false);
+  };
 
   return (
     <>
@@ -98,8 +104,13 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
             <Button
               type="submit"
               className="w-full"
-              onClick={() => setIsOpen(false)}
-              style={{ backgroundColor: theme.primary, color: theme.textOnPrimary }}
+              disabled={!isValid}
+              style={{
+                backgroundColor: !isValid ? theme.translucentStrong : theme.primary,
+                color: theme.textOnPrimary,
+                opacity: !isValid ? 0.5 : 1,
+                cursor: !isValid ? "not-allowed" : "pointer",
+              }}
             >
               Save Changes
             </Button>

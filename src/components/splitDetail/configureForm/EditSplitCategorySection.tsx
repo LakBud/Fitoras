@@ -65,7 +65,6 @@ export function EditSplitCategorySection({
         )}
       />
 
-      {/* NOTE: removed the `watchCategoryId !== ""` guard */}
       {watchCategoryId !== "new" && (
         <div
           className="mt-3 flex flex-col gap-2 p-4 rounded-xl border"
@@ -112,19 +111,60 @@ export function EditSplitCategorySection({
       )}
 
       {watchCategoryId === "new" && (
-        <div className="mt-2 flex flex-col sm:flex-row gap-3">
-          <input
-            {...register("newCategoryName", { required: "Category name is required" })}
-            placeholder="New category name"
-            className="flex-1 w-full rounded-xl px-4 py-3 border focus:ring-2 text-base break-words"
-            style={{ borderColor: errors.newCategoryName ? "#FF4D4F" : theme.translucentStrong, color: theme.dark }}
-          />
-          <input
-            type="color"
-            {...register("newCategoryColor")}
-            defaultValue={theme.primary}
-            className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl cursor-pointer"
-          />
+        <div
+          className="mt-3 flex flex-col gap-3 p-4 rounded-xl border"
+          style={{
+            borderColor: theme.translucentStrong,
+            backgroundColor: theme.translucent,
+          }}
+        >
+          {/* Name */}
+          <div className="flex flex-col gap-1">
+            <Label className="text-sm" style={{ color: theme.darker }}>
+              Category Name
+            </Label>
+
+            <Input
+              {...register("newCategoryName", {
+                required: "Category name is required",
+                maxLength: {
+                  value: 20,
+                  message: "Max 20 characters",
+                },
+              })}
+              maxLength={20}
+              placeholder="e.g. Bodybuilding, Powerlifting.."
+              className="w-full rounded-xl h-11 border text-base"
+              style={{
+                borderColor: errors.newCategoryName ? "#FF4D4F" : theme.translucentStrong,
+                color: theme.dark,
+              }}
+            />
+
+            {/* Error + Counter row */}
+            <div className="flex justify-between text-xs mt-0.5">
+              <span className="text-red-500">{errors.newCategoryName?.message}</span>
+            </div>
+          </div>
+
+          {/* Color */}
+          <div className="flex flex-col gap-1">
+            <Label className="text-sm" style={{ color: theme.darker }}>
+              Category Color
+            </Label>
+            <div className="flex items-center gap-3">
+              <Input
+                type="color"
+                {...register("newCategoryColor", { required: true })}
+                defaultValue={theme.primary}
+                className="w-18 h-14 rounded-xl border cursor-pointer shadow-sm"
+                style={{ borderColor: theme.translucentStrong }}
+              />
+              <span className="text-xs" style={{ color: theme.dark }}>
+                Pick a color
+              </span>
+            </div>
+          </div>
         </div>
       )}
     </div>
