@@ -48,11 +48,16 @@ const SplitDeleteButton = () => {
           style={{ backgroundColor: theme.lighter, color: theme.textOnPrimary }}
         >
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-2xl sm:text-3xl font-extrabold break-words" style={{ color: theme.primary }}>
+            <AlertDialogTitle
+              className="text-2xl sm:text-3xl font-extrabold break-all whitespace-normal"
+              style={{ color: theme.primary }}
+            >
               {`Delete ${split.name}?`}
             </AlertDialogTitle>
-            <p className="text-gray-700 text-sm sm:text-base mt-2 break-words">
-              Are you sure you want to delete <span className="font-semibold">{split.name}</span>? This action cannot be undone.
+
+            <p className="text-gray-700 text-sm sm:text-base mt-2 break-words whitespace-normal">
+              Are you sure you want to delete <span className="font-semibold break-all">{split.name}</span>? This action cannot be
+              undone.
             </p>
           </AlertDialogHeader>
 

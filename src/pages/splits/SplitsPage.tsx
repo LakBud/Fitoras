@@ -3,7 +3,6 @@ import SplitList from "../../components/split/list/SplitList";
 import { SplitForm } from "@/components/split/form/SplitForm";
 import ScrollTopButton from "../../components/common/ScrollTopButton";
 import useBreakpoint from "../../hooks/ui/useBreakpoint";
-import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { PlusCircleIcon } from "lucide-react";
 import { motion } from "framer-motion";
@@ -57,23 +56,22 @@ const SplitsPage = () => {
                   bg-gradient-to-r from-rose-400 via-red-500 to-pink-500"
           />
           {/* Actual button */}
-          <Button
+          <motion.button
+            initial={{ scale: 1 }}
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ scale: 1.25 }}
+            transition={{ type: "spring", stiffness: 100, damping: 2 }}
             onClick={() => setIsModalOpen(true)}
             aria-label="Add new split"
-            className="flex items-center justify-center
-             rounded-xl w-14 h-14 sm:w-16 sm:h-16
+            className={`flex ${isMobile ? "bottom-30 right-6" : "bottom-8 right-10"}  fixed items-center justify-center
+             rounded-lg w-14 h-14 sm:w-16 sm:h-16
              bg-red-600 text-white font-bold
-             shadow-lg hover:shadow-xl  hover:bg-red-700 transition-all"
+             shadow-lg hover:shadow-xl  hover:bg-red-700 transition-all`}
           >
-            <motion.div
-              initial={{ scale: 2.5 }}
-              whileHover={{ scale: 2 }}
-              whileTap={{ scale: 1.5 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            >
+            <motion.div>
               <PlusCircleIcon className="w-8 h-8 sm:w-10 sm:h-10" />
             </motion.div>
-          </Button>
+          </motion.button>
         </div>
 
         {/* Modal Overlay */}

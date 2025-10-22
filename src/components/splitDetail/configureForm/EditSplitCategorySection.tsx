@@ -43,18 +43,18 @@ export function EditSplitCategorySection({
         render={({ field }) => (
           <Select value={field.value ?? ""} onValueChange={(v) => field.onChange(v === "none" ? "" : v)}>
             <SelectTrigger
-              className="w-full h-11 rounded-xl border text-base"
+              className="w-full h-11 rounded-xl border text-base max-w-104"
               style={{ borderColor: theme.translucentStrong, color: theme.dark }}
             >
               <SelectValue placeholder="None" />
             </SelectTrigger>
 
-            <SelectContent className="rounded-xl shadow-lg border">
+            <SelectContent className="rounded-xl shadow-lg border max-w-104">
               <SelectItem value="none">None</SelectItem>
               {categories.map((c) => (
                 <SelectItem key={c.id} value={c.id}>
-                  <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full border" style={{ backgroundColor: c.color }} />
+                  <div className="flex items-center gap-2 ">
+                    <span className="w-3 h-3 rounded-full border text-base" style={{ backgroundColor: c.color }} />
                     {c.name}
                   </div>
                 </SelectItem>

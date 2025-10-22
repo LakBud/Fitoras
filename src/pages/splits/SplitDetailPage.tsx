@@ -78,7 +78,7 @@ const SplitDetailPage = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.7 }}
-              className="mt-4 max-w-3xl text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed break-words text-balance"
+              className="mt-4 max-w-full truncate text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed break-words text-balance tracking-tight bg-clip-text"
             >
               {split.description}
             </motion.p>

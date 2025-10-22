@@ -34,7 +34,7 @@ const CalendarHeader = ({ currentDate, onPrev, onNext, splitName, splitDescripti
             <ChevronLeft className={`${isMobile ? "w-4 h-4" : "w-5 h-5"}`} />
           </motion.button>
           <h2
-            className={`${isMobile ? "text-base" : "text-lg sm:text-xl"} font-semibold text-gray-700 min-w-[200px] text-center`}
+            className={`${isMobile ? "text-base" : "text-lg sm:text-xl"} font-semibold text-gray-700 min-w-[200px] text-center `}
           >
             {currentDate.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
           </h2>
@@ -65,12 +65,16 @@ const CalendarHeader = ({ currentDate, onPrev, onNext, splitName, splitDescripti
           }}
         >
           <h3
-            className={`${isMobile ? "text-base" : "text-lg"} font-semibold text-gray-800 mb-1`}
+            className={`${isMobile ? "text-base" : "text-lg"} font-semibold text-gray-800 mb-1  max-w-full truncate`}
             style={{ color: theme.primary }}
           >
             Current Split: {splitName}
           </h3>
-          {splitDescription && <p className={`${isMobile ? "text-xs" : "text-sm"} text-gray-600`}>{splitDescription}</p>}
+          {splitDescription && (
+            <p className={`${isMobile ? "text-xs" : "text-sm"} text-gray-600  max-w-full truncate`}>
+              Category: {splitDescription}
+            </p>
+          )}
         </motion.div>
       )}
     </div>
