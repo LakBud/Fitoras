@@ -21,6 +21,7 @@ export function useExerciseFilterOptions(): FilterOption[] {
   return useMemo(() => {
     if (!exercises?.length) return [];
 
+    // The filter options
     return [
       {
         key: "force",

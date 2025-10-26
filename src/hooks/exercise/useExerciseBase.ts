@@ -13,7 +13,7 @@ export function useExerciseBase() {
     const currentDayData = split.days.find((d) => d.day === selectedDay);
     if (!currentDayData) return;
 
-    // Check if exercise already exists in selected category or day
+    // Prevent duplicate adds (either inside a category or directly in a day)
     const existsInCategory = selectedCategoryId
       ? currentDayData.categories?.find((cat) => cat.id === selectedCategoryId)?.exercises.some((ex) => ex.id === exercise.id)
       : false;
@@ -21,12 +21,14 @@ export function useExerciseBase() {
     const existsInDay = !selectedCategoryId ? currentDayData.exercises.some((ex) => ex.id === exercise.id) : false;
 
     if (existsInCategory || existsInDay) {
-      alert("This exercise is already added."); // or show a toast
+      alert("This exercise is already added."); // optional UX toast here instead
       return;
     }
 
+    // Default template for a new added exercise
     const newEx: SplitExercise = { ...exercise, sets: 3, reps: 10 };
 
+    // Inject into category if selected, else into day-level list
     const updatedDays = split.days.map((d) => {
       if (d.day !== selectedDay) return d;
       if (selectedCategoryId) {
@@ -47,7 +49,7 @@ export function useExerciseBase() {
     const updatedDays = split.days.map((day) => {
       if (day.day !== selectedDay) return day;
 
-      // If a category is selected
+      // Remove inside a category
       if (categoryId) {
         const updatedCategories = (day.categories ?? []).map((cat) =>
           cat.id === categoryId ? { ...cat, exercises: cat.exercises.filter((ex) => ex.id !== exerciseId) } : cat
@@ -55,8 +57,11 @@ export function useExerciseBase() {
         return { ...day, categories: updatedCategories };
       }
 
-      // If no category, remove from day exercises
-      return { ...day, exercises: day.exercises.filter((ex) => ex.id !== exerciseId) };
+      // Remove from day-level exercises
+      return {
+        ...day,
+        exercises: day.exercises.filter((ex) => ex.id !== exerciseId),
+      };
     });
 
     updateSplit(split.id, { days: updatedDays });
@@ -67,6 +72,8 @@ export function useExerciseBase() {
 
     const updatedDays = split.days.map((d) => {
       if (d.day !== selectedDay) return d;
+
+      // Update inside category
       if (categoryId) {
         const updatedCategories = (d.categories ?? []).map((cat) =>
           cat.id === categoryId
@@ -78,6 +85,8 @@ export function useExerciseBase() {
         );
         return { ...d, categories: updatedCategories };
       }
+
+      // Update on day root level
       return {
         ...d,
         exercises: d.exercises.map((ex) => (ex.id === exerciseId ? { ...ex, [field]: value } : ex)),
@@ -87,6 +96,7 @@ export function useExerciseBase() {
     updateSplit(split.id, { days: updatedDays });
   };
 
+  // Resolves which list is currently active for UI consumption
   const displayedExercises = selectedCategoryId
     ? currentDay?.categories?.find((cat) => cat.id === selectedCategoryId)?.exercises
     : currentDay?.exercises;

@@ -30,14 +30,17 @@ const emptyFilters: ExerciseFilters = {
   secondaryMuscle: "",
 };
 
+// Normalize strings for case-insensitive and hyphen-insensitive comparison
 const normalize = (str: string) => str.toLowerCase().replace(/-/g, "").trim();
 
 export const useExerciseFilterStore = create<FilterState>((set, get) => {
+  // Core filtering implementation — applies current filters to a list
   const applyFilters = (exercises: Exercises[]) => {
     const { filters } = get();
     const search = normalize(filters.name);
 
     const filtered = exercises.filter((ex) => {
+      // Fields considered in free-text search
       const fieldsToSearch = [
         ex.name,
         ex.force,
@@ -48,6 +51,7 @@ export const useExerciseFilterStore = create<FilterState>((set, get) => {
         ...(ex.primaryMuscles || []),
       ].filter(Boolean) as string[];
 
+      // match only if text search hits AND all active filters match exactly
       return (
         (!search || fieldsToSearch.some((f) => normalize(f).includes(search))) &&
         (!filters.force || ex.force === filters.force) &&
@@ -67,6 +71,7 @@ export const useExerciseFilterStore = create<FilterState>((set, get) => {
     filteredExercises: [],
     allExercises: [],
 
+    // Merge new filter values and re-apply when there is data
     setFilters: (newFilters) => {
       const updatedFilters = { ...get().filters, ...newFilters };
       set({ filters: updatedFilters });
@@ -75,11 +80,13 @@ export const useExerciseFilterStore = create<FilterState>((set, get) => {
       }
     },
 
+    // Clear filters and show all exercises again
     resetFilters: () => {
       const allExercises = get().allExercises || [];
       set({ filters: { ...emptyFilters }, filteredExercises: allExercises });
     },
 
+    // Set the full exercise list and immediately apply filters
     setAllExercises: (exercises) => {
       set({ allExercises: exercises });
       applyFilters(exercises);

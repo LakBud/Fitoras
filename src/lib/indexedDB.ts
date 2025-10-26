@@ -1,13 +1,14 @@
 const DB_NAME = "fitorasDB";
-const DB_VERSION = 2; // Increment version to trigger upgrade
+const DB_VERSION = 2; // bumping triggers onupgradeneeded
 
-// Define all your stores here
+// Object stores managed in this DB instance
 const OBJECT_STORES = ["exercises", "splits", "calendar", "theme"];
 
 let dbInstance: IDBDatabase | null = null;
 
 export const initDB = (): Promise<IDBDatabase> => {
   return new Promise((resolve, reject) => {
+    // Reuse open instance if already initialized
     if (dbInstance) {
       resolve(dbInstance);
       return;
@@ -25,7 +26,7 @@ export const initDB = (): Promise<IDBDatabase> => {
     request.onupgradeneeded = (event) => {
       const db = (event.target as IDBOpenDBRequest).result;
 
-      // Create all object stores at once
+      // Create missing stores during version upgrade
       OBJECT_STORES.forEach((storeName) => {
         if (!db.objectStoreNames.contains(storeName)) {
           db.createObjectStore(storeName);
@@ -34,13 +35,14 @@ export const initDB = (): Promise<IDBDatabase> => {
       });
     };
 
-    // Handle blocking events (when database needs upgrade but other tabs are open)
+    // Upgrade blocked = another tab is holding older version open
     request.onblocked = () => {
       console.warn("Database upgrade blocked. Please close other tabs with this site open.");
     };
   });
 };
 
+// Read single value by key from a store
 export const getFromDB = async <T>(storeName: string, key: string): Promise<T | null> => {
   try {
     const db = await initDB();
@@ -58,6 +60,7 @@ export const getFromDB = async <T>(storeName: string, key: string): Promise<T | 
   }
 };
 
+// Upsert value under key in a store
 export const saveToDB = async <T>(storeName: string, key: string, data: T): Promise<void> => {
   try {
     const db = await initDB();
@@ -74,7 +77,7 @@ export const saveToDB = async <T>(storeName: string, key: string, data: T): Prom
   }
 };
 
-// Optional: Helper to delete the database (useful for development)
+// Full drop of IndexedDB & all stores (dev/debug tool)
 export const deleteDB = async (): Promise<void> => {
   return new Promise((resolve, reject) => {
     if (dbInstance) {

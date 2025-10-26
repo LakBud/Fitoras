@@ -14,11 +14,13 @@ export function useCategoryControl() {
     setNewCategoryColor,
   } = useSplitControlStore();
 
+  // Categories for currently selected day (or empty if none)
   const categories = split?.days.find((d) => d.day === selectedDay)?.categories ?? [];
 
   const addCategory = () => {
     if (!split || !selectedDay || !newCategoryName.trim()) return;
 
+    // Build new category with default color & empty exercise list
     const newCategory: WorkoutCategory = {
       id: uuidv4(),
       name: newCategoryName.trim(),
@@ -26,11 +28,14 @@ export function useCategoryControl() {
       exercises: [],
     };
 
+    // Insert category into selected day
     const updatedDays = split.days.map((d) =>
       d.day === selectedDay ? { ...d, categories: [...(d.categories ?? []), newCategory] } : d
     );
 
     updateSplit(split.id, { days: updatedDays });
+
+    // Reset UI input + select the created category
     setNewCategoryName("");
     setNewCategoryColor("#ff0000");
     setSelectedCategoryId(newCategory.id);
@@ -39,6 +44,7 @@ export function useCategoryControl() {
   const deleteCategory = (categoryId: string) => {
     if (!split || !selectedDay) return;
 
+    // Remove from categories of current day
     const updatedDays = split.days.map((d) =>
       d.day === selectedDay
         ? {
@@ -50,6 +56,7 @@ export function useCategoryControl() {
 
     updateSplit(split.id, { days: updatedDays });
 
+    // Clear selection if we deleted the active one
     if (selectedCategoryId === categoryId) {
       setSelectedCategoryId(null);
     }
@@ -58,6 +65,7 @@ export function useCategoryControl() {
   const updateCategory = (categoryId: string, updatedFields: Partial<Pick<WorkoutCategory, "name" | "color">>) => {
     if (!split || !selectedDay) return;
 
+    // Patch category fields inside current day
     const updatedDays = split.days.map((d) =>
       d.day === selectedDay
         ? {
@@ -80,6 +88,6 @@ export function useCategoryControl() {
     setNewCategoryColor,
     addCategory,
     deleteCategory,
-    updateCategory, // replaces both name+color updaters
+    updateCategory,
   };
 }

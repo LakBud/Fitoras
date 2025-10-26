@@ -22,6 +22,7 @@ export const useCurrentCategories = create<CategoriesState>()(
     (set, get) => ({
       categories: [],
 
+      // Create & store a new category (uuid is generated here)
       addCategory: (category) => {
         const newCategory: Category = { ...category, id: uuidv4() };
         const updated = [...get().categories, newCategory];
@@ -29,6 +30,7 @@ export const useCurrentCategories = create<CategoriesState>()(
         return newCategory;
       },
 
+      // Merge partial fields into existing category by id
       updateCategory: (id, updatedFields) => {
         set({
           categories: get().categories.map((c) => (c.id === id ? { ...c, ...updatedFields } : c)),
@@ -36,12 +38,12 @@ export const useCurrentCategories = create<CategoriesState>()(
       },
 
       removeCategory: (id) => {
-        // Remove category from current categories
+        // Remove category from state
         set({
           categories: get().categories.filter((c) => c.id !== id),
         });
 
-        // Reset category for any splits that had this category
+        // Also clear the category on any splits that referenced it
         const splits = useSplitsStore.getState().splits;
         const updateSplit = useSplitsStore.getState().updateSplit;
 
@@ -52,10 +54,12 @@ export const useCurrentCategories = create<CategoriesState>()(
         });
       },
 
+      // Bulk replace categories (used e.g. after import or reset)
       setCategories: (categories) => set({ categories }),
     }),
     {
-      name: "fitoras_categories", //  localStorage key
+      // Persist categories in IndexedDB under this key if needed
+      name: "fitoras_categories",
     }
   )
 );

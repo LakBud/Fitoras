@@ -1,14 +1,15 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useExerciseStore } from "../../stores/exercises/useExerciseStore";
 import { useExerciseFilterStore } from "../../stores/exercises/useExerciseFilterStore";
-import { useScrollStore } from "../../stores/exercises/useScrollState";
 
 export function useExercisePageLifecycle() {
   const { exercises, fetchExercises, loading } = useExerciseStore();
   const { setAllExercises } = useExerciseFilterStore();
-  const { scrollY, setScrollY } = useScrollStore();
 
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Local scroll state
+  const [scrollY, setScrollY] = useState(0);
 
   // 1) fetch once
   useEffect(() => {
@@ -20,13 +21,13 @@ export function useExercisePageLifecycle() {
     if (!loading && exercises.length) setAllExercises(exercises);
   }, [loading, exercises, setAllExercises]);
 
-  // 3) restore scroll
+  // 3) restore scroll on mount
   useEffect(() => {
     const el = containerRef.current;
     if (el) el.scrollTo({ top: scrollY, behavior: "auto" });
   }, [scrollY]);
 
-  // 4) track scroll
+  // 4) track scroll locally
   const handleScroll = () => {
     const el = containerRef.current;
     if (el) setScrollY(el.scrollTop);

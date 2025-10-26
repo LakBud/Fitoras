@@ -30,9 +30,9 @@ export const useImageSlider = ({
   const [currentImage, setCurrentImage] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
-  const [direction, setDirection] = useState(0);
+  const [direction, setDirection] = useState(0); // +1 = forward, -1 = backward
 
-  // Preload adjacent images for smoother transitions
+  // Preload NEXT and PREV images to avoid flash+delay
   useEffect(() => {
     if (imagesCount <= 1) return;
 
@@ -48,16 +48,19 @@ export const useImageSlider = ({
     preloadImage(prevIdx);
   }, [currentImage, images, imagesCount, basePath]);
 
+  // Move forward cyclically
   const nextImage = useCallback(() => {
     setDirection(1);
     setCurrentImage((prev) => (prev + 1) % imagesCount);
   }, [imagesCount]);
 
+  // Move backward cyclically
   const prevImage = useCallback(() => {
     setDirection(-1);
     setCurrentImage((prev) => (prev - 1 + imagesCount) % imagesCount);
   }, [imagesCount]);
 
+  // Jump to a specific index with direction inferred for animation
   const goToImage = useCallback(
     (idx: number) => {
       setDirection(idx > currentImage ? 1 : -1);
@@ -65,6 +68,8 @@ export const useImageSlider = ({
     },
     [currentImage]
   );
+
+  // Touch swipe handlers --------------------------------
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX);
@@ -87,6 +92,7 @@ export const useImageSlider = ({
     setTouchEnd(null);
   }, [touchStart, touchEnd, nextImage, prevImage]);
 
+  // Computed current image path
   const currentImageSrc = `${basePath}/${images[currentImage]}`;
 
   return {

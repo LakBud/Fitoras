@@ -11,6 +11,7 @@ export const useExerciseList = (pageSize = 8) => {
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
 
+  // Initialize / re-sync whenever filters or count change
   useEffect(() => {
     const count = visibleCount || pageSize;
     setVisibleExercises(filteredExercises.slice(0, count));
@@ -18,17 +19,19 @@ export const useExerciseList = (pageSize = 8) => {
     setLoading(false);
   }, [filteredExercises, visibleCount, pageSize]);
 
+  // Lazy load next page chunk
   const loadMore = () => {
     if (loading || !hasMore) return;
     setLoading(true);
 
     const next = filteredExercises.slice(visibleExercises.length, visibleExercises.length + pageSize);
 
+    // Delay added for UX (spinner / shimmer)
     setTimeout(() => {
       const updated = [...visibleExercises, ...next];
       setVisibleExercises(updated);
       setHasMore(updated.length < filteredExercises.length);
-      setVisibleCount(updated.length);
+      setVisibleCount(updated.length); // Persist visible count globally
       setLoading(false);
     }, 300);
   };
