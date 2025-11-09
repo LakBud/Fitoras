@@ -141,7 +141,7 @@ fitora/
 | `/exercise/:id`    | Detailed view of a specific exercise |
 | `/splits`          | View all workout splits              |
 | `/splits/:id`      | View details of a specific split     |
-| `/splits/:id/edit` | Edit/create workout splits           |
+| `/splits/:id/edit` | Edit a specific workout split        |
 | `/calendar`        | Calendar view for workout planning   |
 
 ## 🎨 Key Features Details
