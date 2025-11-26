@@ -1,4 +1,4 @@
-import type { Weekday, Split, SplitExercise } from "../types/splits";
+import type { Weekday, Split, SplitExercise } from "@/types/splits";
 
 export const WEEKDAYS: Weekday[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 

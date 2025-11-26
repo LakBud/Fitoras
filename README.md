@@ -2,7 +2,7 @@
 
 A modern, privacy-focused fitness web application for managing workout routines, tracking exercises, and planning your fitness journey. Built with React, TypeScript, and Tailwind CSS.
 
-## ✨ Features
+## Features
 
 - **800+ Exercises**: Browse a comprehensive collection of exercises targeting every muscle group
 - **Workout Splits**: Create, edit, and manage custom workout splits with multiple days
@@ -13,7 +13,7 @@ A modern, privacy-focused fitness web application for managing workout routines,
 - **Drag & Drop**: Intuitive drag-and-drop interface for organizing exercises in your splits
 - **Category Management**: Organize exercises within workout days using custom categories
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -43,14 +43,14 @@ pnpm run dev
 
 4. Open your browser and navigate to `http://localhost:5173`
 
-## 📦 Available Scripts
+## Available Scripts
 
 - `pnpm run dev` - Start the development server
 - `pnpm run build` - Build the production bundle
 - `pnpm run preview` - Preview the production build locally
 - `pnpm run lint` - Run ESLint to check code quality
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 fitora/
@@ -90,7 +90,7 @@ fitora/
 
 ```
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Core
 
@@ -115,10 +115,9 @@ fitora/
 - **Lucide React** - Icon library
 - **React Icons** - Additional icons
 
-### Form 
+### Form
 
 - **React Hook Form** - Form management
-
 
 ### Drag & Drop
 
@@ -144,7 +143,7 @@ fitora/
 | `/splits/:id/edit` | Edit a specific workout split        |
 | `/calendar`        | Calendar view for workout planning   |
 
-## 🎨 Key Features Details
+## Key Features Details
 
 ### Home/Dashboard
 
@@ -183,7 +182,7 @@ Fitoras prioritizes your privacy:
 - No account creation required
 - Only Google Analytics is used
 
-## 🌐 Deployment
+## Deployment
 
 The project is configured for deployment on Vercel (see `vercel.json`). To deploy:
 
@@ -205,11 +204,7 @@ Alternatively, connect your GitHub repository to Vercel for automatic deployment
 
 - `FITORA_BASE_PATH` - Base path for the application (default: `/`)
 
-## 📄 License
-
-This project is open source
-
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please ensure:
 
@@ -218,12 +213,12 @@ Contributions are welcome! Please ensure:
 - Components follow existing patterns
 - UI is responsive and accessible
 
-## 🐛 Known Issues
+## Known Issues
 
 - Exercise data is loaded from a single JSON file
 - No backup/export functionality yet
 
-## 🔮 Future Enhancements
+## Future Enhancements
 
 - Export/import workout data
 - Custom exercise creation
