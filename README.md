@@ -85,6 +85,9 @@ fitora/
 │   ├── index.css
 │   ├── main.tsx
 │   └── vite-env.d.ts
+├── tests/                         # Unit tests
+│   ├── testFiles/
+│   ├── setup/
 ├── package.json
 └── tsconfig.json
 
@@ -106,6 +109,10 @@ fitora/
 ### Database
 
 - **IndexedDB** - Lightweight Browser Database (50MB+)
+
+### Unit Testing
+
+- **Vitest**
 
 ### UI & Styling
 
