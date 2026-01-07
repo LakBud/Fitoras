@@ -7,7 +7,7 @@ export type Exercises = {
   primaryMuscles: string[];
   secondaryMuscles?: string[];
   instructions?: string;
-  category: string;
+  category?: string;
   images?: string[];
   id: string;
   sets?: number;

@@ -43,7 +43,7 @@ const CategoryEditForm = ({ theme, category, onDelete, onCancel, onSave }: Categ
           value={name}
           onChange={handleNameChange}
           placeholder="Enter category name"
-          className="border rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-offset-1  transition shadow-sm text-sm"
+          className="border rounded-full px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-red-500 transition-colors"
           style={{ borderColor }}
         />
       </div>
