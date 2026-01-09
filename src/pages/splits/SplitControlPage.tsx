@@ -12,7 +12,7 @@ import ControlSelectedExercises from "@/components/splitControl/exercise/lists/C
 import ControlExerciseList from "@/components/splitControl/exercise/lists/ControlExerciseList";
 import ControlExerciseFilter from "@/components/filters/splitControl/ControlExerciseFilter";
 import { useCategoryBase } from "../../hooks/splitControl/useCategoryBase";
-import CollapsiblePanel from "@/components/ui/collapsiblePanel";
+import CollapsiblePanel from "@/components/ui/collapsible-panel";
 import ControlExerciseCategory from "@/components/splitControl/categories/form/ControlExerciseCategoryForm";
 import { useCollapsedPanels } from "@/hooks/ui/useCollapsedPanels";
 
