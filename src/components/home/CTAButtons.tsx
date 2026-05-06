@@ -9,21 +9,36 @@ const CTAButtons = () => {
   const quickActions = [
     {
       label: "Create Splits",
+      description: "Build your workout plan",
       path: "/splits",
       icon: <BsLightningChargeFill />,
-      gradient: "from-rose-500 to-red-600",
+      bg: "bg-rose-600 hover:bg-rose-700",
+      iconBg: "bg-rose-500",
+      primary: true,
     },
     {
       label: "Browse Exercises",
+      description: "800+ movements",
       path: "/exercise",
       icon: <GiMuscleUp />,
-      gradient: "from-red-500 to-rose-600",
+      bg: "bg-white hover:bg-rose-50",
+      iconBg: "bg-rose-100",
+      textColor: "text-gray-800",
+      iconColor: "text-rose-600",
+      borderColor: "border border-rose-200",
+      primary: false,
     },
     {
       label: "View Calendar",
+      description: "Track your sessions",
       path: "/calendar",
       icon: <GiCalendar />,
-      gradient: "from-rose-500 to-red-600",
+      bg: "bg-white hover:bg-rose-50",
+      iconBg: "bg-rose-100",
+      textColor: "text-gray-800",
+      iconColor: "text-rose-600",
+      borderColor: "border border-rose-200",
+      primary: false,
     },
   ];
 
@@ -39,13 +54,18 @@ const CTAButtons = () => {
         {quickActions.map((action, i) => (
           <motion.button
             key={i}
-            whileHover={{ scale: 1.03, y: -3 }}
+            whileHover={{ scale: 1.02, y: -3 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => navigate(action.path)}
-            className={`flex items-center justify-center gap-3 px-6 py-5 rounded-md bg-gradient-to-r ${action.gradient} text-white font-bold text-base sm:text-lg shadow-xl transition-all`}
+            className={`flex items-center gap-4 px-5 py-4 sm:py-5 rounded-2xl ${action.bg} ${action.textColor ?? "text-white"} ${action.borderColor ?? ""} shadow-lg transition-all text-left`}
           >
-            <span className="text-2xl">{action.icon}</span>
-            {action.label}
+            <span className={`${action.iconBg} ${action.iconColor ?? "text-white"} p-3 rounded-xl text-2xl flex-shrink-0 flex items-center justify-center`}>
+              {action.icon}
+            </span>
+            <div>
+              <p className="font-bold text-base sm:text-lg leading-tight">{action.label}</p>
+              <p className={`text-xs sm:text-sm mt-0.5 ${action.primary ? "text-rose-200" : "text-gray-500"}`}>{action.description}</p>
+            </div>
           </motion.button>
         ))}
       </motion.div>
