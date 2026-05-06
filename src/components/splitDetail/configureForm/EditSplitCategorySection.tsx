@@ -49,7 +49,7 @@ export function EditSplitCategorySection({
               <SelectValue placeholder="None" />
             </SelectTrigger>
 
-            <SelectContent className="rounded-xl shadow-lg border max-w-104">
+            <SelectContent className="rounded-xl shadow-lg border max-w-104 focus:outline-none text-base">
               <SelectItem value="none">None</SelectItem>
               {categories.map((c) => (
                 <SelectItem key={c.id} value={c.id}>

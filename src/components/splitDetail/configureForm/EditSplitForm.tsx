@@ -53,7 +53,7 @@ const EditSplitForm = ({ splitToEdit }: EditSplitFormProps) => {
       </Button>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="sm:max-w-lg w-full rounded-3xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
+        <DialogContent className="w-full h-full sm:h-auto sm:max-w-xl max-h-[90vh] overflow-y-auto flex flex-col p-4 sm:p-8 rounded-3xl">
           <DialogHeader>
             <DialogTitle className="text-2xl sm:text-3xl font-extrabold break-words" style={{ color: theme.primary }}>
               Configure Split

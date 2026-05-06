@@ -13,7 +13,6 @@ const HomePage = () => {
   const { isMobile } = useBreakpoint();
   const { currentStreak } = useDashboardStats();
 
-  // Fetch exercises on first mount if not loaded
   useEffect(() => {
     if (exercises.length === 0) {
       fetchExercises();
@@ -21,54 +20,38 @@ const HomePage = () => {
   }, [exercises.length, fetchExercises]);
 
   return (
-    <div
-      className={`min-h-screen bg-gradient-to-br from-rose-50 via-rose-100 to-rose-200 flex flex-col ${isMobile ? "" : "mt-15"}`}
-    >
-      {/* Decorative Background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          animate={{ scale: [1, 1.2, 1], opacity: [0.05, 0.1, 0.05] }}
-          transition={{ duration: 8, repeat: Infinity }}
-          className="absolute -top-1/4 -right-1/4 w-96 h-96 bg-rose-400 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{ scale: [1.2, 1, 1.2], opacity: [0.03, 0.08, 0.03] }}
-          transition={{ duration: 10, repeat: Infinity }}
-          className="absolute -bottom-1/4 -left-1/4 w-96 h-96 bg-red-300 rounded-full blur-3xl"
-        />
-      </div>
-
-      <div className="flex-1 relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-6">
-        {/* Header */}
+    <div className={`min-h-screen bg-gradient-to-b from-rose-50 to-white flex flex-col ${isMobile ? "" : "mt-15"}`}>
+      <div className="flex-1 relative max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-6">
+        {/* Hero */}
         <motion.header
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-10 sm:mb-14 text-center"
+          transition={{ duration: 0.5 }}
+          className="mb-10 sm:mb-12"
         >
-          <div className="flex flex-col items-center sm:flex-row sm:justify-center gap-4 sm:gap-5 mb-5">
-            <motion.div
-              animate={{ rotate: [0, 5, -5, 0] }}
-              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-              className="flex-shrink-0"
-            >
-              <GiPowerLightning className="text-red-500 text-6xl sm:text-7xl md:text-8xl drop-shadow-xl" />
+          <div className="flex items-center gap-3 mb-4">
+            <motion.div animate={{ rotate: [0, 6, -6, 0] }} transition={{ duration: 2, repeat: Infinity, repeatDelay: 4 }}>
+              <GiPowerLightning className="text-rose-500 text-4xl sm:text-5xl drop-shadow-md" />
             </motion.div>
-
-            <div>
-              <h1 className="text-5xl sm:text-6xl md:text-7xl font-black text-red-600 tracking-tight">Fitoras</h1>
-              <p className="text-gray-600 text-base sm:text-lg font-semibold mt-1">Your Fitness Dashboard</p>
-            </div>
+            <span className="text-xs font-bold tracking-[0.2em] uppercase text-rose-400 bg-rose-50 border border-rose-200 px-3 py-1 rounded-full">
+              Fitoras Dashboard
+            </span>
           </div>
+
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-red-600 tracking-tight leading-tight text-balance mb-3">
+            Train Smarter,
+            <br />
+            <span className="text-rose-500">Stay Consistent.</span>
+          </h1>
 
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-red-700 text-lg sm:text-xl font-semibold max-w-3xl mx-auto leading-relaxed"
+            className="text-gray-500 text-base sm:text-lg font-medium max-w-xl leading-relaxed"
           >
             {currentStreak > 0
-              ? `You're on a ${currentStreak}-day streak! Keep it up!`
+              ? `You're on a ${currentStreak}-day streak — keep the momentum going!`
               : "Ready to crush your fitness goals? Let's get started!"}
           </motion.p>
         </motion.header>
@@ -85,28 +68,27 @@ const HomePage = () => {
 
       {/* Footer */}
       <motion.footer
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.8, duration: 0.6 }}
-        className={`w-full py-4 bg-red-200 text-gray-800 text-center text-sm mt-auto ${isMobile ? "mb-18" : ""}`}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.8, duration: 0.5 }}
+        className={`w-full py-5 border-t border-gray-100 text-center text-sm mt-auto ${isMobile ? "mb-18" : ""}`}
       >
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:justify-between md:items-center mb-4 gap-3 px-4">
-          <p className="font-semibold">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:justify-between md:items-center gap-2 px-4">
+          <p className="text-gray-400 font-medium">
             © {new Date().getFullYear()}{" "}
             <a
               href="https://github.com/LakBud/Fitoras"
-              className="text-rose-800 hover:text-rose-900 transition-colors duration-200 text-decoration-line: underline"
+              className="text-rose-500 hover:text-rose-600 transition-colors underline underline-offset-2"
             >
               Fitoras
             </a>
             . All rights reserved.
           </p>
-
-          <p className="text-xs font-semibold md:text-sm mt-1 md:mt-0">
+          <p className="text-gray-400 text-xs font-medium">
             Developed by{" "}
             <a
               href="https://github.com/LakBud/"
-              className="text-orange-800 hover:text-orange-900 transition-colors duration-200 text-decoration-line: underline"
+              className="text-orange-500 hover:text-orange-600 transition-colors underline underline-offset-2"
             >
               Buddo
             </a>
