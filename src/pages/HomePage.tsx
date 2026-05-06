@@ -20,9 +20,7 @@ const HomePage = () => {
   }, [exercises.length, fetchExercises]);
 
   return (
-    <div
-      className={`min-h-screen bg-gradient-to-b from-rose-50 to-white flex flex-col ${isMobile ? "" : "mt-15"}`}
-    >
+    <div className={`min-h-screen bg-gradient-to-b from-rose-50 to-white flex flex-col ${isMobile ? "" : "mt-15"}`}>
       <div className="flex-1 relative max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-6">
         {/* Hero */}
         <motion.header
@@ -32,10 +30,7 @@ const HomePage = () => {
           className="mb-10 sm:mb-12"
         >
           <div className="flex items-center gap-3 mb-4">
-            <motion.div
-              animate={{ rotate: [0, 6, -6, 0] }}
-              transition={{ duration: 2, repeat: Infinity, repeatDelay: 4 }}
-            >
+            <motion.div animate={{ rotate: [0, 6, -6, 0] }} transition={{ duration: 2, repeat: Infinity, repeatDelay: 4 }}>
               <GiPowerLightning className="text-rose-500 text-4xl sm:text-5xl drop-shadow-md" />
             </motion.div>
             <span className="text-xs font-bold tracking-[0.2em] uppercase text-rose-400 bg-rose-50 border border-rose-200 px-3 py-1 rounded-full">
@@ -43,8 +38,9 @@ const HomePage = () => {
             </span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 tracking-tight leading-tight text-balance mb-3">
-            Train Smarter,<br />
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-red-600 tracking-tight leading-tight text-balance mb-3">
+            Train Smarter,
+            <br />
             <span className="text-rose-500">Stay Consistent.</span>
           </h1>
 

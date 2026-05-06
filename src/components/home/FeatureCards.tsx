@@ -50,7 +50,7 @@ const FeatureCards = () => {
       className="w-full mb-16"
     >
       <div className="flex items-center gap-3 mb-6">
-        <h2 className="text-xl sm:text-2xl font-black text-gray-900">Why Fitoras?</h2>
+        <h2 className="text-xl sm:text-2xl font-black text-rose-500">Why Fitoras?</h2>
         <div className="flex-1 h-px bg-gray-100" />
       </div>
 
@@ -62,16 +62,20 @@ const FeatureCards = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 + i * 0.1 }}
             whileHover={{ y: -4 }}
-            className={`group bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all flex flex-col gap-4 ${feature.span}`}
+            className={`group bg-white rounded-2xl p-6 shadow-sm border  border-gray-100 hover:shadow-md transition-all flex flex-col gap-4 ${feature.span}`}
           >
             <div className="flex items-start justify-between">
-              <div className={`${feature.lightBg} ${feature.iconText} w-12 h-12 rounded-xl flex items-center justify-center text-2xl`}>
+              <div
+                className={`${feature.lightBg} ${feature.iconText} w-12 h-12 rounded-xl flex items-center justify-center text-2xl`}
+              >
                 {feature.icon}
               </div>
-              <div className={`w-2 h-2 rounded-full ${feature.accent} opacity-60 group-hover:opacity-100 transition-opacity mt-1`} />
+              <div
+                className={`w-2 h-2 rounded-full ${feature.accent} opacity-60 group-hover:opacity-100 transition-opacity mt-1`}
+              />
             </div>
             <div>
-              <h3 className="text-gray-900 font-bold text-base sm:text-lg mb-1">{feature.title}</h3>
+              <h3 className="text-rose-700 font-bold text-base sm:text-lg mb-1">{feature.title}</h3>
               <p className="text-gray-400 text-sm leading-relaxed">{feature.description}</p>
             </div>
           </motion.div>
