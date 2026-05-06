@@ -31,10 +31,10 @@ const DesktopNavBar = ({ links }: DesktopNavBarProps) => {
           y: scrollUp
             ? 0
             : isExercisePage
-            ? "-54%" // amount to scroll up on exercise page
-            : isSplitPage
-            ? "-54%" // amount to scroll up on split page
-            : "", // default amount for other pages
+              ? "-54%" // amount to scroll up on exercise page
+              : isSplitPage
+                ? "-54%" // amount to scroll up on split page
+                : "", // default amount for other pages
         }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
         className="bg-white shadow-lg fixed top-0 left-0 right-0 z-50 border-b border-gray-200"
@@ -56,7 +56,7 @@ const DesktopNavBar = ({ links }: DesktopNavBarProps) => {
                   aria-label={label}
                   className={({ isActive }) =>
                     [
-                      "flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500",
+                      "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-semibold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500",
                       isActive ? "bg-red-600 text-white shadow-md" : "text-gray-800 hover:text-red-600 hover:bg-red-50",
                     ].join(" ")
                   }

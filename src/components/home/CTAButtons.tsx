@@ -42,7 +42,7 @@ const CTAButtons = () => {
             whileHover={{ scale: 1.03, y: -3 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => navigate(action.path)}
-            className={`flex items-center justify-center gap-3 px-6 py-5 rounded-2xl bg-gradient-to-r ${action.gradient} text-white font-bold text-base sm:text-lg shadow-xl hover:shadow-2xl transition-all`}
+            className={`flex items-center justify-center gap-3 px-6 py-5 rounded-md bg-gradient-to-r ${action.gradient} text-white font-bold text-base sm:text-lg shadow-xl transition-all`}
           >
             <span className="text-2xl">{action.icon}</span>
             {action.label}

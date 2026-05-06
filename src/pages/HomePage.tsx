@@ -88,7 +88,7 @@ const HomePage = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8, duration: 0.6 }}
-        className={`w-full py-4 bg-red-200 text-gray-800 text-center text-sm mt-auto ${isMobile ? "mb-18" : ""}`}
+        className={`w-full py-4  text-gray-800 text-center text-sm mt-auto ${isMobile ? "mb-18" : ""}`}
       >
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:justify-between md:items-center mb-4 gap-3 px-4">
           <p className="font-semibold">

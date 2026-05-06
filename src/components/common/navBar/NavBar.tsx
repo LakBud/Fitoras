@@ -7,9 +7,9 @@ import { GiWeightLiftingUp } from "react-icons/gi";
 
 const links = [
   { to: "/", label: "Home", icon: <FiHome size={22} aria-hidden="true" /> },
+  { to: "/exercise", label: "Exercises", icon: <GiWeightLiftingUp size={22} aria-hidden="true" /> },
   { to: "/splits", label: "Splits", icon: <BsSignpostSplit size={22} aria-hidden="true" /> },
   { to: "/calendar", label: "Calendar", icon: <BsCalendar2Check size={22} aria-hidden="true" /> },
-  { to: "/exercise", label: "Exercises", icon: <GiWeightLiftingUp size={22} aria-hidden="true" /> },
 ];
 
 const NavBar = () => {

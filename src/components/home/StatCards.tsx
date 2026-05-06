@@ -59,7 +59,7 @@ const StatCards = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
           whileHover={{ y: -6, scale: 1.03 }}
-          className="bg-white/95 backdrop-blur-sm rounded-3xl p-5 sm:p-7 shadow-xl hover:shadow-2xl border border-white/60 transition-all"
+          className="bg-white/95 backdrop-blur-sm rounded-3xl p-5 sm:p-7 shadow-xl border border-white/60 transition-all"
         >
           <div
             className={`${stat.bgColor} ${stat.iconColor} w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mb-4 text-3xl sm:text-4xl shadow-sm`}
