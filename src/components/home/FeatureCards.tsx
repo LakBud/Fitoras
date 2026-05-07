@@ -11,7 +11,6 @@ const FeatureCards = () => {
       accent: "bg-rose-500",
       lightBg: "bg-rose-50",
       iconText: "text-rose-500",
-      span: "sm:col-span-2",
     },
     {
       icon: <GiLockedBox />,
@@ -38,7 +37,6 @@ const FeatureCards = () => {
       accent: "bg-amber-500",
       lightBg: "bg-amber-50",
       iconText: "text-amber-500",
-      span: "sm:col-span-2",
     },
   ];
 
