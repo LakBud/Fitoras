@@ -18,15 +18,12 @@
     <meta property="og:url" content="https://fitoras.vercel.app" />
 
     <link rel="stylesheet" href="/src/index.css" />
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MH8B06QZVT"></script>
+    <!-- Google Analytics is loaded only after the user consents (see src/hooks/useGoogleAnalytics.ts) -->
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-
-      gtag("config", "G-MH8B06QZVT");
+      window.gtag = function () {
+        window.dataLayer.push(arguments);
+      };
     </script>
     <title>Fitoras | Exercises & Workout</title>
   </head>
