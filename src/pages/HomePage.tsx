@@ -84,15 +84,6 @@ const HomePage = () => {
             </a>
             . All rights reserved.
           </p>
-          <p className="text-gray-400 text-xs font-medium">
-            Developed by{" "}
-            <a
-              href="https://github.com/LakBud/"
-              className="text-orange-500 hover:text-orange-600 transition-colors underline underline-offset-2"
-            >
-              Buddo
-            </a>
-          </p>
         </div>
       </motion.footer>
     </div>
