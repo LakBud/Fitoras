@@ -66,10 +66,12 @@ const StatCards = () => {
           className="relative overflow-hidden bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100 flex flex-col gap-3 transition-shadow hover:shadow-md"
         >
           {/* Subtle colored top bar */}
-          <div className={`absolute top-0 left-0 right-0 h-1 ${stat.bgColor} rounded-t-2xl`} />
+          <div className={`absolute top-0 left-0 right-0 h-1 p-1 ${stat.bgColor} rounded-t-2xl`} />
 
           {/* Icon */}
-          <div className={`${stat.bgColor} w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center text-white text-xl sm:text-2xl shadow-sm`}>
+          <div
+            className={`${stat.bgColor} w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center text-white text-xl sm:text-2xl shadow-sm`}
+          >
             {stat.icon}
           </div>
 
@@ -93,9 +95,7 @@ const StatCards = () => {
           </div>
 
           {/* Subtitle */}
-          {stat.subtitle && (
-            <p className="text-gray-400 text-xs font-medium leading-none">{stat.subtitle}</p>
-          )}
+          {stat.subtitle && <p className="text-gray-400 text-xs font-medium leading-none">{stat.subtitle}</p>}
         </motion.div>
       ))}
     </motion.div>

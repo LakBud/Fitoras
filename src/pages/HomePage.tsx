@@ -1,4 +1,3 @@
-import { GiPowerLightning } from "react-icons/gi";
 import { motion } from "framer-motion";
 import { useExerciseStore } from "@/stores/exercises/useExerciseStore";
 import StatCards from "@/components/home/StatCards";
@@ -29,15 +28,6 @@ const HomePage = () => {
           transition={{ duration: 0.5 }}
           className="mb-10 sm:mb-12"
         >
-          <div className="flex items-center gap-3 mb-4">
-            <motion.div animate={{ rotate: [0, 6, -6, 0] }} transition={{ duration: 2, repeat: Infinity, repeatDelay: 4 }}>
-              <GiPowerLightning className="text-rose-500 text-4xl sm:text-5xl drop-shadow-md" />
-            </motion.div>
-            <span className="text-xs font-bold tracking-[0.2em] uppercase text-rose-400 bg-rose-50 border border-rose-200 px-3 py-1 rounded-full">
-              Fitoras Dashboard
-            </span>
-          </div>
-
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-red-600 tracking-tight leading-tight text-balance mb-3">
             Train Smarter,
             <br />
